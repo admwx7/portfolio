@@ -1,0 +1,39 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/my-app.html",
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+  "lint": {
+    "rules": ["polymer-2"]
+  },
+  "builds": [
+    {
+      "preset": "es5-bundled",
+      "addServiceWorker": false,
+      "js": {
+        "minify": false
+      }
+    },
+    {
+      "preset": "es6-bundled",
+      "addServiceWorker": false,
+      "js": {
+        "minify": false
+      }
+    },
+    {
+      "preset": "es6-unbundled",
+      "addServiceWorker": false,
+      "js": {
+        "minify": false
+      }
+    }
+  ]
+}
