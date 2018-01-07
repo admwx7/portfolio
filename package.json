@@ -6,10 +6,12 @@
     "babel-polyfill": "^6.26.0"
   },
   "devDependencies": {
+    "bower": "^1.8.2",
     "eslint": "^4.13.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-chai-expect": "^1.1.1",
-    "eslint-plugin-html": "^4.0.1"
+    "eslint-plugin-html": "^4.0.1",
+    "polymer-cli": "^1.5.7"
   },
   "engines": {
     "node": "^8.2.1",
