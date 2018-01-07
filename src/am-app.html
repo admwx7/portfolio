@@ -9,23 +9,24 @@
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/lazy-imports/lazy-imports-mixin.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 
-<link rel="import" href="my-icons.html">
+<link rel="import" href="theme/am-icons.html">
+<link rel="import" href="theme/colors.html">
+<link rel="import" href="theme/shared-styles.html">
 
-<dom-module id="my-app">
-  <link rel="lazy-import" href="my-view1.html">
-  <link rel="lazy-import" href="my-view2.html">
-  <link rel="lazy-import" href="my-view3.html">
-  <link rel="lazy-import" href="my-view404.html">
+<dom-module id="am-app">
+  <link rel="lazy-import" group="home" href="pages/am-page-main.html">
+  <link rel="lazy-import" group="404" href="pages/am-page-404.html">
 
   <template>
-    <style>
+    <style include="colors shared-styles">
       :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
+        --app-primary-color: var(--dark-primary-color);
+        --app-secondary-color: var(--primary-color);
 
         display: block;
       }
@@ -35,7 +36,7 @@
       }
 
       app-header {
-        color: #fff;
+        color: var(--text-color);
         background-color: var(--app-primary-color);
       }
 
@@ -56,22 +57,19 @@
       }
 
       .drawer-list a.iron-selected {
-        color: black;
+        color: var(--accent-color);
         font-weight: bold;
       }
     </style>
 
     <firebase-app
-      auth-domain="amscripting-portfolio.firebaseapp.com"
-      database-url="https://amscripting-portfolio.firebaseio.com"
-      api-key="AIzaSyB2R2OczrNMi1Nj_LbCUCWqDl2HaUODr2U"
-      storage-bucket="amscripting-portfolio.appspot.com"
-      messaging-sender-id="683474723650"
+      auth-domain="portfolio-138c8.firebaseapp.com"
+      database-url="https://portfolio-138c8.firebaseio.com"
+      api-key="AIzaSyCjMz2srT0HjuJRPH2ThhLD7XqLcrYqSQQ"
+      storage-bucket="portfolio-138c8.appspot.com"
+      messaging-sender-id="807153287758"
     ></firebase-app>
-    <firebase-auth
-      id="auth"
-      provider="google"
-    ></firebase-auth>
+
     <app-location
       route="{{route}}"
       url-space-regex="^[[rootPath]]"
@@ -88,9 +86,7 @@
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="[[rootPath]]view1">View One</a>
-          <a name="view2" href="[[rootPath]]view2">View Two</a>
-          <a name="view3" href="[[rootPath]]view3">View Three</a>
+          <a name="home" href="[[rootPath]]home">Home</a>
         </iron-selector>
       </app-drawer>
 
@@ -99,7 +95,7 @@
 
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
-            <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
+            <paper-icon-button icon="am-icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>My App</div>
           </app-toolbar>
         </app-header>
@@ -107,21 +103,18 @@
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
-            fallback-selection="view404"
+            fallback-selection="404"
             role="main">
-          <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
-          <my-view404 name="view404"></my-view404>
+          <am-page-main name="home"></am-page-main>
+          <am-page-404 name="404"></am-page-404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
   </template>
 
   <script>
-    class MyApp extends Polymer.Element {
-      static get is() { return 'my-app'; }
-
+    class AmApp extends Polymer.LazyImportsMixin(Polymer.Element) {
+      static get is() { return 'am-app'; }
       static get properties() {
         return {
           page: {
@@ -136,44 +129,28 @@
           rootPath: String,
         };
       }
-
       static get observers() {
         return [
           '_routePageChanged(routeData.page)',
         ];
       }
 
-      connectedCallback() {
-        super.connectedCallback();
-        this.$.auth.signInWithPopup();
-      }
-
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
-        // Default to 'view1' in that case.
-        this.page = page || 'view1';
+        this.page = page || 'home';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
       }
-
       _pageChanged(page) {
-        // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
-        Polymer.importHref(
-            resolvedPageUrl,
-            null,
-            this._showPage404.bind(this),
-            true);
+        this.importLazyGroup(page).catch(this._showPage404.bind(this));
       }
-
       _showPage404() {
-        this.page = 'view404';
+        this.page = '404';
       }
     }
-
-    window.customElements.define(MyApp.is, MyApp);
+    window.customElements.define(AmApp.is, AmApp);
   </script>
 </dom-module>

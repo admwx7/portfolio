@@ -1,6 +1,6 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/my-app.html",
+  "shell": "src/am-app.html",
   "sources": [
     "src/**/*",
     "images/**/*",
