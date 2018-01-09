@@ -122,8 +122,8 @@
        * Filters the pages to only show pages that have a label and the user has access to
        * @private
        *
-       * @param {Object | HTMLElement} page
-       * @returns {String}
+       * @param {Boolean} signedIn
+       * @return {String}
        */
       __filterPages(signedIn) {
         return (page) => {
@@ -137,8 +137,9 @@
        * Fetches the path from the given object
        * @private
        *
-       * @param {Object | HTMLElement}
-       * @returns {String}
+       * @param {Object | HTMLElement} object
+       * @param {String} path
+       * @return {String}
        */
       __get(object, path) {
         return object[path] || object.getAttribute(path);
