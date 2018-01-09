@@ -1,0 +1,51 @@
+<link rel="import" href="colors.html">
+
+<dom-module id="shared-styles">
+  <template>
+    <style include="colors">
+      :host {
+        --padding: 16px;
+        --gutter: 48px;
+      }
+      .card {
+        margin: calc(var(--gutter) / 2);
+        padding: var(--padding);
+        color: var(--primary-text-color);
+        border-radius: 5px;
+        background-color: var(--light-primary-color);
+        box-shadow:
+          -3px 0 3px 0 var(--accent-shadow-color),
+          0 3px 3px 0 var(--accent-shadow-color),
+          3px 0 3px 0px var(--accent-shadow-color),
+          0 -3px 3px 0px var(--accent-shadow-color);
+        border: 1px solid var(--accent-shadow-color);
+      }
+      .circle {
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        text-align: center;
+        color: var(--light-primary-color);
+        border-radius: 50%;
+        background: var(--primary-color);
+        font-size: 30px;
+        line-height: 64px;
+      }
+      h1 {
+        margin: 16px 0;
+        color: var(--primary-text-color);
+        font-size: 22px;
+      }
+      .divider {
+        border-bottom: 1px solid var(--divider-color);
+        box-shadow: 0 2px 2px 0 var(--divider-shadow-color);
+      }
+      .card > .divider {
+        margin-left: calc(var(--padding) * -1);
+        padding-left: var(--padding);
+        padding-right: var(--padding);
+        width: 100%;
+      }
+    </style>
+  </template>
+</dom-module>

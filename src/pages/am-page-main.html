@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../theme/shared-styles.html">
+
+<dom-module id="am-page-main">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <div class="divider">
+        <h1>Home</h1>
+      </div>
+      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
+      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+    </div>
+  </template>
+
+  <script>
+    class AmPageMain extends Polymer.Element {
+      static get is() {
+        return 'am-page-main';
+      }
+    }
+
+    window.customElements.define(AmPageMain.is, AmPageMain);
+  </script>
+</dom-module>

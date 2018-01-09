@@ -1,0 +1,108 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+
+<link rel="import" href="elements/am-nav.html">
+<link rel="import" href="elements/am-pages.html">
+<link rel="import" href="theme/am-icons.html">
+<link rel="import" href="theme/colors.html">
+<link rel="import" href="theme/shared-styles.html">
+
+<dom-module id="am-app">
+  <template>
+    <style include="colors shared-styles">
+      :host {
+        display: block;
+      }
+      #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: 80px;
+        color: var(--text-color);
+        background-color: var(--dark-primary-color);
+      }
+      #title {
+        flex: 0 0 auto;
+        font-size: 20pt;
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--text-color);
+        text-shadow:
+          0 -1px 4px var(--accent-shadow-color),
+          1px 0 4px var(--accent-shadow-color),
+          0 1px 4px var(--accent-shadow-color),
+          -1px 0 4px var(--accent-shadow-color);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      #title:hover {
+        background-color: var(--primary-color);
+      }
+      #nav {
+        flex: 1 1 auto;
+        height: 100%;
+      }
+      #content {
+        width: 100%;
+        margin-top: 80px;
+      }
+    </style>
+
+    <firebase-app
+      auth-domain="portfolio-138c8.firebaseapp.com"
+      database-url="https://portfolio-138c8.firebaseio.com"
+      api-key="AIzaSyCjMz2srT0HjuJRPH2ThhLD7XqLcrYqSQQ"
+      storage-bucket="portfolio-138c8.appspot.com"
+      messaging-sender-id="807153287758"
+    ></firebase-app>
+
+    <div id="header">
+      <a id="title"
+        href="/">
+        <span>Austin Murdock</span>
+      </a>
+      <am-nav id="nav"
+        page="{{page}}"
+        pages="[[pages]]"
+        root-path="[[rootPath]]"
+      ></am-nav>
+    </div>
+    <am-pages id="content"
+      page="{{page}}"
+      pages="{{pages}}"
+      root-path="[[rootPath]]"
+    ></am-pages>
+  </template>
+
+  <script>
+    class AmApp extends Polymer.Element {
+      static get is() {
+        return 'am-app';
+      }
+      static get properties() {
+        return {
+          page: String,
+          pages: Array,
+
+          /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
+          rootPath: String,
+        };
+      }
+    }
+
+    window.customElements.define(AmApp.is, AmApp);
+  </script>
+</dom-module>

@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../theme/shared-styles.html">
+
+<dom-module id="am-page-404">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px 20px;
+      }
+    </style>
+
+    <div class="card">
+      <p>Oops you hit a 404. <a href="[[rootPath]]">Head back to home.</a></p>
+    </div>
+  </template>
+
+  <script>
+    class AmPage404 extends Polymer.Element {
+      static get is() {
+        return 'am-page-404';
+      }
+      static get properties() {
+        return {
+          /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
+          rootPath: String,
+        };
+      }
+    }
+
+    window.customElements.define(AmPage404.is, AmPage404);
+  </script>
+</dom-module>

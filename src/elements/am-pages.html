@@ -1,0 +1,145 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/lazy-imports/lazy-imports-mixin.html">
+
+<dom-module id="am-pages">
+  <link rel="lazy-import" group="blog" href="../pages/am-page-blog.html">
+  <link rel="lazy-import" group="home" href="../pages/am-page-main.html">
+  <link rel="lazy-import" group="404" href="../pages/am-page-404.html">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <app-location
+      route="{{__route}}"
+      url-space-regex="^[[rootPath]]"
+    ></app-location>
+    <app-route
+      route="{{__route}}"
+      pattern="[[rootPath]]:page"
+      data="{{__routeData}}"
+      tail="{{__subroute}}"
+    ></app-route>
+
+    <iron-pages
+      attr-for-selected="name"
+      items="{{pages}}"
+      role="main"
+      selected="[[page]]"
+      selected-attribute="selected">
+      <am-page-main name="home"
+        label="Home"
+        root-path="[[rootPath]]"
+      ></am-page-main>
+      <am-page-blog name="blog"
+        label="Blog"
+        root-path="[[rootPath]]"
+      ></am-page-blog>
+      <div name="test"
+        label="Test"
+        authenticated
+      ></div>
+      <am-page-404 name="404"
+        title="404"
+        root-path="[[rootPath]]"
+      ></am-page-404>
+    </iron-pages>
+  </template>
+
+  <script>
+    class AmPages extends Polymer.LazyImportsMixin(Polymer.Element) {
+      static get is() {
+        return 'am-pages';
+      }
+      static get properties() {
+        return {
+          /* The currently selected page */
+          page: {
+            type: String,
+            notify: true,
+            observer: '__pageChanged',
+          },
+          /* The pages available in the app */
+          pages: {
+            type: Array,
+            notify: true,
+          },
+
+          __route: Object,
+          __routeData: Object,
+          __subroute: String,
+
+          /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
+          rootPath: String,
+        };
+      }
+      static get observers() {
+        return [
+          '__routePageChanged(__routeData.page)',
+        ];
+      }
+
+      /* Private Methods */
+
+      /**
+       * Called when the page changes to make sure page and routeData.page are in sync
+       * @private
+       *
+       * @param {String} page
+       */
+      __pageChanged(page) {
+        if (page !== this.__routeData.page) {
+          this.set('__routeData.page', page);
+        }
+      }
+      /**
+       * Attempt to route to the page, on failure send the user to the 404 page.  If there is no page defined route to
+       *  the home page.
+       * @private
+       *
+       * @param {String} page
+       */
+      __routePageChanged(page) {
+        // default to the home if there isn't a route
+        page = page || 'home';
+
+        // ensure the page exists in the DOM
+        const el = this.shadowRoot.querySelector(`[name="${page}"]`);
+        if (!el) {
+          this.__show404Page();
+          return;
+        }
+
+        // attempt to lazy-import the page reference
+        this.importLazyGroup(page).
+          // assign the page so it gets displayed upon success
+          then(() => {
+            this.set('page', page);
+            document.title = 'Austin Murdock';
+
+            const title = el.getAttribute('title') || el.getAttribute('label');
+            if (title) {
+              document.title += ` | ${title}`;
+            }
+          }).
+          // send the user to the 404 page upon failure
+          catch(this.__show404Page.bind(this));
+      }
+      /**
+       * Routes to the 404 page
+       * @private
+       */
+      __show404Page() {
+        this.set('__routeData.page', '404');
+      }
+    }
+
+    window.customElements.define(AmPages.is, AmPages);
+  </script>
+</dom-module>
