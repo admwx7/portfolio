@@ -1,0 +1,150 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+
+<dom-module id="am-nav">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-direction: column;
+      }
+      iron-selector {
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+      }
+      .page-link {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 24px;
+        padding-right: 24px;
+        position: relative;
+      }
+      .page-link:not([selected]):hover {
+        cursor: pointer;
+        background-color: var(--primary-color);
+      }
+      .page-link[selected] {
+        font-weight: bold;
+        color: var(--accent-color);
+      }
+      .page-link[selected]::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        border-bottom: 4px solid var(--accent-color);
+      }
+    </style>
+
+    <firebase-auth id="auth"
+      signed-in="{{signedIn}}"
+      provider="google"
+    ></firebase-auth>
+
+    <iron-selector
+      attr-for-selected="name"
+      selected="{{page}}"
+      selected-attribute="selected">
+      <dom-repeat id="pages"
+        items="[[pages]]"
+        filter="[[__filterPages(signedIn)]]"
+        as="page">
+        <template>
+          <div name$="[[__get(page, 'name')]]"
+            class="page-link">
+            <span>[[__get(page, 'label')]]</span>
+          </div>
+        </template>
+      </dom-repeat>
+      <dom-if if="[[!signedIn]]">
+        <template>
+          <div class="page-link" on-click="signIn">
+            Sign In
+          </div>
+        </template>
+      </dom-if>
+      <dom-if if="[[signedIn]]">
+        <template>
+          <div class="page-link" on-click="signOut">
+            Sign Out
+          </div>
+        </template>
+      </dom-if>
+    </iron-selector>
+  </template>
+
+  <script>
+    class AmNav extends Polymer.Element {
+      static get is() {
+        return 'am-nav';
+      }
+      static get properties() {
+        return {
+          /* The currently selected page */
+          page: {
+            type: String,
+            notify: true,
+          },
+          /* The pages available in the app */
+          pages: Array,
+          /* Whether or not the user is signed in */
+          signedIn: Boolean,
+
+          /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
+          rootPath: String,
+        };
+      }
+
+      /* Public Methods */
+
+      /**
+       * Signs the user in
+       */
+      signIn() {
+        this.$.auth.signInWithPopup();
+      }
+      /**
+       * Signs the user out
+       */
+      signOut() {
+        this.$.auth.signOut();
+      }
+
+      /* Private Methods */
+
+      /**
+       * Filters the pages to only show pages that have a label and the user has access to
+       * @private
+       *
+       * @param {Object | HTMLElement} page
+       * @returns {String}
+       */
+      __filterPages(signedIn) {
+        return (page) => {
+          return [
+            page.label || page.getAttribute('label'),
+            this.signedIn || (!page.authenticated && page.getAttribute('authenticated') === null),
+          ].every(Boolean);
+        };
+      }
+      /**
+       * Fetches the path from the given object
+       * @private
+       *
+       * @param {Object | HTMLElement}
+       * @returns {String}
+       */
+      __get(object, path) {
+        return object[path] || object.getAttribute(path);
+      }
+    }
+
+    window.customElements.define(AmNav.is, AmNav);
+  </script>
+</dom-module>

@@ -1,8 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../theme/shared-styles.html">
+
 <dom-module id="am-page-404">
   <template>
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
 
@@ -10,16 +12,19 @@
       }
     </style>
 
-    Oops you hit a 404. <a href="[[rootPath]]">Head back to home.</a>
+    <div class="card">
+      <p>Oops you hit a 404. <a href="[[rootPath]]">Head back to home.</a></p>
+    </div>
   </template>
 
   <script>
     class AmPage404 extends Polymer.Element {
-      static get is() { return 'am-page-404'; }
+      static get is() {
+        return 'am-page-404';
+      }
       static get properties() {
         return {
-          // This shouldn't be neccessary, but the Analyzer isn't picking up
-          // Polymer.Element#rootPath
+          /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
           rootPath: String,
         };
       }
