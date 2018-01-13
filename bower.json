@@ -5,21 +5,17 @@
   ],
   "license": "https://github.com/admwx7/portfolio/blob/master/LICENSE",
   "dependencies": {
-    "app-layout": "PolymerElements/app-layout#^2.0.0",
     "app-route": "PolymerElements/app-route#^2.0.0",
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.0.0",
     "iron-media-query": "PolymerElements/iron-media-query#^2.0.0",
     "iron-pages": "PolymerElements/iron-pages#^2.0.0",
     "iron-selector": "PolymerElements/iron-selector#^2.0.0",
-    "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
     "polymer": "Polymer/polymer#^2.0.0",
     "polymerfire": "firebase/polymerfire#^v2.2.1",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
-    "lazy-imports": "Polymer/lazy-imports#27eed928ec0b40ce731f279644f51829cd84cc53"
+    "lazy-imports": "Polymer/lazy-imports#^2.1.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
-  },
-  "private": true
+  }
 }
