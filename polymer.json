@@ -16,24 +16,6 @@
   "builds": [
     {
       "preset": "es5-bundled",
-      "addServiceWorker": false,
-      "js": {
-        "minify": false
-      }
-    },
-    {
-      "preset": "es6-bundled",
-      "addServiceWorker": false,
-      "js": {
-        "minify": false
-      }
-    },
-    {
-      "preset": "es6-unbundled",
-      "addServiceWorker": false,
-      "js": {
-        "minify": false
-      }
     }
   ]
 }
