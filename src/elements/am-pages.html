@@ -14,6 +14,10 @@
       :host {
         display: block;
       }
+      .page {
+        display: block;
+        padding: 10px;
+      }
     </style>
 
     <app-location
@@ -21,10 +25,10 @@
       url-space-regex="^[[rootPath]]"
     ></app-location>
     <app-route
-      route="{{__route}}"
-      pattern="[[rootPath]]:page"
       data="{{__routeData}}"
-      tail="{{__subroute}}"
+      pattern="[[rootPath]]:page"
+      route="{{__route}}"
+      tail="{{__subRoute}}"
     ></app-route>
 
     <iron-pages
@@ -32,20 +36,21 @@
       items="{{pages}}"
       role="main"
       selected="[[page]]"
-      selected-attribute="selected">
+      selected-attribute="active">
       <am-page-main name="home"
+        class="page"
         label="Home"
         root-path="[[rootPath]]"
+        route="{{__subRoute}}"
       ></am-page-main>
       <am-page-blog name="blog"
+        class="page"
         label="Blog"
         root-path="[[rootPath]]"
+        route="{{__subRoute}}"
       ></am-page-blog>
-      <div name="test"
-        label="Test"
-        authenticated
-      ></div>
       <am-page-404 name="404"
+        class="page"
         title="404"
         root-path="[[rootPath]]"
       ></am-page-404>
@@ -73,7 +78,7 @@
 
           __route: Object,
           __routeData: Object,
-          __subroute: String,
+          __subRoute: String,
 
           /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
           rootPath: String,
