@@ -1,10 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 
 <link rel="import" href="../theme/shared-styles.html">
@@ -17,15 +17,11 @@
       }
     </style>
 
-    <!-- TODO: add support for loading next 10, use startAt property -->
     <firebase-query id="query"
       path="/posts"
       data="{{posts}}"
-      order-by-child="createdAt"
-      limit-to-last="10"
+      order-by-child="lastUpdated"
     ></firebase-query>
-    <firebase-document id="document"
-    ></firebase-document>
 
     <dom-if if="[[create]]">
       <template>
@@ -37,13 +33,6 @@
             required
             value="{{post.title}}"
           ></paper-input>
-          <paper-textarea id="summary"
-            auto-validate
-            invalid="{{__invalidSummary}}"
-            label="Summary"
-            required
-            value="{{post.summary}}"
-          ></paper-textarea>
           <paper-textarea id="content"
             auto-validate
             invalid="{{__invalidContent}}"
@@ -52,7 +41,7 @@
             value="{{post.content}}"
           ></paper-textarea>
           <paper-button
-            disabled$="[[__some(loading, __invalidContent, __invalidSummary, __invalidTitle, __clean)]]"
+            disabled$="[[__some(loading, __invalidContent, __invalidTitle, __clean)]]"
             on-click="__submit"
             raised
           >Submit</paper-button>
@@ -67,50 +56,49 @@
     <dom-if if="[[!create]]">
       <template>
         <!-- TODO: make this look better, FAB for admins -->
-        <dom-if if="[[selected]]">
-          <template>
-            <paper-button
-              on-click="reset"
-              raised
-            >Back</paper-button>
+        <paper-button
+          hidden$="[[__boolean(selected)]]"
+          on-click="createPost"
+          raised
+        >Create</paper-button>
+        <paper-button
+          hidden$="[[!__boolean(selected)]]"
+          on-click="reset"
+          raised
+        >Back</paper-button>
+        <paper-button
+          hidden$="[[!__boolean(selected)]]"
+          on-click="__delete"
+          raised
+        >Delete</paper-button>
 
-            <firebase-document
-              path="/posts/[[selected]]"
-              data="{{selectedPost}}"
-            ></firebase-document>
-
-            <div class="card">
-              <h2 class="card__title">[[selectedPost.title]]</h2>
-              <!-- TODO: render as markdown -->
-              <div class="card__content">[[selectedPost.content]]</div>
-            </div>
-          </template>
-        </dom-if>
-        <dom-if if="[[!selected]]">
-          <template>
-            <paper-button
-              on-click="createPost"
-              raised
-            >Create</paper-button>
-            <dom-repeat
-              as="post"
-              items="[[posts]]">
-              <template>
-                <div class="card" on-click="__selectPost">
-                  <h2 class="card__title">[[post.title]]</h2>
-                  <!-- TODO: render as markdown -->
-                  <div class="card__content">[[post.summary]]</div>
-                </div>
-              </template>
-            </dom-repeat>
-          </template>
-        </dom-if>
+        <iron-selector id="selector"
+          attr-for-selected="name"
+          selected="{{selected}}"
+          selected-item="{{selectedPost}}">
+          <dom-repeat
+            as="post"
+            items="[[posts]]"
+            sort="__reverse">
+            <template>
+              <div name$="[[post.name]]"
+                class="card"
+                key="[[post.$key]]">
+                <h2 class="card__title">[[post.title]]</h2>
+                <!-- TODO: render as markdown -->
+                <div class="card__content"
+                  hidden$="[[!__equal(post.name, selected)]]"
+                >[[post.content]]</div>
+              </div>
+            </template>
+          </dom-repeat>
+        </iron-selector>
       </template>
     </dom-if>
   </template>
 
   <script>
-    class AmBlogPosts extends Polymer.LazyImportsMixin(Polymer.Element) {
+    class AmBlogPosts extends Polymer.Element {
       static get is() {
         return 'am-blog-posts';
       }
@@ -161,15 +149,25 @@
             type: Boolean,
             value: false,
           },
-          __invalidSummary: {
-            type: Boolean,
-            value: false,
-          },
           __invalidTitle: {
             type: Boolean,
             value: false,
           },
         };
+      }
+
+      /* Lifecylce Events */
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        // Having issues with selected having a default value of null, when the page loads it prefers the default over
+        // the value provided by the parent element.
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          if (typeof this.selected === 'undefined') {
+            this.selected = null;
+          }
+        });
       }
 
       /* Public Methods */
@@ -185,10 +183,9 @@
        */
       reset() {
         this.post = {};
-        this.selected = '';
+        this.selected = null;
         this.__dirty = false;
         this.__invalidContent = false;
-        this.__invalidSummary = false;
         this.__invalidTitle = false;
 
         this.loading = false;
@@ -196,6 +193,18 @@
 
       /* Private Methods */
 
+      // TODO: move helper methods to a mixin (boolean, equals, some, reverse, ...)
+
+      /**
+       * Gets the Boolean version of the property
+       * @private
+       *
+       * @param {String | Number | Boolean} a
+       * @returns {Boolean}
+       */
+      __boolean(a) {
+        return Boolean(a);
+      }
       /**
        * Computes clean state as !__dirty
        * @private
@@ -207,6 +216,25 @@
         return !dirty;
       }
       /**
+       * Attempts to delete the selected post from the DB
+       * @private
+       */
+      __delete() {
+        // TODO: add permission checks
+        const key = this.selectedPost.key;
+        if (key && !this.loading) {
+          this.loading = true;
+          this.$.query.ref.child(key).remove().
+            then(() => {
+              this.reset();
+            }).
+            catch(() => {
+              // TODO: add error handling
+              this.loading = false;
+            });
+        }
+      }
+      /**
        * Performs a dirty check on the data for creating a new post
        * @private
        *
@@ -214,9 +242,32 @@
        * @returns {Boolean}
        */
       __dirtyCheck(post) {
-        return Boolean(post.content &&
-          post.summary &&
-          post.title);
+        return Boolean(
+          post.content &&
+          post.title
+        );
+      }
+      /**
+       * Used to check if two Strings are equal
+       * @private
+       *
+       * @param {String} a
+       * @param {String} b
+       * @returns {Boolean}
+       */
+      __equal(a, b) {
+        return a == b;
+      }
+      /**
+       * Used to reverse the sort order from firebase based on lastUpdated
+       * @private
+       *
+       * @param {Object} a
+       * @param {Object} b
+       * @returns {Boolean}
+       */
+      __reverse(a, b) {
+        return b.lastUpdated - a.lastUpdated;
       }
       /**
        * Sets the selectedPost
@@ -242,16 +293,19 @@
        * @private
        */
       __submit() {
-        // TODO: permission check
+        // TODO: permission checks
         if (!this.create || this.loading) return;
         this.loading = true;
 
-        this.$.document.data = Object.assign({}, this.post);
-        this.$.document.saveValue('/posts', this.post.title.toLowerCase().replace(/ /g, '-')).
+        this.$.query.ref.push(Object.assign({
+          name: this.post.title.toLowerCase().replace(/ /g, '-'),
+          lastUpdated: window.firebase.database.ServerValue.TIMESTAMP,
+        }, this.post)).
           then(() => {
             this.reset();
           }).
           catch(() => {
+            // TODO: add error handling
             this.loading = false;
           });
       }

@@ -3,10 +3,13 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 
 <link rel="import" href="../elements/am-blog-posts.html">
+<link rel="import" href="../elements/am-under-construction.html">
 
 <dom-module id="am-page-blog">
   <template>
-    <app-route
+    <am-under-construction></am-under-construction>
+
+    <app-route id="postsRoute"
       data="{{__postData}}"
       pattern="/:id"
       route="{{route}}"
@@ -20,6 +23,7 @@
     <am-blog-posts
       create="{{__createPost}}"
       selected="{{__postData.id}}"
+      on-selected-changed="__selectedChanged"
     ></am-blog-posts>
   </template>
 
@@ -38,6 +42,21 @@
           __createPost: Boolean,
           __postData: Object,
         };
+      }
+
+      /* Private Methods */
+
+      /**
+       * Used to handle when selected is changed inside of <am-blog-posts and there is no trailing '/' in the path
+       * @private
+       *
+       * @param {CustomEvent} event
+       */
+      __selectedChanged(event) {
+        const value = event.detail.value;
+        if (value && !this.$.postsRoute.active && !(this.route.path.includes(value) || this.route.path.endsWith('/'))) {
+          this.set('route.path', `${this.route.path}/${value}`);
+        }
       }
     }
 
