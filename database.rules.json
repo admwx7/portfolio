@@ -1,9 +1,14 @@
 {
   "rules": {
-    "users": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-    		".write": "$uid === auth.uid"
+    "posts": {
+      ".read": true,
+      ".write": false,
+      ".indexOn": ["createdAt"],
+      "$post": {
+        ".read": true,
+        ".write": "auth != null",
+        ".indexOn": ["createdAt"],
+        ".validate": "newData.hasChildren(['title', 'summary', 'content']) && newData.child('title').isString() && newData.child('summary').isString() && newData.child('content').isString()"
       }
     }
   }

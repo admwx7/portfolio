@@ -1,30 +1,43 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
 
-<link rel="import" href="../theme/shared-styles.html">
+<link rel="import" href="../elements/am-blog-posts.html">
 
 <dom-module id="am-page-blog">
   <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <app-route
+      data="{{__postData}}"
+      pattern="/:id"
+      route="{{route}}"
+    ></app-route>
+    <app-route
+      active="{{__createPost}}"
+      pattern="/new"
+      route="{{route}}"
+    ></app-route>
 
-        padding: 10px;
-      }
-    </style>
-
-    <div class="card">
-      <div class="divider">
-        <h1>Blog</h1>
-      </div>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
+    <am-blog-posts
+      create="{{__createPost}}"
+      selected="{{__postData.id}}"
+    ></am-blog-posts>
   </template>
 
   <script>
     class AmPageBlog extends Polymer.Element {
       static get is() {
         return 'am-page-blog';
+      }
+      static get properties() {
+        return {
+          route: {
+            type: Object,
+            notify: true,
+          },
+
+          __createPost: Boolean,
+          __postData: Object,
+        };
       }
     }
 

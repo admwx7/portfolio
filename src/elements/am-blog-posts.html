@@ -1,0 +1,262 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+
+<link rel="import" href="../theme/shared-styles.html">
+
+<dom-module id="am-blog-posts">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <!-- TODO: add support for loading next 10, use startAt property -->
+    <firebase-query id="query"
+      path="/posts"
+      data="{{posts}}"
+      order-by-child="createdAt"
+      limit-to-last="10"
+    ></firebase-query>
+    <firebase-document id="document"
+    ></firebase-document>
+
+    <dom-if if="[[create]]">
+      <template>
+        <div class="card">
+          <paper-input id="title"
+            auto-validate
+            invalid="{{__invalidTitle}}"
+            label="Title"
+            required
+            value="{{post.title}}"
+          ></paper-input>
+          <paper-textarea id="summary"
+            auto-validate
+            invalid="{{__invalidSummary}}"
+            label="Summary"
+            required
+            value="{{post.summary}}"
+          ></paper-textarea>
+          <paper-textarea id="content"
+            auto-validate
+            invalid="{{__invalidContent}}"
+            label="Content"
+            required
+            value="{{post.content}}"
+          ></paper-textarea>
+          <paper-button
+            disabled$="[[__some(loading, __invalidContent, __invalidSummary, __invalidTitle, __clean)]]"
+            on-click="__submit"
+            raised
+          >Submit</paper-button>
+          <paper-button
+            disabled$="[[__some(loading)]]"
+            on-click="reset"
+            raised
+          >Cancel</paper-button>
+        </div>
+      </template>
+    </dom-if>
+    <dom-if if="[[!create]]">
+      <template>
+        <!-- TODO: make this look better, FAB for admins -->
+        <dom-if if="[[selected]]">
+          <template>
+            <paper-button
+              on-click="reset"
+              raised
+            >Back</paper-button>
+
+            <firebase-document
+              path="/posts/[[selected]]"
+              data="{{selectedPost}}"
+            ></firebase-document>
+
+            <div class="card">
+              <h2 class="card__title">[[selectedPost.title]]</h2>
+              <!-- TODO: render as markdown -->
+              <div class="card__content">[[selectedPost.content]]</div>
+            </div>
+          </template>
+        </dom-if>
+        <dom-if if="[[!selected]]">
+          <template>
+            <paper-button
+              on-click="createPost"
+              raised
+            >Create</paper-button>
+            <dom-repeat
+              as="post"
+              items="[[posts]]">
+              <template>
+                <div class="card" on-click="__selectPost">
+                  <h2 class="card__title">[[post.title]]</h2>
+                  <!-- TODO: render as markdown -->
+                  <div class="card__content">[[post.summary]]</div>
+                </div>
+              </template>
+            </dom-repeat>
+          </template>
+        </dom-if>
+      </template>
+    </dom-if>
+  </template>
+
+  <script>
+    class AmBlogPosts extends Polymer.LazyImportsMixin(Polymer.Element) {
+      static get is() {
+        return 'am-blog-posts';
+      }
+      static get properties() {
+        return {
+          /* Triggers creation of a new blog post */
+          create: {
+            type: Boolean,
+            value: false,
+          },
+          /* Shows loading status */
+          loading: {
+            type: Boolean,
+            notify: true,
+            value: false,
+          },
+          /* The data associated with the new blog post */
+          post: {
+            type: Object,
+            value() {
+              return {};
+            },
+          },
+          /* The list of blog posts */
+          posts: {
+            type: Array,
+            notify: true,
+          },
+          /* The currently selected blog post, shows all if one isn't selected */
+          selected: {
+            type: String,
+            notify: true,
+          },
+          /* The data associated with the currently selected post */
+          selectedPost: Object,
+
+          __clean: {
+            type: Boolean,
+            computed: '__computeClean(__dirty)',
+            value: false,
+          },
+          __dirty: {
+            type: Boolean,
+            value: false,
+            computed: '__dirtyCheck(post, post.*)',
+          },
+          __invalidContent: {
+            type: Boolean,
+            value: false,
+          },
+          __invalidSummary: {
+            type: Boolean,
+            value: false,
+          },
+          __invalidTitle: {
+            type: Boolean,
+            value: false,
+          },
+        };
+      }
+
+      /* Public Methods */
+
+      /**
+       * Triggers the new post logic
+       */
+      createPost() {
+        this.selected = 'new';
+      }
+      /**
+       * Resets element state back to the posts page
+       */
+      reset() {
+        this.post = {};
+        this.selected = '';
+        this.__dirty = false;
+        this.__invalidContent = false;
+        this.__invalidSummary = false;
+        this.__invalidTitle = false;
+
+        this.loading = false;
+      }
+
+      /* Private Methods */
+
+      /**
+       * Computes clean state as !__dirty
+       * @private
+       *
+       * @param {Boolean} dirty
+       * @returns {Boolean}
+       */
+      __computeClean(dirty) {
+        return !dirty;
+      }
+      /**
+       * Performs a dirty check on the data for creating a new post
+       * @private
+       *
+       * @param {Object} post
+       * @returns {Boolean}
+       */
+      __dirtyCheck(post) {
+        return Boolean(post.content &&
+          post.summary &&
+          post.title);
+      }
+      /**
+       * Sets the selectedPost
+       * @private
+       *
+       * @param {ClickEvent} event
+       */
+      __selectPost(event) {
+        this.selected = event.model.post.$key;
+      }
+      /**
+       * Runs a test to see if any of that parameters are true
+       * @private
+       *
+       * @param {...Boolean} params
+       * @returns {Boolean}
+       */
+      __some(...params) {
+        return params.some(Boolean);
+      }
+      /**
+       * Submits the new post data to firebase
+       * @private
+       */
+      __submit() {
+        // TODO: permission check
+        if (!this.create || this.loading) return;
+        this.loading = true;
+
+        this.$.document.data = Object.assign({}, this.post);
+        this.$.document.saveValue('/posts', this.post.title.toLowerCase().replace(/ /g, '-')).
+          then(() => {
+            this.reset();
+          }).
+          catch(() => {
+            this.loading = false;
+          });
+      }
+    }
+
+    window.customElements.define(AmBlogPosts.is, AmBlogPosts);
+  </script>
+</dom-module>
