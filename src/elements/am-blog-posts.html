@@ -200,7 +200,7 @@
        * @private
        *
        * @param {String | Number | Boolean} a
-       * @returns {Boolean}
+       * @return {Boolean}
        */
       __boolean(a) {
         return Boolean(a);
@@ -210,7 +210,7 @@
        * @private
        *
        * @param {Boolean} dirty
-       * @returns {Boolean}
+       * @return {Boolean}
        */
       __computeClean(dirty) {
         return !dirty;
@@ -239,7 +239,7 @@
        * @private
        *
        * @param {Object} post
-       * @returns {Boolean}
+       * @return {Boolean}
        */
       __dirtyCheck(post) {
         return Boolean(
@@ -253,7 +253,7 @@
        *
        * @param {String} a
        * @param {String} b
-       * @returns {Boolean}
+       * @return {Boolean}
        */
       __equal(a, b) {
         return a == b;
@@ -264,7 +264,7 @@
        *
        * @param {Object} a
        * @param {Object} b
-       * @returns {Boolean}
+       * @return {Boolean}
        */
       __reverse(a, b) {
         return b.lastUpdated - a.lastUpdated;
@@ -283,7 +283,7 @@
        * @private
        *
        * @param {...Boolean} params
-       * @returns {Boolean}
+       * @return {Boolean}
        */
       __some(...params) {
         return params.some(Boolean);
