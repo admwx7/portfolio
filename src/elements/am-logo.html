@@ -1,0 +1,234 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../theme/colors.html">
+
+<dom-module id="am-logo">
+  <template>
+    <style include="colors">
+      :host {
+        display: block;
+        position: relative;
+
+        --block-size: var(--am-logo-sizing, 16px);
+
+        width: calc(6 * var(--block-size));
+        height: calc(4 * var(--block-size));
+        margin: calc(1/2 * var(--block-size));
+        padding: calc(-1/2 * var(--block-size));
+      }
+      hr {
+        border: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .guideline {
+        position: absolute;
+        border-width: 1px;
+        border-color: var(--secondary-text-color);
+      }
+      .horizontal {
+        width: calc(7 * var(--block-size));
+        left: calc(-1/2 * var(--block-size));
+        border-bottom-style: solid;
+      }
+      .vertical {
+        top: calc(-1/2 * var(--block-size));
+        height: calc(5 * var(--block-size));
+        border-right-style: solid;
+      }
+
+      .fill {
+        position: absolute;
+        height: var(--block-size);
+        width: var(--block-size);
+        z-index: 1;
+      }
+      .fill-lower {
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-style: solid;
+        border-width: 0 0 calc(3/2 * var(--block-size)) calc(1 * var(--block-size));
+        z-index: 1;
+      }
+      .fill-upper {
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-style: solid;
+        border-width: calc(3/2 * var(--block-size)) calc(1 * var(--block-size)) 0 0;
+        z-index: 1;
+      }
+      .fill.light {
+        background-color: var(--divider-color);
+      }
+      .fill-upper.light {
+        border-color: var(--divider-color) transparent transparent transparent;
+      }
+      .fill-lower.light {
+        border-color: transparent transparent var(--divider-color) transparent;
+      }
+      .fill.accent {
+        background-color: var(--accent-color);
+      }
+      .fill-upper.accent {
+        border-color: var(--accent-color) transparent transparent transparent;
+      }
+      .fill-lower.accent {
+        border-color: transparent transparent var(--accent-color) transparent;
+      }
+
+      .top-0 {
+        top: 0;
+      }
+      .top-0-5 {
+        top: calc(0.5 * var(--block-size));
+      }
+      .top-1 {
+        top: var(--block-size);
+      }
+      .top-1-5 {
+        top: calc(1.5 * var(--block-size));
+      }
+      .top-2 {
+        top: calc(2 * var(--block-size));
+      }
+      .top-3 {
+        top: calc(3 * var(--block-size));
+      }
+      .top-4 {
+        top: calc(4 * var(--block-size));
+      }
+      .right-0 {
+        right: 0;
+      }
+      .right-1 {
+        right: var(--block-size);
+      }
+      .right-2 {
+        right: calc(2 * var(--block-size));
+      }
+      .right-3 {
+        right: calc(3 * var(--block-size));
+      }
+      .right-4 {
+        right: calc(4 * var(--block-size));
+      }
+      .right-5 {
+        right: calc(5 * var(--block-size));
+      }
+      .right-6 {
+        right: calc(6 * var(--block-size));
+      }
+      .bottom--0-5 {
+        bottom: calc(-0.5 * var(--block-size));
+      }
+      .bottom-0 {
+        bottom: 0;
+      }
+      .bottom-1 {
+        bottom: var(--block-size);
+      }
+      .bottom-2 {
+        bottom: calc(2 * var(--block-size));
+      }
+      .bottom-3 {
+        bottom: calc(3 * var(--block-size));
+      }
+      .bottom-4 {
+        bottom: calc(4 * var(--block-size));
+      }
+      .left-0 {
+        left: 0;
+      }
+      .left-1 {
+        left: var(--block-size);
+      }
+      .left-2 {
+        left: calc(2 * var(--block-size));
+      }
+      .left-3 {
+        left: calc(3 * var(--block-size));
+      }
+      .left-4 {
+        left: calc(4 * var(--block-size));
+      }
+      .left-5 {
+        left: calc(5 * var(--block-size));
+      }
+      .left-6 {
+        left: calc(6 * var(--block-size));
+      }
+
+      .width-1 {
+        width: var(--block-size);
+      }
+      .width-2 {
+        width: calc(2 * var(--block-size));
+      }
+      .width-3 {
+        width: calc(3 * var(--block-size));
+      }
+      .height-1 {
+        height: var(--block-size);
+      }
+      .height-2 {
+        height: calc(2 * var(--block-size));
+      }
+      .height-3 {
+        height: calc(3 * var(--block-size));
+      }
+      .height-4 {
+        height: calc(4 * var(--block-size));
+      }
+    </style>
+
+    <!-- Corner block -->
+    <div class="fill light top-0 left-0 width-1 height-1"></div>
+    <div class="fill light top-0-5 left-0 width-1 height-1"></div>
+    <div class="fill-upper light top-0 left-1"></div>
+    <div class="fill-upper light top-1-5 left-0"></div>
+    <!-- Letter A -->
+    <div class="fill-lower accent left-2 top-0"></div>
+    <div class="fill-upper accent left-2 bottom-1"></div>
+    <div class="fill-upper accent left-1 top-3"></div>
+    <div class="fill-lower accent left-0 bottom--0-5"></div>
+    <div class="fill-lower accent left-1 bottom-1"></div>
+    <div class="fill accent left-2 bottom-1"></div>
+    <div class="fill accent left-3 bottom-3"></div>
+    <div class="fill accent left-3 bottom-2"></div>
+    <div class="fill accent left-3 bottom-1"></div>
+    <div class="fill accent left-3 bottom-0"></div>
+    <!-- Letter M -->
+    <div class="fill-lower light right-1 top-0"></div>
+    <div class="fill-upper light right-1 top-1-5"></div>
+    <div class="fill light right-0 bottom-3"></div>
+    <div class="fill light right-0 bottom-2"></div>
+    <div class="fill light right-0 bottom-1"></div>
+    <div class="fill light right-0 bottom-0"></div>
+    <!-- Guidelines -->
+    <hr class="guideline horizontal top-0" />
+    <hr class="guideline horizontal top-1" />
+    <hr class="guideline horizontal top-2" />
+    <hr class="guideline horizontal top-3" />
+    <hr class="guideline horizontal top-4" />
+    <hr class="guideline vertical" />
+    <hr class="guideline vertical left-0" />
+    <hr class="guideline vertical left-1" />
+    <hr class="guideline vertical left-2" />
+    <hr class="guideline vertical left-3" />
+    <hr class="guideline vertical left-4" />
+    <hr class="guideline vertical left-5" />
+    <hr class="guideline vertical left-6" />
+  </template>
+  <script>
+    class AmLogo extends Polymer.Element {
+      static get is() {
+        return 'am-logo';
+      }
+    }
+
+    window.customElements.define(AmLogo.is, AmLogo);
+  </script>
+</dom-module>

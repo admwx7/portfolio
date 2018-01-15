@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 
+<link rel="import" href="elements/am-logo.html">
 <link rel="import" href="elements/am-nav.html">
 <link rel="import" href="elements/am-pages.html">
 <link rel="import" href="theme/am-icons.html">
@@ -11,48 +12,31 @@
   <template>
     <style include="colors shared-styles">
       :host {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
       }
       #header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+        flex: 0 0 auto;
         display: flex;
         justify-content: flex-start;
-        align-items: center;
-        height: 80px;
         color: var(--text-color);
         background-color: var(--dark-primary-color);
       }
       #title {
-        flex: 0 0 auto;
-        font-size: 20pt;
-        cursor: pointer;
-        text-decoration: none;
-        color: var(--text-color);
-        text-shadow:
-          0 -1px 4px var(--accent-shadow-color),
-          1px 0 4px var(--accent-shadow-color),
-          0 1px 4px var(--accent-shadow-color),
-          -1px 0 4px var(--accent-shadow-color);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: 100%;
-        padding-left: 24px;
-        padding-right: 24px;
+        overflow: hidden;
+        --am-logo-sizing: 16px;
+        margin-top: var(--am-logo-sizing);
+        margin-bottom: var(--am-logo-sizing);
+        margin-left: var(--am-logo-sizing);
       }
-      #title:hover {
-        background-color: var(--primary-color);
-      }
-      #nav {
+      #content, #nav {
         flex: 1 1 auto;
-        height: 100%;
       }
       #content {
-        width: 100%;
-        margin-top: 80px;
+        overflow-y: auto;
       }
     </style>
 
@@ -67,7 +51,7 @@
     <div id="header">
       <a id="title"
         href="/">
-        <span>Austin Murdock</span>
+        <am-logo></am-logo>
       </a>
       <am-nav id="nav"
         page="{{page}}"
@@ -75,11 +59,13 @@
         root-path="[[rootPath]]"
       ></am-nav>
     </div>
-    <am-pages id="content"
-      page="{{page}}"
-      pages="{{pages}}"
-      root-path="[[rootPath]]"
-    ></am-pages>
+    <div id="content">
+      <am-pages
+        page="{{page}}"
+        pages="{{pages}}"
+        root-path="[[rootPath]]"
+      ></am-pages>
+    </div>
   </template>
 
   <script>
