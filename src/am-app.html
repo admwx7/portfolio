@@ -17,20 +17,26 @@
         height: 100vh;
         width: 100vw;
         overflow: hidden;
+
+        --am-logo-sizing: 16px;
       }
       #header {
         flex: 0 0 auto;
         display: flex;
         justify-content: flex-start;
         color: var(--text-color);
-        background-color: var(--dark-primary-color);
+        padding-left: var(--padding);
+        padding-right: var(--padding);
+        margin-left: var(--gutter);
+        margin-right: var(--gutter);
       }
       #title {
         overflow: hidden;
-        --am-logo-sizing: 16px;
         margin-top: var(--am-logo-sizing);
         margin-bottom: var(--am-logo-sizing);
-        margin-left: var(--am-logo-sizing);
+      }
+      #nav {
+        margin-bottom: -1px;
       }
       #content, #nav {
         flex: 1 1 auto;
@@ -48,7 +54,7 @@
       messaging-sender-id="807153287758"
     ></firebase-app>
 
-    <div id="header">
+    <div id="header" class="divider">
       <a id="title"
         href="/">
         <am-logo></am-logo>

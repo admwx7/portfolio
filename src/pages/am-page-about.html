@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../elements/am-under-construction.html">
+<link rel="import" href="../theme/shared-styles.html">
+
+<dom-module id="am-page-about">
+  <template>
+    <style include="shared-styles">
+    </style>
+
+    <!--
+      Background
+      Education
+      Years in business
+      resume
+      YouTube channel
+    -->
+
+    <am-under-construction></am-under-construction>
+    <div class="card">
+      <div class="divider">
+        <h1>About Me</h1>
+      </div>
+      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
+      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+    </div>
+  </template>
+
+  <script>
+    class AmPageAbout extends Polymer.Element {
+      static get is() {
+        return 'am-page-about';
+      }
+    }
+
+    window.customElements.define(AmPageAbout.is, AmPageAbout);
+  </script>
+</dom-module>
