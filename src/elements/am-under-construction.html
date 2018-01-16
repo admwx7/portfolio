@@ -8,28 +8,84 @@
   <template>
     <style include="colors">
       :host {
-        display: flex;
-        justify-content: center;
-        width: calc(100% - 12px);
-        padding: 16px;
-        background-color: var(--warning-color);
-        color: var(--primary-text-color);
-        font-size: 14pt;
-        font-weight: bold;
-        text-align: center;
-        margin: -10px -10px 10px -10px;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        height: var(--size);
+        width: var(--size);
+        z-index: 100;
+
+        --transition-duration: var(--under-construction-transition-duration, 0.5s);
+        --transition-delay: var(--under-construction-transition-delay, 0.5s);
+        --size: var(--under-constrution-size, 100px);
+        --icon-ratio: var(--under-constrution-icon-ratio, 0.4);
+        --background-color: var(--under-construction-background-color, var(--warning-color));
+        --text-color: var(--under-construction-text-color, var(--secondary-text-color));
+        --font-size: var(--under-construction-font-size, 16pt);
+      }
+      .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: var(--size) var(--size) 0 0;
+        border-color: var(--background-color) transparent transparent transparent;
+        z-index: 1;
+
+        transition-duration: var(--transition-duration);
+        transition-delay: var(--transition-delay);
+      }
+      .content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding-top: var(--padding, 16px);
+        padding-bottom: var(--padding, 16px);
+        padding-right: var(--padding, 16px);
+        padding-left: var(--size);
+        width: calc(100vw - 2 * var(--size) - var(--padding, 16px));
+        height: calc(var(--size) - 2 * var(--padding, 16px));
+        background-color: var(--background-color);
+        font-size: var(--font-size);
+        color: var(--text-color);
+
+        z-index: 0;
+        transition-duration: var(--transition-duration);
+      }
+      .icon:hover ~ .background {
+        left: calc(100vw - var(--size));
+        transition-delay: 0s;
+      }
+      .icon:not(:hover) ~ .content {
+        left: calc(-100vw + var(--size));
+        transition-delay: var(--transition-delay);
       }
       .icon {
-        height: 40px;
-        width: 40px;
+        position: absolute;
+        top: 30%;
+        left: 30%;
+        transform: translate(-50%, -50%);
+        height: calc(var(--icon-ratio) * var(--size));
+        width: calc(var(--icon-ratio) * var(--size));
+        z-index: 2;
+        cursor: pointer;
+        color: var(--text-color);
+
+        transition-duration: var(--transition-duration);
       }
     </style>
 
-    <div class="container">
-      <iron-icon class="icon"
-        icon="am-icons:warning"
-      ></iron-icon>
-      <span>This page is currently under construction and may have some issues</span>
+    <iron-icon class="icon"
+      icon="am-icons:warning"
+    ></iron-icon>
+    <div class="background"></div>
+    <div class="content">
+      <slot><span>This page is under construction</span></slot>
     </div>
   </template>
 

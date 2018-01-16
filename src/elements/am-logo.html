@@ -10,6 +10,8 @@
         position: relative;
 
         --block-size: var(--am-logo-sizing, 16px);
+        --rotation: 0deg;
+        --slant: -45deg;
 
         width: calc(6 * var(--block-size));
         height: calc(4 * var(--block-size));
@@ -25,7 +27,7 @@
       .guideline {
         position: absolute;
         border-width: 1px;
-        border-color: var(--secondary-text-color);
+        border-color: var(--primary-text-color);
       }
       .horizontal {
         width: calc(7 * var(--block-size));
@@ -43,53 +45,63 @@
         height: var(--block-size);
         width: var(--block-size);
         z-index: 1;
+        overflow: hidden;
       }
-      .fill-lower {
+      .fill::after {
+        content: "";
         position: absolute;
-        height: 0;
-        width: 0;
-        border-style: solid;
-        border-width: 0 0 calc(3/2 * var(--block-size)) calc(1 * var(--block-size));
-        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
       }
-      .fill-upper {
-        position: absolute;
-        height: 0;
-        width: 0;
-        border-style: solid;
-        border-width: calc(3/2 * var(--block-size)) calc(1 * var(--block-size)) 0 0;
-        z-index: 1;
+      .rotate {
+        --rotation: -146.31deg;
       }
-      .fill.light {
-        background-color: var(--divider-color);
+      .fill.light::after {
+        background: repeating-linear-gradient(
+          calc(var(--slant) - var(--rotation)),
+          var(--divider-color) 1px,
+          var(--divider-light-color) 1px,
+          var(--divider-dark-color) 2px,
+          var(--divider-color) 2px,
+          var(--divider-dark-color) 1px,
+          var(--divider-light-color) 2px
+        );
       }
-      .fill-upper.light {
-        border-color: var(--divider-color) transparent transparent transparent;
+      .fill.accent::after {
+        background: repeating-linear-gradient(
+          calc(var(--slant) - var(--rotation)),
+          var(--accent-color) 1px,
+          var(--accent-light-color) 1px,
+          var(--accent-dark-color) 2px,
+          var(--accent-color) 2px,
+          var(--accent-dark-color) 1px,
+          var(--accent-light-color) 2px
+        );
       }
-      .fill-lower.light {
-        border-color: transparent transparent var(--divider-color) transparent;
+      .rotate::after {
+        width: var(--block-size);
+        height: 150%;
+        top: 100%;
+        left: 0;
+        transform: rotate(var(--rotation));
+        transform-origin: top left;
       }
-      .fill.accent {
-        background-color: var(--accent-color);
+      .shift-right::after {
+        left: 30%;
+        top: 122%;
       }
-      .fill-upper.accent {
-        border-color: var(--accent-color) transparent transparent transparent;
-      }
-      .fill-lower.accent {
-        border-color: transparent transparent var(--accent-color) transparent;
+      .shift-right-2::after {
+        left: 60%;
+        top: 90%;
       }
 
       .top-0 {
         top: 0;
       }
-      .top-0-5 {
-        top: calc(0.5 * var(--block-size));
-      }
       .top-1 {
         top: var(--block-size);
-      }
-      .top-1-5 {
-        top: calc(1.5 * var(--block-size));
       }
       .top-2 {
         top: calc(2 * var(--block-size));
@@ -120,9 +132,6 @@
       }
       .right-6 {
         right: calc(6 * var(--block-size));
-      }
-      .bottom--0-5 {
-        bottom: calc(-0.5 * var(--block-size));
       }
       .bottom-0 {
         bottom: 0;
@@ -185,28 +194,19 @@
     </style>
 
     <!-- Corner block -->
-    <div class="fill light top-0 left-0 width-1 height-1"></div>
-    <div class="fill light top-0-5 left-0 width-1 height-1"></div>
-    <div class="fill-upper light top-0 left-1"></div>
-    <div class="fill-upper light top-1-5 left-0"></div>
-    <!-- Letter A -->
-    <div class="fill-lower accent left-2 top-0"></div>
-    <div class="fill-upper accent left-2 bottom-1"></div>
-    <div class="fill-upper accent left-1 top-3"></div>
-    <div class="fill-lower accent left-0 bottom--0-5"></div>
-    <div class="fill-lower accent left-1 bottom-1"></div>
-    <div class="fill accent left-2 bottom-1"></div>
-    <div class="fill accent left-3 bottom-3"></div>
-    <div class="fill accent left-3 bottom-2"></div>
-    <div class="fill accent left-3 bottom-1"></div>
-    <div class="fill accent left-3 bottom-0"></div>
+    <div class="fill rotate light top-0 left-0 height-3 width-2"></div>
+    <div class="fill rotate light top-0 left-0 height-2 width-2"></div>
+    <div class="fill light top-0 left-0"></div>
+
     <!-- Letter M -->
-    <div class="fill-lower light right-1 top-0"></div>
-    <div class="fill-upper light right-1 top-1-5"></div>
-    <div class="fill light right-0 bottom-3"></div>
-    <div class="fill light right-0 bottom-2"></div>
-    <div class="fill light right-0 bottom-1"></div>
-    <div class="fill light right-0 bottom-0"></div>
+    <div class="fill rotate shift-right-2 light left-2 bottom-0 height-4 width-3"></div>
+    <div class="fill light right-0 top-0 height-4 width-1"></div>
+
+    <!-- Letter A -->
+    <div class="fill rotate shift-right accent left-0 top-0 height-4 width-3"></div>
+    <div class="fill accent left-2 bottom-1"></div>
+    <div class="fill accent left-3 top-0 height-4 width-1"></div>
+
     <!-- Guidelines -->
     <hr class="guideline horizontal top-0" />
     <hr class="guideline horizontal top-1" />
