@@ -88,6 +88,72 @@
           rootPath: String,
         };
       }
+
+      constructor() {
+        super();
+
+        this.closeDrawer = this.closeDrawer.bind(this);
+        this.__touchMove = this.__touchMove.bind(this);
+        this.__touchStart = this.__touchStart.bind(this);
+      }
+      connectedCallback() {
+        super.connectedCallback();
+
+        document.addEventListener('click', this.closeDrawer, false);
+        document.addEventListener('touchmove', this.__touchMove, false);
+        document.addEventListener('touchstart', this.__touchStart, false);
+      }
+      disconnectedCallback() {
+        super.disconnectedCallback();
+
+        document.removeEventListener('click', this.closeDrawer);
+        document.removeEventListener('touchmove', this.__touchMove);
+        document.removeEventListener('touchstart', this.__touchStart);
+      }
+
+      closeDrawer() {
+        this.open = false;
+        this.__xDown = null;
+      }
+      openDrawer() {
+        this.open = true;
+        this.__xDown = null;
+      }
+      toggleDrawer(event) {
+        event.stopPropagation();
+        this.open = !this.open;
+      }
+
+      __touchMove(event) {
+        if (!this.__xDown) return;
+
+        const xUp = event.touches[0].clientX;
+        const xDiff = this.__xDown - xUp;
+
+        if (xDiff > this.swipeDiff) {
+          this.closeDrawer();
+        } else if (xDiff < (-1 * this.swipeDiff)) {
+          this.openDrawer();
+        }
+      }
+      __touchStart(event) {
+        this.__xDown = event.touches[0].clientX;
+      }
+      __updateGlobal(event) {
+        const property = event.type.replace('-changed', '');
+        const styles = {};
+        let value = event.detail.value;
+        switch (property) {
+          case 'gutter':
+            value = `${value}px`;
+            break;
+          default:
+            value = String(value);
+            break;
+        }
+        styles[`--${property}`] = value;
+        this.updateStyles(styles);
+      }
     }
 
     window.customElements.define(AmApp.is, AmApp);
