@@ -1,5 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/am-breakpoints/am-breakpoints.html">
 
 <link rel="import" href="elements/am-logo.html">
 <link rel="import" href="elements/am-nav.html">
@@ -16,7 +18,6 @@
         flex-direction: column;
         height: 100vh;
         width: 100vw;
-        overflow: hidden;
 
         --am-logo-sizing: calc(0.75 * var(--gutter));
       }
@@ -33,13 +34,10 @@
         color: var(--text-color);
         padding-left: var(--padding);
         padding-right: var(--padding);
-        margin-left: var(--gutter);
-        margin-right: var(--gutter);
       }
-      #title {
-        overflow: hidden;
-        margin-top: var(--am-logo-sizing);
-        margin-bottom: var(--am-logo-sizing);
+      #title[center] {
+        margin-left: auto;
+        margin-right: auto;
       }
       #nav {
         margin-bottom: -1px;
@@ -120,33 +118,59 @@
     <div id="header"
       class="divider">
       <a id="title"
+        center$="[[hideTopNav]]"
         href="/">
-        <am-logo></am-logo>
+        <am-logo
+          large$="[[__largeLogo]]"
+        ></am-logo>
       </a>
       <am-nav id="nav"
+        hidden$="[[hideTopNav]]"
         page="{{page}}"
         pages="[[pages]]"
         root-path="[[rootPath]]"
       ></am-nav>
     </div>
-    <div id="content">
-      <am-pages
-        page="{{page}}"
-        pages="{{pages}}"
-        root-path="[[rootPath]]"
-      ></am-pages>
-    </div>
+    <am-pages id="content"
+      page="{{page}}"
+      pages="{{pages}}"
+      root-path="[[rootPath]]"
+    ></am-pages>
   </template>
 
   <script>
+    Polymer.setPassiveTouchGestures(true);
     class AmApp extends Polymer.Element {
       static get is() {
         return 'am-app';
       }
       static get properties() {
         return {
+          hideTopNav: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+          },
+          open: {
+            type: Boolean,
+            notify: true,
+            value: false,
+          },
           page: String,
           pages: Array,
+          swipeDiff: {
+            type: Number,
+            value: 120,
+          },
+
+          __largeLogo: {
+            type: Boolean,
+            value: false,
+          },
+          __xDown: {
+            type: Number,
+            value: null,
+          },
 
           /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
           rootPath: String,
