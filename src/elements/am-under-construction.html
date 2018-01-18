@@ -47,8 +47,8 @@
         padding-top: var(--padding, 16px);
         padding-bottom: var(--padding, 16px);
         padding-right: var(--padding, 16px);
-        padding-left: var(--size);
-        width: calc(100vw - 2 * var(--size) - var(--padding, 16px));
+        padding-left: calc(var(--size) * 0.7);
+        width: calc(100vw - var(--padding, 16px) - (var(--size) * 0.7) - (var(--size) / 2));
         height: calc(var(--size) - 2 * var(--padding, 16px));
         background-color: var(--background-color);
         font-size: var(--font-size);
@@ -58,11 +58,11 @@
         transition-duration: var(--transition-duration);
       }
       .icon:hover ~ .background {
-        left: calc(100vw - var(--size));
+        left: calc(100vw - (var(--size) / 2));
         transition-delay: 0s;
       }
       .icon:not(:hover) ~ .content {
-        left: calc(-100vw + var(--size));
+        left: calc(-100vw + (var(--size) / 2));
         transition-delay: var(--transition-delay);
       }
       .icon {
