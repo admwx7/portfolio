@@ -190,8 +190,8 @@
         super.disconnectedCallback();
 
         document.removeEventListener('click', this.closeDrawer);
-        document.removeEventListener('touchmove', this.__touchMove)
-        document.removeEventListener('touchstart', this.__touchStart)
+        document.removeEventListener('touchmove', this.__touchMove);
+        document.removeEventListener('touchstart', this.__touchStart);
       }
 
       closeDrawer() {
@@ -226,13 +226,15 @@
         const property = event.type.replace('-changed', '');
         const styles = {};
         let value = event.detail.value;
-        switch(property) {
+        switch (property) {
           case 'gutter':
             value = `${value}px`;
+            break;
           default:
-            styles[`--${property}`] = String(value);
+            value = String(value);
             break;
         }
+        styles[`--${property}`] = value;
         this.updateStyles(styles);
       }
     }
