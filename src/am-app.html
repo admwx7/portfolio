@@ -19,7 +19,7 @@
         height: 100vh;
         width: 100vw;
 
-        --am-logo-sizing: var(--padding);
+        --am-logo-sizing: calc(0.75 * var(--gutter));
       }
       :host([hide-top-nav]) {
         height: 100%;
@@ -76,6 +76,9 @@
         cursor: pointer;
         color: var(--light-primary-color);
       }
+      #drawer .icon:hover {
+        filter: drop-shadow(0 0 4px var(--primary-color));
+      }
       #drawer[open] .icon {
         transform: rotateY(180deg);
       }
@@ -99,7 +102,8 @@
       breakpoints="large-tablet"
     ></am-breakpoints>
 
-    <div id="drawer" open$="[[open]]">
+    <div id="drawer"
+      open$="[[open]]">
       <am-nav id="side-nav"
         page="{{page}}"
         pages="[[pages]]"
@@ -111,7 +115,8 @@
         on-click="toggleDrawer"
       ></iron-icon>
     </div>
-    <div id="header" class="divider">
+    <div id="header"
+      class="divider">
       <a id="title"
         center$="[[hideTopNav]]"
         href="/">
@@ -171,7 +176,7 @@
           rootPath: String,
         };
       }
-
+      /* Lifecycle Methods */
       constructor() {
         super();
 
@@ -193,20 +198,37 @@
         document.removeEventListener('touchmove', this.__touchMove);
         document.removeEventListener('touchstart', this.__touchStart);
       }
-
+      /* Public Methods */
+      /**
+       * Closes the drawer
+       */
       closeDrawer() {
         this.open = false;
         this.__xDown = null;
       }
+      /**
+       * Opens the drawer
+       */
       openDrawer() {
         this.open = true;
         this.__xDown = null;
       }
+      /**
+       * Toggles the drawer and prevents event propagation
+       *
+       * @param {CustomEvent} event
+       */
       toggleDrawer(event) {
         event.stopPropagation();
         this.open = !this.open;
       }
-
+      /* Private Methods */
+      /**
+       * Monitors movements associated with touch actions for triggering between open and closing the drawer
+       * @private
+       *
+       * @param {CustomEvent} event
+       */
       __touchMove(event) {
         if (!this.__xDown) return;
 
@@ -219,9 +241,21 @@
           this.openDrawer();
         }
       }
+      /**
+       * Tracks touch start for opening / closing the left drawer
+       * @private
+       *
+       * @param {CustomEvent} event
+       */
       __touchStart(event) {
         this.__xDown = event.touches[0].clientX;
       }
+      /**
+       * Used to trigger updates to global style variables based on event changes
+       * @private
+       *
+       * @param {CustomEvent} event
+       */
       __updateGlobal(event) {
         const property = event.type.replace('-changed', '');
         const styles = {};

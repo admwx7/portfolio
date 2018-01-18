@@ -1,39 +1,88 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
 <link rel="import" href="../elements/am-under-construction.html">
+<link rel="import" href="../elements/am-contact-card.html">
 <link rel="import" href="../theme/shared-styles.html">
 
 <dom-module id="am-page-main">
   <template>
     <style include="shared-styles">
+      .split {
+        display: flex;
+      }
+      .split > * {
+        flex: 1 1 auto;
+      }
+      .contact {
+        flex: 0 0 auto;
+        display: flex;
+        padding-top: calc(var(--padding) / 2);
+        padding-bottom: calc(var(--padding) / 2);
+        padding-left: var(--gutter);
+        flex-direction: column;
+      }
+      .highlight {
+        margin: 0;
+        padding: 0;
+        color: var(--accent-color);
+        font-size: 18pt;
+      }
+      .small {
+        font-size: 14pt;
+      }
+      .right {
+        text-align: right;
+      }
+
+      h1 {
+        font-size: 24pt;
+      }
+      p {
+        font-size: 16pt;
+      }
     </style>
 
-    <am-under-construction></am-under-construction>
-
-    <div class="card">
-      <h2 class="divider">TAGLINE</h2>
-      <ul>
-        <!-- what am I? -->
-        <li>developer / architect - front-end focus</li>
-        <!-- what do I do? -->
-        <li>build web-apps</li>
-        <!-- where am I located? -->
-        <li>located in Central US</li>
-        <!-- what am I looking for? -->
-        <li>Freelancer always looking for new projects</li>
-      </ul>
+    <div class="card split">
+      <div>
+        <h1 class="divider">Architect turned Software Engineer</h1>
+        <p>
+          I am a <span class="highlight">Front-End</span> focused <span class="highlight">Full-Stack Engineer</span> with an emphasis on <span class="highlight">Architecture</span> and <span class="highlight">User Experience</span>
+        </p>
+      </div>
+      <div class="contact">
+        <am-contact-card
+          icon="am-icons:email"
+          href="mailto:austin.d.murdock@gmail.com"
+        ><p>austin.d.murdock@gmail.com</p></am-contact-card>
+        <am-contact-card
+          icon="am-icons:phone"
+          href="tel:+16365773448"
+        ><p>(636) 577-3448</p></am-contact-card>
+        <am-contact-card
+          icon="am-icons:twitter"
+          href="https://twitter.com/admwx7"
+        ><p>@admwx7</p></am-contact-card>
+        <am-contact-card
+          icon="am-icons:linkedin"
+          href="https://www.linkedin.com/in/austinmurdock/"
+        ><p>austinmurdock</p></am-contact-card>
+        <am-contact-card
+          icon="am-icons:youtube"
+          href="https://www.youtube.com/user/admwx7"
+        ><p>admwx7</p></am-contact-card>
+      </div>
     </div>
 
-    <div class="card">
+    <!-- <div class="card">
       <h2 class="divider">PORTFOLIO</h2>
       <p>
         horizontal scroller of projects cards?
       </p>
-    </div>
+    </div> -->
 
-    <div class="card">
+    <!-- what services do I provide? -->
+    <!-- <div class="card">
       <h2 class="divider">SERVICES</h2>
-      <!-- what services do I provide? -->
       <p>
         <ul>
           <li>architecture</li>
@@ -41,17 +90,14 @@
           <li>UI</li>
         </ul>
       </p>
-    </div>
+    </div> -->
 
-    <div class="card">
+    <!-- <div class="card">
       <h2 class="divider">CONTACT ME</h2>
-      <p>
-        Contact cards: email, phone, twitter, linkedin, YouTube
-      </p>
       <p>
         Form to collect info for potential contacts
       </p>
-    </div>
+    </div> -->
   </template>
 
   <script>

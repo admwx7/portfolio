@@ -35,14 +35,12 @@
         border-width: var(--size) var(--size) 0 0;
         border-color: var(--background-color) transparent transparent transparent;
         z-index: 1;
-
-        transition-duration: var(--transition-duration);
-        transition-delay: var(--transition-delay);
+        transition: left var(--transition-duration) ease-in-out var(--transition-delay);
       }
       .content {
         position: absolute;
         top: 0;
-        left: 0;
+        left: calc(-100vw + (var(--size) / 2));
         margin: 0;
         padding-top: var(--padding, 16px);
         padding-bottom: var(--padding, 16px);
@@ -52,18 +50,20 @@
         height: calc(var(--size) - 2 * var(--padding, 16px));
         background-color: var(--background-color);
         font-size: var(--font-size);
-        color: var(--text-color);
+        color: transparent;
 
         z-index: 0;
-        transition-duration: var(--transition-duration);
+        transition: color calc((var(--transition-duration) / 2) + (var(--transition-delay) / 2)) ease-in-out calc(var(--transition-delay) / 2),
+          left var(--transition-duration) ease-in-out var(--transition-delay);
+      }
+      .icon:hover ~ .content {
+        color: var(--text-color);
+        left: 0;
+        transition: color calc(var(--transition-duration) / 2) ease-in-out calc(var(--transition-delay) + (var(--transition-duration) / 1.5)),
+          left var(--transition-duration) ease-in-out var(--transition-delay);
       }
       .icon:hover ~ .background {
         left: calc(100vw - (var(--size) / 2));
-        transition-delay: 0s;
-      }
-      .icon:not(:hover) ~ .content {
-        left: calc(-100vw + (var(--size) / 2));
-        transition-delay: var(--transition-delay);
       }
       .icon {
         position: absolute;
@@ -75,8 +75,6 @@
         z-index: 2;
         cursor: pointer;
         color: var(--text-color);
-
-        transition-duration: var(--transition-duration);
       }
     </style>
 

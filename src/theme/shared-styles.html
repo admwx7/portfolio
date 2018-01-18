@@ -3,9 +3,11 @@
 <dom-module id="shared-styles">
   <template>
     <style include="colors">
+      :host {
+        --padding: 8px;
+      }
       [hidden] {
         display: none;
-        --padding: 8px;
       }
       .card {
         margin: 0 auto;
