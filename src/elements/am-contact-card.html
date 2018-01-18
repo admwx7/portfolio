@@ -1,0 +1,95 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../theme/am-icons.html">
+
+<dom-module id="am-contact-card">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        padding-top: calc(var(--padding) / 2);
+        padding-bottom: calc(var(--padding) / 2);
+        z-index: 1;
+      }
+      #icon {
+        height: 36px;
+        width: 36px;
+        z-index: 1;
+        cursor: pointer;
+        filter: drop-shadow(0 0 2px var(--dark-primary-color));
+      }
+      #icon:hover {
+        filter: drop-shadow(0 0 4px var(--dark-primary-color));
+      }
+      #flyout {
+        white-space: nowrap;
+        position: absolute;
+        opacity: 0;
+        right: 0;
+        top: 50%;
+        bottom: 0;
+        transform: translateY(-50%);
+        z-index: 0;
+      }
+      #flyout ::slotted(*) {
+        margin: 0;
+        padding: 0;
+        text-shadow: 0 0 8px var(--dark-primary-color);
+      }
+      #icon:not(:hover) ~ #flyout {
+        transition: right 0.5s ease-in-out 0s,
+          opacity 0.25s ease-in-out 0s,
+          width 0s ease-out 0.75s;
+      }
+      #icon:hover ~ #flyout {
+        opacity: 1;
+        right: calc(100% + var(--padding));
+        transition: right 0.5s ease-in-out 0s,
+          opacity 0.25s ease-in-out 0.25s;
+      }
+    </style>
+
+    <iron-icon id="icon"
+      icon="[[icon]]"
+    ></iron-icon>
+    <div id="flyout">
+      <slot></slot>
+    </div>
+  </template>
+  <script>
+    class AmContactCard extends Polymer.Element {
+      static get is() {
+        return 'am-contact-card';
+      }
+      static get properties() {
+        return {
+          icon: String,
+          href: String,
+        };
+      }
+      /* Lifecycle Methods */
+      constructor() {
+        super();
+        this.__open = this.__open.bind(this);
+      }
+      connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('click', this.__open);
+      }
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener('click', this.__open);
+      }
+      /* Private Methods */
+      /**
+       * Opens a new tab/window based on the provided href
+       */
+      __open() {
+        window.open(this.href);
+      }
+    }
+
+    window.customElements.define(AmContactCard.is, AmContactCard);
+  </script>
+</dom-module>

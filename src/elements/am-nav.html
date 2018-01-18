@@ -23,14 +23,17 @@
         position: relative;
         text-align: center;
         min-width: 110px;
+        font-weight: bold;
+        font-size: 14pt;
       }
       .page-link:not([selected]):hover {
         cursor: pointer;
-        font-weight: bold;
-        color: var(--primary-text-color);
+        filter: drop-shadow(0 0 2px var(--primary-color));
+      }
+      :host([vertical]) .page-link:not([selected]):hover {
+        filter: drop-shadow(0 0 2px var(--primary-color));
       }
       .page-link[selected] {
-        font-weight: bold;
         color: var(--accent-color);
       }
       .page-link[selected]::after {

@@ -18,7 +18,13 @@
         width: 100vw;
         overflow: hidden;
 
-        --am-logo-sizing: 16px;
+        --am-logo-sizing: calc(0.75 * var(--gutter));
+      }
+      :host([hide-top-nav]) {
+        height: 100%;
+      }
+      am-logo[large] {
+        --am-logo-sizing: var(--gutter);
       }
       #header {
         flex: 0 0 auto;
@@ -44,6 +50,40 @@
       #content {
         overflow-y: auto;
       }
+      #drawer {
+        display: block;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -305px;
+        width: 300px;
+        z-index: 999;
+        border-right: 1px solid var(--divider-color);
+        box-shadow: 1px 0 2px 0 var(--divider-shadow-color);
+
+        background-color: var(--light-primary-color);
+        transition-duration: 0.75s;
+        transition-property: left;
+      }
+      #drawer[open] {
+        left: 0;
+      }
+      #drawer .icon {
+        position: absolute;
+        right: -25px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition-duration: 0.75s;
+        transition-property: transform;
+        cursor: pointer;
+        color: var(--light-primary-color);
+      }
+      #drawer .icon:hover {
+        filter: drop-shadow(0 0 4px var(--primary-color));
+      }
+      #drawer[open] .icon {
+        transform: rotateY(180deg);
+      }
     </style>
 
     <firebase-app
@@ -53,8 +93,32 @@
       storage-bucket="portfolio-138c8.appspot.com"
       messaging-sender-id="807153287758"
     ></firebase-app>
+    <am-breakpoints
+      active="{{hideTopNav}}"
+      breakpoints="xsmall,small-tablet,large-tablet,medium-handset-landscape,larget-handset-landscape"
+      on-columns-changed="__updateGlobal"
+      on-gutter-changed="__updateGlobal"
+    ></am-breakpoints>
+    <am-breakpoints
+      active="{{__largeLogo}}"
+      breakpoints="large-tablet"
+    ></am-breakpoints>
 
-    <div id="header" class="divider">
+    <div id="drawer"
+      open$="[[open]]">
+      <am-nav id="side-nav"
+        page="{{page}}"
+        pages="[[pages]]"
+        root-path="[[rootPath]]"
+        vertical
+      ></am-nav>
+      <iron-icon class="icon"
+        icon="am-icons:chevron-right"
+        on-click="toggleDrawer"
+      ></iron-icon>
+    </div>
+    <div id="header"
+      class="divider">
       <a id="title"
         href="/">
         <am-logo></am-logo>
@@ -88,7 +152,7 @@
           rootPath: String,
         };
       }
-
+      /* Lifecycle Methods */
       constructor() {
         super();
 
@@ -110,20 +174,37 @@
         document.removeEventListener('touchmove', this.__touchMove);
         document.removeEventListener('touchstart', this.__touchStart);
       }
-
+      /* Public Methods */
+      /**
+       * Closes the drawer
+       */
       closeDrawer() {
         this.open = false;
         this.__xDown = null;
       }
+      /**
+       * Opens the drawer
+       */
       openDrawer() {
         this.open = true;
         this.__xDown = null;
       }
+      /**
+       * Toggles the drawer and prevents event propagation
+       *
+       * @param {CustomEvent} event
+       */
       toggleDrawer(event) {
         event.stopPropagation();
         this.open = !this.open;
       }
-
+      /* Private Methods */
+      /**
+       * Monitors movements associated with touch actions for triggering between open and closing the drawer
+       * @private
+       *
+       * @param {CustomEvent} event
+       */
       __touchMove(event) {
         if (!this.__xDown) return;
 
@@ -136,9 +217,21 @@
           this.openDrawer();
         }
       }
+      /**
+       * Tracks touch start for opening / closing the left drawer
+       * @private
+       *
+       * @param {CustomEvent} event
+       */
       __touchStart(event) {
         this.__xDown = event.touches[0].clientX;
       }
+      /**
+       * Used to trigger updates to global style variables based on event changes
+       * @private
+       *
+       * @param {CustomEvent} event
+       */
       __updateGlobal(event) {
         const property = event.type.replace('-changed', '');
         const styles = {};
