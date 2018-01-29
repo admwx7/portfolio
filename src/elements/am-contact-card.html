@@ -28,9 +28,10 @@
         opacity: 0;
         right: 0;
         top: 50%;
-        bottom: 0;
         transform: translateY(-50%);
         z-index: 0;
+        text-align: right;
+        padding: 4px;
       }
       #flyout ::slotted(*) {
         margin: 0;
@@ -38,14 +39,19 @@
         text-shadow: 0 0 8px var(--dark-primary-color);
       }
       #icon:not(:hover) ~ #flyout {
-        transition: right 0.5s ease-in-out 0s,
+        overflow: hidden;
+        width: 0;
+        transition:
+          right 0.5s ease-in-out 0s,
           opacity 0.25s ease-in-out 0s,
-          width 0s ease-out 0.75s;
+          width 0s ease-in-out 0.75s;
       }
       #icon:hover ~ #flyout {
+        width: 100vw;
         opacity: 1;
         right: calc(100% + var(--padding));
-        transition: right 0.5s ease-in-out 0s,
+        transition:
+          right 0.5s ease-in-out 0s,
           opacity 0.25s ease-in-out 0.25s;
       }
     </style>

@@ -2,16 +2,15 @@
 
 <link rel="import" href="../elements/am-under-construction.html">
 <link rel="import" href="../elements/am-contact-card.html">
+<link rel="import" href="../elements/am-service-card.html">
+<link rel="import" href="../theme/am-icons.html">
 <link rel="import" href="../theme/shared-styles.html">
 
 <dom-module id="am-page-main">
   <template>
     <style include="shared-styles">
-      .split {
-        display: flex;
-      }
-      .split > * {
-        flex: 1 1 auto;
+      :host {
+        padding-bottom: var(--gutter);
       }
       .contact {
         flex: 0 0 auto;
@@ -33,20 +32,15 @@
       .right {
         text-align: right;
       }
-
-      h1 {
-        font-size: 24pt;
-      }
-      p {
-        font-size: 16pt;
-      }
     </style>
 
     <div class="card split">
       <div>
         <h1 class="divider">Architect turned Software Engineer</h1>
-        <p>
-          I am a <span class="highlight">Front-End</span> focused <span class="highlight">Full-Stack Engineer</span> with an emphasis on <span class="highlight">Architecture</span> and <span class="highlight">User Experience</span>
+        <p class="card__content">
+          I am a <span class="highlight">Front-End</span> focused <span class="highlight">Full-Stack Engineer</span>
+          with an emphasis on <span class="highlight">Architecture</span> and developing
+          <span class="highlight">User Experience</span>
         </p>
       </div>
       <div class="contact">
@@ -80,17 +74,40 @@
       </p>
     </div> -->
 
-    <!-- what services do I provide? -->
-    <!-- <div class="card">
-      <h2 class="divider">SERVICES</h2>
-      <p>
-        <ul>
-          <li>architecture</li>
-          <li>API</li>
-          <li>UI</li>
-        </ul>
-      </p>
-    </div> -->
+    <div class="card tiles">
+      <am-service-card icon="am-icons:ruler">
+        <h3 slot="title">Architecture</h3>
+        <p slot="description">
+          Architecting Web Apps and elements for scalability and re-use is what I love, it's also what I'm great at.
+          Breaking down complex systems into components to isolate re-usable code and designing for scaling and growth
+          is what drew me to Software in the first place.
+        </p>
+      </am-service-card>
+      <am-service-card icon="am-icons:dev">
+        <h3 slot="title">Development</h3>
+        <p slot="description">
+          There's little I enjoy more than putting code to an idea or concept I've been working on, but you can't just
+          skip past all of the foundational work and jump straight to the fun part. Which is why I focus on code
+          quality, re-usability, and readability to prevent rebuilding the same foundational parts over and over again.
+        </p>
+      </am-service-card>
+      <am-service-card icon="am-icons:test">
+        <h3 slot="title">Testing</h3>
+        <p slot="description">
+          Code is a living thing that evolves and grows over time, unit testing provides a sustainable way to ensure
+          the code I write continues to function as intended long after it has been modified beyond it's intended
+          purpose.
+        </p>
+      </am-service-card>
+      <am-service-card icon="am-icons:continuous">
+        <h3 slot="title">DevOps</h3>
+        <p slot="description">
+          There's no point in building software if no one can access it, whether it's running scripts to build and
+          deploy an application or run unit tests against a new open sourc element I've created continious integration
+          and deployment play an integral role in modern development.
+        </p>
+      </am-service-card>
+    </div>
 
     <!-- <div class="card">
       <h2 class="divider">CONTACT ME</h2>
