@@ -1,0 +1,74 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../theme/shared-styles.html">
+
+<dom-module id="am-service-card">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex: 0 0 calc(100% / var(--size) - var(--gutter) * var(--size));
+        margin: calc(var(--gutter) / 2);
+        padding: var(--padding);
+        border-radius: 2px;
+        flex-direction: column;
+        box-shadow:
+          0 1px 4px 0 var(--shadow-color, var(--divider-shadow-color)),
+          0 0px 4px 0 var(--shadow-color, var(--divider-shadow-color));
+
+        --size: calc(var(--columns) / var(--column-width, 4));
+      }
+      :host([selectable]):hover {
+        cursor: pointer;
+        box-shadow:
+          0 1px 4px 0 var(--shadow-color, var(--divider-shadow-color)),
+          0 0px 4px 0 var(--shadow-color, var(--divider-shadow-color)),
+          0 0 20px 0 var(--shadow-color, var(--divider-shadow-color));
+      }
+      #icon {
+        height: 30px;
+        width: 30px;
+        padding-right: var(--padding);
+        padding-bottom: var(--padding);
+        padding-left: var(--padding);
+      }
+      .header ::slotted([slot="title"]) {
+        display: inline-block;
+      }
+    </style>
+
+    <div class="header divider">
+      <dom-if if="[[icon]]">
+        <template>
+          <iron-icon id="icon"
+            icon="[[icon]]"
+          ></iron-icon>
+        </template>
+      </dom-if>
+      <slot name="title"></slot>
+    </div>
+    <slot name="description"></slot>
+  </template>
+  <script>
+    class AmServiceCard extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
+      static get is() {
+        return 'am-service-card';
+      }
+      // eslint-disable-next-line require-jsdoc
+      static get properties() {
+        return {
+          icon: String,
+          selectable: {
+            type: Boolean,
+            reflectToAttribute: true,
+            value: false,
+          },
+        };
+      }
+    }
+
+    window.customElements.define(AmServiceCard.is, AmServiceCard);
+  </script>
+</dom-module>

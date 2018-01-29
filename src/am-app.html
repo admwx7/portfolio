@@ -82,6 +82,12 @@
       #drawer[open] .icon {
         transform: rotateY(180deg);
       }
+      #menuIcon {
+        align-self: center;
+        height: 35px;
+        width: 35px;
+        margin-right: -35px;
+      }
     </style>
 
     <firebase-app
@@ -96,6 +102,7 @@
       breakpoints="xsmall,small-tablet,large-tablet,medium-handset-landscape,larget-handset-landscape"
       on-columns-changed="__updateGlobal"
       on-gutter-changed="__updateGlobal"
+      columns="{{columns}}"
     ></am-breakpoints>
     <am-breakpoints
       active="{{__largeLogo}}"
@@ -104,6 +111,7 @@
 
     <div id="drawer"
       open$="[[open]]">
+      [[columns]]
       <am-nav id="side-nav"
         page="{{page}}"
         pages="[[pages]]"
@@ -117,6 +125,11 @@
     </div>
     <div id="header"
       class="divider">
+      <iron-icon id="menuIcon"
+        hidden$="[[!hideTopNav]]"
+        icon="am-icons:menu"
+        on-click="toggleDrawer"
+      ></iron-icon>
       <a id="title"
         center$="[[hideTopNav]]"
         href="/">
@@ -156,7 +169,10 @@
             notify: true,
             value: false,
           },
-          page: String,
+          page: {
+            type: String,
+            observer: '__pageChanged',
+          },
           pages: Array,
           swipeDiff: {
             type: Number,
@@ -223,6 +239,9 @@
         this.open = !this.open;
       }
       /* Private Methods */
+      __pageChanged(page) {
+        this.open = false;
+      }
       /**
        * Monitors movements associated with touch actions for triggering between open and closing the drawer
        * @private
