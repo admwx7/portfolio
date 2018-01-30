@@ -1,7 +1,12 @@
 {
   "name": "amscripting-portfolio",
-  "license": "GPL-3.0",
   "description": "A portfolio web-app for hosting my blog and current / past projects",
+  "license": "GPL-3.0",
+  "author": "Austin Murdock <admwx7@gmail.com> (https://amscripting.com)",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:admwx7/portfolio"
+  },
   "dependencies": {
     "babel-polyfill": "^6.26.0"
   },
