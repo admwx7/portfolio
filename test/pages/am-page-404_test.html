@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>am-page-404 test</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../src/pages/am-page-404.html">
+  </head>
+  <body id="body">
+    <test-fixture id="basic">
+      <template>
+        <am-page-404></am-page-404>
+      </template>
+    </test-fixture>
+
+    <script>
+      describe('am-breakpoints', () => {
+        let element;
+        beforeEach(() => {
+          element = fixture('basic');
+        });
+
+        it('should instantiate', () => {
+          expect(element.localName).to.equal('am-page-404');
+        });
+      });
+    </script>
+  </body>
+</html>
