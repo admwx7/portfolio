@@ -86,14 +86,20 @@
       <slot><span>This page is under construction</span></slot>
     </div>
   </template>
-
   <script>
+    /**
+     * `am-under-construction` an element for showing a warning that a page or feature is still under construction
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmUnderConstruction extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-under-construction';
       }
     }
-
     window.customElements.define(AmUnderConstruction.is, AmUnderConstruction);
   </script>
 </dom-module>

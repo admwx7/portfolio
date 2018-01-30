@@ -15,8 +15,49 @@
         color: var(--text-color);
         max-width: 1200px;
       }
+      .card.split {
+        display: flex;
+      }
+      .card.split > * {
+        flex: 1 1 auto;
+      }
+      .card__content {
+        padding-right: var(--padding);
+        padding-left: var(--padding);
+        text-align: justify;
+      }
       .divider {
         border-bottom: 1px solid var(--divider-color);
+      }
+      .tiles {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        flex-wrap: wrap;
+      }
+
+      h1 {
+        font-size: 24pt;
+        margin-bottom: 0;
+      }
+      h2 {
+        font-size: 20pt;
+        margin-bottom: 0;
+      }
+      h3 {
+        font-size: 16pt;
+        margin-bottom: 0;
+      }
+      p {
+        font-size: 16pt;
+        margin-bottom: 0;
+      }
+      a {
+        color: var(--text-color);
+      }
+      a:hover {
+        color: var(--accent-color);
       }
     </style>
   </template>

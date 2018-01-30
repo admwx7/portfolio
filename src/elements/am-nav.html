@@ -20,8 +20,8 @@
         flex-direction: row;
       }
       :host([vertical]) .page-link {
-        padding-top: 8px;
-        padding-bottom: 8px;
+        padding-top: var(--padding);
+        padding-bottom: var(--padding);
       }
       .page-link {
         display: flex;
@@ -35,9 +35,8 @@
       }
       .page-link:not([selected]):hover {
         cursor: pointer;
-        filter: drop-shadow(0 0 2px var(--primary-color));
       }
-      :host([vertical]) .page-link:not([selected]):hover {
+      .page-link:not([selected]):hover {
         filter: drop-shadow(0 0 2px var(--primary-color));
       }
       .page-link[selected] {
@@ -95,12 +94,20 @@
       </dom-if>
     </iron-selector>
   </template>
-
   <script>
+    /**
+     * `am-nav` takes in the pages object from `<am-pages>` and builds out the navigation links
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmNav extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-nav';
       }
+      // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
           /* The currently selected page */
@@ -117,9 +124,7 @@
           rootPath: String,
         };
       }
-
       /* Public Methods */
-
       /**
        * Signs the user in
        */
@@ -132,9 +137,7 @@
       signOut() {
         this.$.auth.signOut();
       }
-
       /* Private Methods */
-
       /**
        * Filters the pages to only show pages that have a label and the user has access to
        * @private
@@ -146,7 +149,7 @@
         return (page) => {
           return [
             page.label || page.getAttribute('label'),
-            this.signedIn || (!page.authenticated && page.getAttribute('authenticated') === null),
+            signedIn || (!page.authenticated && page.getAttribute('authenticated') === null),
           ].every(Boolean);
         };
       }

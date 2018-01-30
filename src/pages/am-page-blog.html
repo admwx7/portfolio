@@ -26,12 +26,20 @@
       on-selected-changed="__selectedChanged"
     ></am-blog-posts>
   </template>
-
   <script>
+    /**
+     * `am-page-blog` a page for managing and reading blog posts
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmPageBlog extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-page-blog';
       }
+      // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
           route: {
@@ -43,9 +51,7 @@
           __postData: Object,
         };
       }
-
       /* Private Methods */
-
       /**
        * Used to handle when selected is changed inside of <am-blog-posts and there is no trailing '/' in the path
        * @private
@@ -59,7 +65,6 @@
         }
       }
     }
-
     window.customElements.define(AmPageBlog.is, AmPageBlog);
   </script>
 </dom-module>

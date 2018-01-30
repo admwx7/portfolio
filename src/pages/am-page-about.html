@@ -25,14 +25,20 @@
       <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
     </div>
   </template>
-
   <script>
+    /**
+     * `am-page-about` a page containing information about me and my background, as well as my resume
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmPageAbout extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-page-about';
       }
     }
-
     window.customElements.define(AmPageAbout.is, AmPageAbout);
   </script>
 </dom-module>
