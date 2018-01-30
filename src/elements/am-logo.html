@@ -223,12 +223,19 @@
     <hr class="guideline vertical left-6" />
   </template>
   <script>
+    /**
+     * `am-logo` the app logo
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmLogo extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-logo';
       }
     }
-
     window.customElements.define(AmLogo.is, AmLogo);
   </script>
 </dom-module>

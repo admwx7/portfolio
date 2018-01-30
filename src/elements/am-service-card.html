@@ -51,6 +51,13 @@
     <slot name="description"></slot>
   </template>
   <script>
+    /**
+     * `am-service-card` an element for displaying information about a service I offer
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmServiceCard extends Polymer.Element {
       // eslint-disable-next-line require-jsdoc
       static get is() {
@@ -68,7 +75,6 @@
         };
       }
     }
-
     window.customElements.define(AmServiceCard.is, AmServiceCard);
   </script>
 </dom-module>

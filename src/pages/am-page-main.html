@@ -118,12 +118,19 @@
   </template>
 
   <script>
+    /**
+     * `am-page-main` the home page containing information about me, services I provide, my projects, and contact info
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmPageMain extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-page-main';
       }
     }
-
     window.customElements.define(AmPageMain.is, AmPageMain);
   </script>
 </dom-module>

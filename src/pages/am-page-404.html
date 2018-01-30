@@ -13,10 +13,19 @@
   </template>
 
   <script>
+    /**
+     * `am-page-404` a basic 404 page
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmPage404 extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-page-404';
       }
+      // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
           /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */

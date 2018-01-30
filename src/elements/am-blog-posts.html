@@ -96,12 +96,20 @@
       </template>
     </dom-if>
   </template>
-
   <script>
+    /**
+     * `am-blog-posts` gives an interface for rendering and creating blog posts
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmBlogPosts extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-blog-posts';
       }
+      // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
           /* Triggers creation of a new blog post */
@@ -155,9 +163,8 @@
           },
         };
       }
-
       /* Lifecylce Events */
-
+      // eslint-disable-next-line require-jsdoc
       connectedCallback() {
         super.connectedCallback();
 
@@ -169,9 +176,7 @@
           }
         });
       }
-
       /* Public Methods */
-
       /**
        * Triggers the new post logic
        */
@@ -190,11 +195,8 @@
 
         this.loading = false;
       }
-
       /* Private Methods */
-
       // TODO: move helper methods to a mixin (boolean, equals, some, reverse, ...)
-
       /**
        * Gets the Boolean version of the property
        * @private
@@ -310,7 +312,6 @@
           });
       }
     }
-
     window.customElements.define(AmBlogPosts.is, AmBlogPosts);
   </script>
 </dom-module>

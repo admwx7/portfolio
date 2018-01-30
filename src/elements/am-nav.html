@@ -97,12 +97,20 @@
       </dom-if>
     </iron-selector>
   </template>
-
   <script>
+    /**
+     * `am-nav` takes in the pages object from `<am-pages>` and builds out the navigation links
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmNav extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-nav';
       }
+      // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
           /* The currently selected page */
@@ -119,9 +127,7 @@
           rootPath: String,
         };
       }
-
       /* Public Methods */
-
       /**
        * Signs the user in
        */
@@ -134,9 +140,7 @@
       signOut() {
         this.$.auth.signOut();
       }
-
       /* Private Methods */
-
       /**
        * Filters the pages to only show pages that have a label and the user has access to
        * @private
@@ -148,7 +152,7 @@
         return (page) => {
           return [
             page.label || page.getAttribute('label'),
-            this.signedIn || (!page.authenticated && page.getAttribute('authenticated') === null),
+            signedIn || (!page.authenticated && page.getAttribute('authenticated') === null),
           ].every(Boolean);
         };
       }
