@@ -36,11 +36,8 @@
       .page-link:not([selected]):hover {
         cursor: pointer;
       }
-      :host(:not([vertical])) .page-link:not([selected]):hover {
+      .page-link:not([selected]):hover {
         filter: drop-shadow(0 0 2px var(--primary-color));
-      }
-      :host([vertical]) .page-link:not([selected]):hover {
-        background-color: var(--accent-shadow-color);
       }
       .page-link[selected] {
         color: var(--accent-color);

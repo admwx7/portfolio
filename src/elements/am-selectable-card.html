@@ -1,9 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
 <link rel="import" href="../theme/shared-styles.html">
 
-<dom-module id="am-service-card">
+<dom-module id="am-selectable-card">
   <template>
     <style include="shared-styles">
       :host {
@@ -19,55 +18,57 @@
 
         --size: calc(var(--columns) / var(--column-width, 4));
       }
-      :host([selectable]):hover {
+      :host([selectable]):hover,
+      :host([selected]) {
         cursor: pointer;
         box-shadow:
           0 1px 4px 0 var(--shadow-color, var(--divider-shadow-color)),
           0 0px 4px 0 var(--shadow-color, var(--divider-shadow-color)),
           0 0 20px 0 var(--shadow-color, var(--divider-shadow-color));
       }
-      #icon {
+      :host ::slotted([slot="title"]) {
+        display: inline-block;
+      }
+      :host ::slotted([slot="description"]) {
+        text-align: center;
+      }
+      :host ::slotted([slot="icon"]) {
         height: 30px;
         width: 30px;
         padding-right: var(--padding);
         padding-bottom: var(--padding);
         padding-left: var(--padding);
       }
-      .header ::slotted([slot="title"]) {
-        display: inline-block;
-      }
     </style>
 
     <div class="header divider">
-      <dom-if if="[[icon]]">
-        <template>
-          <iron-icon id="icon"
-            icon="[[icon]]"
-          ></iron-icon>
-        </template>
-      </dom-if>
+      <slot name="icon"></slot>
       <slot name="title"></slot>
     </div>
     <slot name="description"></slot>
   </template>
   <script>
     /**
-     * `am-service-card` an element for displaying information about a service I offer
+     * `am-selectable-card` an element for displaying information about a service I offer
      *
      * @customElement
      * @polymer
      * @extends Polymer.Element
      */
-    class AmServiceCard extends Polymer.Element {
+    class AmSelectableCard extends Polymer.Element {
       // eslint-disable-next-line require-jsdoc
       static get is() {
-        return 'am-service-card';
+        return 'am-selectable-card';
       }
       // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
-          icon: String,
           selectable: {
+            type: Boolean,
+            reflectToAttribute: true,
+            value: false,
+          },
+          selected: {
             type: Boolean,
             reflectToAttribute: true,
             value: false,
@@ -75,6 +76,6 @@
         };
       }
     }
-    window.customElements.define(AmServiceCard.is, AmServiceCard);
+    window.customElements.define(AmSelectableCard.is, AmSelectableCard);
   </script>
 </dom-module>
