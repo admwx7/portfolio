@@ -23,6 +23,7 @@ module.exports = {
     'max-len': [2, {
       'code': 120,
     }],
+    'new-cap': 0,
     'no-unused-expressions': [2, {
       allowShortCircuit: true,
       allowTernary: false,

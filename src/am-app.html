@@ -153,10 +153,20 @@
 
   <script>
     Polymer.setPassiveTouchGestures(true);
+
+    /**
+     * `am-app` contains the app-wide structure and common functionality
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmApp extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-app';
       }
+      // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
           hideTopNav: {
@@ -193,6 +203,7 @@
         };
       }
       /* Lifecycle Methods */
+      // eslint-disable-next-line require-jsdoc
       constructor() {
         super();
 
@@ -200,6 +211,7 @@
         this.__touchMove = this.__touchMove.bind(this);
         this.__touchStart = this.__touchStart.bind(this);
       }
+      // eslint-disable-next-line require-jsdoc
       connectedCallback() {
         super.connectedCallback();
 
@@ -207,6 +219,7 @@
         document.addEventListener('touchmove', this.__touchMove, false);
         document.addEventListener('touchstart', this.__touchStart, false);
       }
+      // eslint-disable-next-line require-jsdoc
       disconnectedCallback() {
         super.disconnectedCallback();
 
@@ -239,7 +252,10 @@
         this.open = !this.open;
       }
       /* Private Methods */
-      __pageChanged(page) {
+      /**
+       * Forces navigation closed every time there's a page change
+       */
+      __pageChanged() {
         this.open = false;
       }
       /**

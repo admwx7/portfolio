@@ -12,6 +12,9 @@
         padding-bottom: calc(var(--padding) / 2);
         z-index: 1;
       }
+      a {
+        color: var(--text-color);
+      }
       #icon {
         height: 36px;
         width: 36px;
@@ -56,43 +59,34 @@
       }
     </style>
 
-    <iron-icon id="icon"
-      icon="[[icon]]"
-    ></iron-icon>
-    <div id="flyout">
-      <slot></slot>
-    </div>
+    <a href$="[[href]]">
+      <iron-icon id="icon"
+        icon="[[icon]]"
+      ></iron-icon>
+      <div id="flyout">
+        <slot></slot>
+      </div>
+    </a>
   </template>
   <script>
+    /**
+     * `am-contact-card` a card for displaying a way to contact me: twitter, linkedin, github, ...
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmContactCard extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-contact-card';
       }
+      // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
           icon: String,
           href: String,
         };
-      }
-      /* Lifecycle Methods */
-      constructor() {
-        super();
-        this.__open = this.__open.bind(this);
-      }
-      connectedCallback() {
-        super.connectedCallback();
-        this.addEventListener('click', this.__open);
-      }
-      disconnectedCallback() {
-        super.disconnectedCallback();
-        this.removeEventListener('click', this.__open);
-      }
-      /* Private Methods */
-      /**
-       * Opens a new tab/window based on the provided href
-       */
-      __open() {
-        window.open(this.href);
       }
     }
 

@@ -57,12 +57,21 @@
       ></am-page-404>
     </iron-pages>
   </template>
-
   <script>
+    /**
+     * `am-pages` an element for coordinating and lazy-loading pages, also builds out the information needed ot build
+     *  navigation links
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
     class AmPages extends Polymer.LazyImportsMixin(Polymer.Element) {
+      // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-pages';
       }
+      // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
           /* The currently selected page */
@@ -85,14 +94,13 @@
           rootPath: String,
         };
       }
+      // eslint-disable-next-line require-jsdoc
       static get observers() {
         return [
           '__routePageChanged(__routeData.page)',
         ];
       }
-
       /* Private Methods */
-
       /**
        * Called when the page changes to make sure page and routeData.page are in sync
        * @private
