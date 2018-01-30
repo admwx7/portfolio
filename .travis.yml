@@ -5,7 +5,7 @@ before_script:
 install:
 - npm i -g polymer-cli
 - npm i
-- polymer install --variants
+- polymer install
 node_js: stable
 addons:
   firefox: latest
