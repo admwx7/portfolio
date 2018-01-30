@@ -1,9 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
-<link rel="import" href="../theme/am-icons.html">
-
-<dom-module id="am-contact-card">
+<dom-module id="am-flyout-icon">
   <template>
     <style>
       :host {
@@ -47,10 +45,10 @@
         transition:
           right 0.5s ease-in-out 0s,
           opacity 0.25s ease-in-out 0s,
-          width 0s ease-in-out 0.75s;
+          width 0s ease-in-out 0.25s;
       }
       #icon:hover ~ #flyout {
-        width: 100vw;
+        width: 300px;
         opacity: 1;
         right: calc(100% + var(--padding));
         transition:
@@ -70,16 +68,16 @@
   </template>
   <script>
     /**
-     * `am-contact-card` a card for displaying a way to contact me: twitter, linkedin, github, ...
+     * `am-flyout-icon` a card for displaying a way to contact me: twitter, linkedin, github, ...
      *
      * @customElement
      * @polymer
      * @extends Polymer.Element
      */
-    class AmContactCard extends Polymer.Element {
+    class AmFlyoutIcon extends Polymer.Element {
       // eslint-disable-next-line require-jsdoc
       static get is() {
-        return 'am-contact-card';
+        return 'am-flyout-icon';
       }
       // eslint-disable-next-line require-jsdoc
       static get properties() {
@@ -90,6 +88,6 @@
       }
     }
 
-    window.customElements.define(AmContactCard.is, AmContactCard);
+    window.customElements.define(AmFlyoutIcon.is, AmFlyoutIcon);
   </script>
 </dom-module>
