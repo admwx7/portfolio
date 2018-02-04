@@ -11,15 +11,9 @@
       }
       .card {
         margin: 0 auto;
-        padding: calc(var(--gutter) / 2) var(--gutter);
+        padding: var(--padding);
         color: var(--text-color);
-        max-width: 1200px;
-      }
-      .card.split {
-        display: flex;
-      }
-      .card.split > * {
-        flex: 1 1 auto;
+        max-width: 1475px;
       }
       .card__content {
         padding-right: var(--padding);
@@ -37,20 +31,34 @@
         flex-wrap: wrap;
       }
 
+      .inline-emphasis {
+        margin: 0;
+        padding: 0;
+        font-size: 16pt;
+        font-weight: bold;
+      }
+
       h1 {
-        font-size: 24pt;
+        font-size: 28pt;
+        margin-top: 0;
         margin-bottom: 0;
+        color: var(--accent-color);
       }
       h2 {
-        font-size: 20pt;
+        font-size: 22pt;
+        margin-top: 0;
         margin-bottom: 0;
+        color: var(--accent-color);
       }
       h3 {
         font-size: 16pt;
+        margin-top: 0;
         margin-bottom: 0;
+        color: var(--accent-color);
       }
       p {
-        font-size: 16pt;
+        font-size: 14pt;
+        margin-top: 0;
         margin-bottom: 0;
       }
       a {

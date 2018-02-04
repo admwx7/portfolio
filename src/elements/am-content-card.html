@@ -1,10 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
-<link rel="import" href="../theme/shared-styles.html">
-
-<dom-module id="am-selectable-card">
+<dom-module id="am-content-card">
   <template>
-    <style include="shared-styles">
+    <style>
       :host {
         display: flex;
         flex: 0 0 calc(100% / var(--size) - var(--gutter) * var(--size));
@@ -12,53 +10,51 @@
         padding: var(--padding);
         border-radius: 2px;
         flex-direction: column;
-        box-shadow:
-          0 1px 4px 0 var(--shadow-color, var(--divider-shadow-color)),
-          0 0px 4px 0 var(--shadow-color, var(--divider-shadow-color));
+        align-items: center;
 
         --size: calc(var(--columns) / var(--column-width, 4));
       }
-      :host([selectable]):hover,
-      :host([selected]) {
-        cursor: pointer;
-        box-shadow:
-          0 1px 4px 0 var(--shadow-color, var(--divider-shadow-color)),
-          0 0px 4px 0 var(--shadow-color, var(--divider-shadow-color)),
-          0 0 20px 0 var(--shadow-color, var(--divider-shadow-color));
-      }
       :host ::slotted([slot="title"]) {
-        display: inline-block;
+        padding-top: var(--padding);
       }
       :host ::slotted([slot="description"]) {
+        flex: 1 1 auto;
+        padding-top: var(--padding);
         text-align: center;
       }
       :host ::slotted([slot="icon"]) {
         height: 30px;
         width: 30px;
-        padding-right: var(--padding);
+        padding: calc(var(--padding) * 2);
+        border-radius: 100%;
+        background-color: var(--primary-background-color);
+        box-shadow: 0 0 4px 0 var(--shadow-color, var(--divider-shadow-color));
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding-top: var(--padding);
         padding-bottom: var(--padding);
-        padding-left: var(--padding);
       }
     </style>
 
-    <div class="header divider">
-      <slot name="icon"></slot>
-      <slot name="title"></slot>
-    </div>
+    <slot name="icon"></slot>
+    <slot name="title"></slot>
     <slot name="description"></slot>
   </template>
   <script>
     /**
-     * `am-selectable-card` an element for displaying information about a service I offer
+     * `am-content-card` an element for displaying information about a service I offer
      *
      * @customElement
      * @polymer
      * @extends Polymer.Element
      */
-    class AmSelectableCard extends Polymer.Element {
+    class AmContentCard extends Polymer.Element {
       // eslint-disable-next-line require-jsdoc
       static get is() {
-        return 'am-selectable-card';
+        return 'am-content-card';
       }
       // eslint-disable-next-line require-jsdoc
       static get properties() {
@@ -76,6 +72,6 @@
         };
       }
     }
-    window.customElements.define(AmSelectableCard.is, AmSelectableCard);
+    window.customElements.define(AmContentCard.is, AmContentCard);
   </script>
 </dom-module>

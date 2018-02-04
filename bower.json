@@ -5,7 +5,7 @@
   ],
   "license": "https://github.com/admwx7/portfolio/blob/master/LICENSE",
   "dependencies": {
-    "am-breakpoints": "admwx7/am-breakpoints#^0.1.0",
+    "am-breakpoints": "admwx7/am-breakpoints#^1.0.0",
     "app-route": "PolymerElements/app-route#^2.0.0",
     "iron-icon": "PolymerElements/iron-icon#^2.0.0",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.0.0",
