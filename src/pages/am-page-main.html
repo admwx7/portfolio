@@ -1,9 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/am-breakpoints/am-breakpoints.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
-<link rel="import" href="../elements/am-under-construction.html">
 <link rel="import" href="../elements/am-flyout-icon.html">
-<link rel="import" href="../elements/am-selectable-card.html">
+<link rel="import" href="../elements/am-item-scroller.html">
+<link rel="import" href="../elements/am-content-card.html">
+<link rel="import" href="../elements/am-under-construction.html">
 <link rel="import" href="../theme/am-icons.html">
 <link rel="import" href="../theme/shared-styles.html">
 
@@ -12,42 +14,78 @@
     <style include="shared-styles">
       :host {
         padding-bottom: var(--gutter);
+        display: relative;
       }
-      .contact {
-        flex: 0 0 auto;
+      .center {
+        text-align: center;
+      }
+      #contact-flyouts {
+        position: var(--am-contact-flyouts-position, fixed);
+        top: calc(var(--padding) + var(--header-height));
+        left: var(--padding);
         display: flex;
+        flex-direction: column;
+        user-select: none;
+        z-index: 1;
+      }
+      #contact-flyouts[inline] ~ .card {
+        padding-left: calc(var(--padding) * 2 + 36px);
+      }
+      #contact-me {
+        height: 36px;
+        width: 36px;
         padding-top: calc(var(--padding) / 2);
         padding-bottom: calc(var(--padding) / 2);
-        padding-left: var(--gutter);
+        cursor: pointer;
+      }
+      #contact-flyouts:hover > #contact-me {
+        color: var(--accent-color);
+      }
+      #icons {
+        display: none;
         flex-direction: column;
       }
-      .highlight {
+      #contact-me:hover + #icons,
+      #icons:hover {
+        display: flex;
+      }
+      .primary-content {
+        font-size: 16pt;
+      }
+      .primary-content .inline-emphasis {
+        font-size: 17pt;
+      }
+      .project-card {
+        height: 90%;
+        width: calc(100% - var(--gutter) - var(--padding) * 2);
+        max-width: 400px;
+      }
+      .project-card > * {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
         margin: 0;
-        padding: 0;
+      }
+      am-item-scroller {
+        height: 300px;
+      }
+      am-content-card [slot="icon"] {
         color: var(--accent-color);
-        font-size: 18pt;
-      }
-      .small {
-        font-size: 14pt;
-      }
-      .right {
-        text-align: right;
       }
     </style>
 
-    <div class="card split">
-      <div>
-        <h1 class="divider">Architect turned Software Engineer</h1>
-        <p class="card__content">
-          I am a <span class="highlight">Front-End</span> focused <span class="highlight">Full-Stack Engineer</span>
-          with an emphasis on <span class="highlight">Architecture</span> and developing intuitive
-          <span class="highlight">User Experiences</span>. I firmly believe in the benefit of <span class="highlight">
-          Unit Testing</span> and rely heavily on <span class="highlight">Continuous Integration</span> and
-          <span class="highlight">Deployment</span> to support my efforts building highly <span class="highlight">
-          Reusable</span> elements.
-        </p>
-      </div>
-      <div class="contact">
+    <am-breakpoints
+      breakpoints="max-width"
+      active="{{maxWidth}}"
+    ></am-breakpoints>
+
+    <div id="contact-flyouts" inline$="[[!maxWidth]]">
+      <iron-icon id="contact-me"
+        icon="am-icons:contact-me"
+      ></iron-icon>
+      <div id="icons">
         <am-flyout-icon
           icon="am-icons:email"
           href="mailto:austin.d.murdock@gmail.com"
@@ -71,16 +109,48 @@
       </div>
     </div>
 
-    <!-- <div class="card">
-      <h2 class="divider">PORTFOLIO</h2>
-      <p>
-        horizontal scroller of projects cards?
+    <div class="card">
+      <p class="primary-content card__content">
+        I am a <span class="inline-emphasis">Front-End</span> focused <span class="inline-emphasis">Full-Stack Engineer</span>
+        with an inline-emphasis on <span class="inline-emphasis">Architecture</span> and developing intuitive
+        <span class="inline-emphasis">User Experiences</span>. I firmly believe in the benefit of <span class="inline-emphasis">
+        Unit Testing</span> and rely heavily on <span class="inline-emphasis">Continuous Integration</span> and
+        <span class="inline-emphasis">Deployment</span> to support my efforts building highly <span class="inline-emphasis">
+        Reusable Elements</span>.
       </p>
+    </div>
+
+    <!-- <div class="card">
+      <h1 class="divider">Live Projects</h1>
+      <am-item-scroller>
+        <a href="/blog" class="project-card">
+          <am-content-card
+            selectable>
+            <div slot="description">
+              test
+            </div>
+          </am-content-card>
+        </a>
+      </am-item-scroller>
+    </div>
+
+    <div class="card">
+      <h1 class="divider">Open Source Code</h1>
+      <am-item-scroller>
+        <a href="/blog" class="project-card">
+          <am-content-card
+            selectable>
+            <div slot="description">
+              test
+            </div>
+          </am-content-card>
+        </a>
+      </am-item-scroller>
     </div> -->
 
     <div class="card">
       <div class="tiles">
-        <am-selectable-card>
+        <am-content-card>
           <iron-icon slot="icon"
             icon="am-icons:ruler"
           ></iron-icon>
@@ -90,8 +160,8 @@
             Breaking down complex systems into components to isolate re-usable code and designing for scaling and growth
             is what drew me to Software in the first place.
           </p>
-        </am-selectable-card>
-        <am-selectable-card>
+        </am-content-card>
+        <am-content-card>
           <iron-icon slot="icon"
             icon="am-icons:dev"
           ></iron-icon>
@@ -101,8 +171,8 @@
             skip past all of the foundational work and jump straight to the fun part. Which is why I focus on code
             quality, re-usability, and readability to prevent rebuilding the same foundational parts over and over again.
           </p>
-        </am-selectable-card>
-        <am-selectable-card>
+        </am-content-card>
+        <am-content-card>
           <iron-icon slot="icon"
             icon="am-icons:testing"
           ></iron-icon>
@@ -112,8 +182,8 @@
             the code I write continues to function as intended long after it has been modified beyond it's intended
             purpose.
           </p>
-        </am-selectable-card>
-        <am-selectable-card>
+        </am-content-card>
+        <am-content-card>
           <iron-icon slot="icon"
             icon="am-icons:continuous"
           ></iron-icon>
@@ -123,19 +193,20 @@
             deploy an application or run unit tests against a new open sourc element I've created continuous integration
             and deployment play an integral role in modern development.
           </p>
-        </am-selectable-card>
-        <am-selectable-card>
+        </am-content-card>
+        <am-content-card>
           <iron-icon slot="icon"
             icon="am-icons:training"
           ></iron-icon>
           <h3 slot="title">Training</h3>
           <p slot="description">
-            Have a new team of devs that you want brought up to speed on HTML/CSS/JS? Or maybe need a crash course in the
-            new web-components standards and how they are changing how we build Front-End code? I can work with you to put
-            together a training course that fits your exact needs. If you just want a refresher or to find out about some
-            new concepts, check out my <a href="https://www.youtube.com/user/admwx7">YouTube</a> channel.
+            Have a new team of devs that you want brought up to speed on HTML/CSS/JS? Or maybe need a crash course in
+            the new web-components standards and how they are changing the way we build Front-End assets? I can work
+            with you to put together a training course that fits your exact needs. If you just want a refresher or to
+            find out about some new concepts, check out my <a href="https://www.youtube.com/user/admwx7">YouTube</a>
+            channel.
           </p>
-        </am-selectable-card>
+        </am-content-card>
       </div>
     </div>
 
@@ -146,7 +217,6 @@
       </p>
     </div> -->
   </template>
-
   <script>
     /**
      * `am-page-main` the home page containing information about me, services I provide, my projects, and contact info
@@ -159,6 +229,15 @@
       // eslint-disable-next-line require-jsdoc
       static get is() {
         return 'am-page-main';
+      }
+      // eslint-disable-next-line require-jsdoc
+      static get properties() {
+        return {
+          maxWidth: {
+            type: Boolean,
+            value: false,
+          },
+        };
       }
     }
     window.customElements.define(AmPageMain.is, AmPageMain);

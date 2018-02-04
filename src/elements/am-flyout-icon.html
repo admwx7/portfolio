@@ -13,47 +13,51 @@
       a {
         color: var(--text-color);
       }
+      a:hover > #icon {
+        color: var(--accent-color);
+      }
       #icon {
         height: 36px;
         width: 36px;
         z-index: 1;
         cursor: pointer;
-        filter: drop-shadow(0 0 2px var(--dark-primary-color));
-      }
-      #icon:hover {
-        filter: drop-shadow(0 0 4px var(--dark-primary-color));
-      }
-      #flyout {
-        white-space: nowrap;
-        position: absolute;
-        opacity: 0;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 0;
-        text-align: right;
-        padding: 4px;
-      }
-      #flyout ::slotted(*) {
-        margin: 0;
-        padding: 0;
-        text-shadow: 0 0 8px var(--dark-primary-color);
       }
       #icon:not(:hover) ~ #flyout {
         overflow: hidden;
         width: 0;
         transition:
-          right 0.5s ease-in-out 0s,
+          left 0.5s ease-in-out 0s,
           opacity 0.25s ease-in-out 0s,
           width 0s ease-in-out 0.25s;
       }
       #icon:hover ~ #flyout {
-        width: 300px;
         opacity: 1;
-        right: calc(100% + var(--padding));
+        left: calc(100% + var(--padding));
         transition:
-          right 0.5s ease-in-out 0s,
+          left 0.5s ease-in-out 0s,
           opacity 0.25s ease-in-out 0.25s;
+      }
+      #flyout {
+        white-space: nowrap;
+        position: absolute;
+        opacity: 0;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 0;
+        width: 300px;
+        padding: var(--padding);
+      }
+      #flyout ::slotted(*) {
+        display: inline-block;
+        margin: 0;
+        padding: 0 var(--padding);
+        background: radial-gradient(
+          ellipse at center,
+          var(--primary-background-color),
+          var(--primary-background-color) 30%,
+          transparent);
+        font-weight: bold
       }
     </style>
 

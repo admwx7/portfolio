@@ -18,16 +18,19 @@
         flex-direction: column;
         color: var(--text-color);
         height: 100vh;
-        width: 100vw;
         background: linear-gradient(150deg, var(--secondary-background-color) 1vh, var(--primary-background-color) 21vh, var(--primary-background-color) 79.75vh, var(--secondary-background-color) 80vh, var(--primary-background-color) 100vh);
 
         --am-logo-sizing: calc(0.75 * var(--gutter));
       }
+      :host([large-logo]) {
+        --am-logo-sizing: var(--gutter);
+        --header-height: calc(var(--am-logo-sizing) * 5);
+      }
       :host([hide-top-nav]) {
         height: 100%;
-      }
-      am-logo[large] {
-        --am-logo-sizing: var(--gutter);
+
+        --header-height: 0;
+        --am-contact-flyouts-position: absolute;
       }
       #header {
         flex: 0 0 auto;
@@ -37,6 +40,7 @@
         padding-right: var(--padding);
         background-color: var(--primary-background-color);
         box-shadow: 0 1px 2px 0 var(--divider-shadow-color);
+        z-index: 1;
       }
       #title[center] {
         margin-left: auto;
@@ -80,7 +84,11 @@
         color: var(--light-primary-color);
       }
       #drawer .icon:hover {
-        filter: drop-shadow(0 0 4px var(--primary-color));
+        filter:
+          drop-shadow(1px 0 2px var(--accent-shadow-color))
+          drop-shadow(-1px 0 2px var(--accent-shadow-color))
+          drop-shadow(0 1px 2px var(--accent-shadow-color))
+          drop-shadow(0 -1px 2px var(--accent-shadow-color));
       }
       #drawer[open] .icon {
         transform: rotateY(180deg);
@@ -107,7 +115,7 @@
       on-gutter-changed="__updateGlobal"
     ></am-breakpoints>
     <am-breakpoints
-      active="{{__largeLogo}}"
+      active="{{largeLogo}}"
       breakpoints="large-tablet"
     ></am-breakpoints>
 
@@ -133,9 +141,7 @@
       <a id="title"
         center$="[[hideTopNav]]"
         href="/">
-        <am-logo
-          large$="[[__largeLogo]]"
-        ></am-logo>
+        <am-logo></am-logo>
       </a>
       <am-nav id="nav"
         hidden$="[[hideTopNav]]"
@@ -174,6 +180,12 @@
             value: false,
             reflectToAttribute: true,
           },
+          largeLogo: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true,
+          },
           open: {
             type: Boolean,
             notify: true,
@@ -189,10 +201,6 @@
             value: 120,
           },
 
-          __largeLogo: {
-            type: Boolean,
-            value: false,
-          },
           __xDown: {
             type: Number,
             value: null,
