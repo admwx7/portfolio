@@ -81,7 +81,9 @@
         new Polymer.FlattenedNodesObserver(this.shadowRoot.querySelector('slot'), this.__fetchChildren);
         // TODO: polyfill this?  It's not a common issue and the polyfill is a pretty negative impact to battery life
         if (ResizeObserver) {
-          (new ResizeObserver(() => { this._updateChildrenStyles(); })).observe(this);
+          (new ResizeObserver(() => {
+            this._updateChildrenStyles();
+          })).observe(this);
         } else {
           Polymer.RenderStatus.afterNextRender(this, () => {
             this._updateChildrenStyles();
@@ -157,7 +159,7 @@
           // Swipe went off of the screen
           this.__clientStart = null;
           return;
-        };
+        }
         const maxOffset = this.__lastChild ?
           (this.__lastChild.parentNode.clientWidth + this.__lastChild.clientWidth) / 2 :
           null;
@@ -177,7 +179,6 @@
        * Sets the swipeX value to calculate the swipe against
        * @private
        *
-       * @param {Object} config
        * @param {TouchEvent|MouseEvent} event
        */
       __swipeX(event) {
