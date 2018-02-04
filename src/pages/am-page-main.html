@@ -38,16 +38,20 @@
         padding-bottom: calc(var(--padding) / 2);
         cursor: pointer;
       }
-      #contact-flyouts:hover > #contact-me {
-        color: var(--accent-color);
+      #icons:hover ~ #contact-me, #contact-me:hover {
+        filter: var(--drop-shadow);
       }
       #icons {
-        display: none;
+        opacity: 0;
+        pointer-events: none;
         flex-direction: column;
+        display: flex;
+        transition: opacity 0.25s;
       }
       #contact-me:hover + #icons,
       #icons:hover {
-        display: flex;
+        opacity: 1;
+        pointer-events: auto;
       }
       .primary-content {
         font-size: 16pt;

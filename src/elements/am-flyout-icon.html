@@ -14,7 +14,7 @@
         color: var(--text-color);
       }
       a:hover > #icon {
-        color: var(--accent-color);
+        filter: var(--drop-shadow);
       }
       #icon {
         height: 36px;
@@ -23,7 +23,7 @@
         cursor: pointer;
       }
       #icon:not(:hover) ~ #flyout {
-        overflow: hidden;
+        pointer-events: none;
         width: 0;
         transition:
           left 0.5s ease-in-out 0s,
@@ -32,7 +32,7 @@
       }
       #icon:hover ~ #flyout {
         opacity: 1;
-        left: calc(100% + var(--padding));
+        left: 100%;
         transition:
           left 0.5s ease-in-out 0s,
           opacity 0.25s ease-in-out 0.25s;
@@ -52,12 +52,8 @@
         display: inline-block;
         margin: 0;
         padding: 0 var(--padding);
-        background: radial-gradient(
-          ellipse at center,
-          var(--primary-background-color),
-          var(--primary-background-color) 30%,
-          transparent);
-        font-weight: bold
+        font-weight: bold;
+        text-shadow: var(--text-shadow);
       }
     </style>
 
