@@ -11,7 +11,7 @@
         --secondary-text-color: #000;
 
         --primary-background-color: #393939;
-        --secondary-background-color: #595959;
+        --secondary-background-color: #545454;
 
         --dark-accent-color: #A3C940;
         --accent-color: #B0D64D;
@@ -26,6 +26,29 @@
         --success-color: #5cb85c;
         --warning-color: #f0ad4e;
         --error-color: #d9534f;
+
+        --drop-shadow:
+          drop-shadow(1px 0 2px var(--accent-shadow-color))
+          drop-shadow(-1px 0 2px var(--accent-shadow-color))
+          drop-shadow(0 1px 2px var(--accent-shadow-color))
+          drop-shadow(0 -1px 2px var(--accent-shadow-color));
+        --text-shadow:
+          var(--primary-background-color) 1px 0 1px,
+          var(--primary-background-color) -1px 0 1px,
+          var(--primary-background-color) 0 1px 1px,
+          var(--primary-background-color) 0 -1px 1px,
+          var(--primary-background-color) 1px 1px 1px,
+          var(--primary-background-color) -1px 1px 1px,
+          var(--primary-background-color) -1px -1px 1px,
+          var(--primary-background-color) 1px -1px 1px,
+          var(--accent-shadow-color) 2px 0 10px,
+          var(--accent-shadow-color) -2px 0 10px,
+          var(--accent-shadow-color) 0 2px 10px,
+          var(--accent-shadow-color) 0 -2px 10px,
+          var(--accent-shadow-color) 4px 0 30px,
+          var(--accent-shadow-color) -4px 0 30px,
+          var(--accent-shadow-color) 0 4px 30px,
+          var(--accent-shadow-color) 0 -4px 30px;
       }
     </style>
   </template>
