@@ -40,14 +40,12 @@
             required
             value="{{post.content}}"
           ></paper-textarea>
-          <paper-button
+          <paper-button on-click="__submit"
             disabled$="[[__some(loading, __invalidContent, __invalidTitle, __clean)]]"
-            on-click="__submit"
             raised
           >Submit</paper-button>
-          <paper-button
+          <paper-button on-click="reset"
             disabled$="[[__some(loading)]]"
-            on-click="reset"
             raised
           >Cancel</paper-button>
         </div>
@@ -56,19 +54,16 @@
     <dom-if if="[[!create]]">
       <template>
         <!-- TODO: make this look better, FAB for admins -->
-        <paper-button
+        <paper-button on-click="createPost"
           hidden$="[[__boolean(selected)]]"
-          on-click="createPost"
           raised
         >Create</paper-button>
-        <paper-button
+        <paper-button on-click="reset"
           hidden$="[[!__boolean(selected)]]"
-          on-click="reset"
           raised
         >Back</paper-button>
-        <paper-button
+        <paper-button on-click="__delete"
           hidden$="[[!__boolean(selected)]]"
-          on-click="__delete"
           raised
         >Delete</paper-button>
 
