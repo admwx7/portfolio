@@ -7,7 +7,8 @@
 
 <dom-module id="am-page-blog">
   <template>
-    <am-under-construction></am-under-construction>
+    <am-under-construction
+    ></am-under-construction>
 
     <app-route id="postsRoute"
       data="{{__postData}}"
@@ -23,7 +24,6 @@
     <am-blog-posts
       create="{{__createPost}}"
       selected="{{__postData.id}}"
-      on-selected-changed="__selectedChanged"
     ></am-blog-posts>
   </template>
   <script>
