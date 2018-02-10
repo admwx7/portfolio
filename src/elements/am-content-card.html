@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
 <dom-module id="am-content-card">
   <template>
@@ -29,6 +30,7 @@
         border-radius: 100%;
         background-color: var(--primary-background-color);
         box-shadow: 0 0 4px 0 var(--shadow-color, var(--divider-shadow-color));
+        border: 1px solid var(--divider-shadow-color);
       }
       .header {
         display: flex;
@@ -42,6 +44,7 @@
     <slot name="icon"></slot>
     <slot name="title"></slot>
     <slot name="description"></slot>
+    <slot name="links"></slot>
   </template>
   <script>
     /**
