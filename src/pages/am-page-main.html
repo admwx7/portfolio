@@ -53,6 +53,9 @@
         opacity: 1;
         pointer-events: auto;
       }
+      #projects {
+        overflow: hidden;
+      }
       .primary-content {
         font-size: 16pt;
       }
@@ -63,17 +66,27 @@
         height: 90%;
         width: calc(100% - var(--gutter) - var(--padding) * 2);
         max-width: 400px;
+        background-color: var(--primary-background-color);
+        box-shadow: 0 0 4px 0 var(--shadow-color, var(--divider-shadow-color));
+        border-radius: 8px;
+        border: 1px solid var(--divider-shadow-color);
       }
-      .project-card > * {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        margin: 0;
+      [mobile] .project-card {
+        max-width: 320px;
       }
-      am-item-scroller {
-        height: 300px;
+      .project-link {
+        display: inline-block;
+        padding: 0 5px;
+      }
+      .project-link > iron-icon {
+        height: 40px;
+        width: 40px;
+      }
+      am-item-scroller[mobile] {
+        height: 425px;
+      }
+      am-item-scroller:not([mobile]) {
+        height: 320px;
       }
       am-content-card [slot="icon"] {
         color: var(--accent-color);
@@ -84,8 +97,13 @@
       breakpoints="max-width"
       active="{{maxWidth}}"
     ></am-breakpoints>
+    <am-breakpoints
+      breakpoints="xsmall"
+      active="{{mobile}}"
+    ></am-breakpoints>
 
-    <div id="contact-flyouts" inline$="[[!maxWidth]]">
+    <div id="contact-flyouts"
+      inline$="[[!maxWidth]]">
       <iron-icon id="contact-me"
         icon="am-icons:contact-me"
       ></iron-icon>
@@ -110,10 +128,14 @@
           icon="am-icons:youtube"
           href="https://www.youtube.com/user/admwx7"
         ><p>admwx7</p></am-flyout-icon>
+        <am-flyout-icon
+          icon="am-icons:github"
+          href="https://github.com/admwx7"
+        ><p>admwx7</p></am-flyout-icon>
       </div>
     </div>
-
-    <div class="card">
+    <div id="intro"
+      class="card">
       <p class="primary-content card__content">
         I am a <span class="inline-emphasis">Front-End</span> focused <span class="inline-emphasis">Full-Stack Engineer</span>
         with an emphasis on <span class="inline-emphasis">Architecture</span> and developing intuitive
@@ -123,36 +145,80 @@
         Reusable Elements</span>.
       </p>
     </div>
-
-    <!-- <div class="card">
-      <h1 class="divider">Live Projects</h1>
-      <am-item-scroller>
-        <a href="/blog" class="project-card">
-          <am-content-card
-            selectable>
-            <div slot="description">
-              test
-            </div>
-          </am-content-card>
-        </a>
+    <div id="projects"
+      class="card">
+      <am-item-scroller mobile$="[[mobile]]">
+        <am-content-card class="project-card">
+          <h3 slot="title">Portfolio</h3>
+          <p slot="description">
+            This very website! It's a location to house information about myself, my career, and a few of the projects
+            that I've worked on. I'm also building out a <a href="/blog">blog page</a> to support the effort I started
+            on my <a href="https://www.youtube.com/user/admwx7">YouTube channel</a> distributing information on how to
+            tackle common <a href="https://www.polymer-project.org/">Polymer</a> related issues.
+          </p>
+          <div slot="links">
+            <a href="https://github.com/admwx7/portfolio" alt="Source Code" class="project-link">
+              <iron-icon
+                icon="am-icons:github"
+              ></iron-icon>
+            </a>
+          </div>
+        </am-content-card>
+        <am-content-card class="project-card">
+          <h3 slot="title">Initiate Today</h3>
+          <p slot="description">
+            The first <a href="https://northamerica.startupbus.com/2017/">StartupBus</a> out
+            of St. Louis, during this week long competition our team of 3 put together <a href="https://initiate.today">
+            initiate.today</a> to solve the gap in time between accepting a job and starting at a company
+            (pre-boarding).
+          </p>
+          <div slot="links">
+            <a href="https://youtu.be/zKeyVhC8qbU?t=2h37m14s" alt="Final Pitch" class="project-link">
+              <iron-icon
+                icon="am-icons:youtube"
+              ></iron-icon>
+            </a>
+            <a href="http://bit.ly/2AV2M0O" alt="Entrepreneurially Thinking Podcast" class="project-link">
+              <iron-icon
+                icon="am-icons:podcast"
+              ></iron-icon>
+            </a>
+          </div>
+        </am-content-card>
+        <am-content-card class="project-card">
+          <h3 slot="title">GlobalHack V</h3>
+          <p slot="description">
+            This first civic based GlobalHack, aimed at the justice system and helping better provide information to the
+            public. The app is mobile friendly, printer friendly, has offline support for recovering data from previous
+            searches. Meanjs was used for scaffolding with a free Bootstrap 3 theme.
+          </p>
+          <div slot="links">
+            <a href="https://github.com/Hackception/civiception" alt="Source Code" class="project-link">
+              <iron-icon
+                icon="am-icons:github"
+              ></iron-icon>
+            </a>
+          </div>
+        </am-content-card>
+        <am-content-card class="project-card">
+          <h3 slot="title">GlobalHack IV</h3>
+          <p slot="description">
+            The goal was to create a new widget utilizing the LockerDome API, we created an interactive chart that would
+            allow a user to draw a line, compare it to the true line then view what other users entered. A submission
+            form was created using AngularJS, the chart was created using the C3 charting library.
+          </p>
+          <div slot="links">
+            <a href="https://github.com/Hackception/Widgetception" alt="Source Code" class="project-link">
+              <iron-icon
+                icon="am-icons:github"
+              ></iron-icon>
+            </a>
+          </div>
+        </am-content-card>
       </am-item-scroller>
     </div>
-
-    <div class="card">
-      <h1 class="divider">Open Source Code</h1>
-      <am-item-scroller>
-        <a href="/blog" class="project-card">
-          <am-content-card
-            selectable>
-            <div slot="description">
-              test
-            </div>
-          </am-content-card>
-        </a>
-      </am-item-scroller>
-    </div> -->
-
-    <div class="card">
+    <div id="services"
+      class="card">
       <div class="tiles">
         <am-content-card>
           <iron-icon slot="icon"
@@ -204,11 +270,9 @@
           ></iron-icon>
           <h3 slot="title">Training</h3>
           <p slot="description">
-            Have a new team of devs that you want brought up to speed on HTML/CSS/JS? Or maybe need a crash course in
-            the new web-components standards and how they are changing the way we build Front-End assets? I can work
-            with you to put together a training course that fits your exact needs. If you just want a refresher or to
-            find out about some new concepts, check out my <a href="https://www.youtube.com/user/admwx7">YouTube</a>
-            channel.
+            Have some new devs that you want brought up to speed on HTML/CSS/JS? Or maybe need a crash course in the new
+            web-components standards and how they are changing the way we build Front-End assets? I can work with you to
+            put together a training course that fits your exact needs.
           </p>
         </am-content-card>
       </div>

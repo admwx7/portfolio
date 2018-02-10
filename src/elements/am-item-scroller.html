@@ -9,11 +9,13 @@
         perspective: 5000px;
         transform-style: preserve-3d;
         width: 100%;
+        cursor: pointer;
       }
       :host ::slotted(*) {
         position: absolute;
         top: 50%;
         left: 50%;
+        user-select: none;
       }
       :host ::slotted([hide]) {
         opacity: 0;
@@ -41,6 +43,10 @@
           horizontalOffset: {
             type: String,
             value: '300px',
+          },
+          swipeThreshold: {
+            type: Number,
+            value: 10,
           },
 
           _clickThreshold: {
@@ -122,7 +128,7 @@
             -50%,
             calc(-50%),
             ${-5000 * intensity}px`;
-          child.style.opacity = Math.min(Math.max(1 - intensity, 0.2), 1);
+          child.style.opacity = Math.min(Math.max(1 - intensity + 0.1, 0.2), 1);
         });
       }
       /* Private Methods */
@@ -151,22 +157,24 @@
        */
       __swipe(event) {
         if (typeof this.__clientStart !== 'number') return;
-        event.stopPropagation();
-        event.returnValue = false;
 
         const swipeDiff = this.__clientStart - (event.clientX || (event.touches && event.touches[0].clientX));
+        event.stopPropagation();
+        if (Math.abs(swipeDiff) < this.swipeThreshold) return;
+
+        event.returnValue = false;
         if (typeof swipeDiff !== 'number') {
           // Swipe went off of the screen
           this.__clientStart = null;
           return;
         }
-        const maxOffset = this.__lastChild ?
-          (this.__lastChild.parentNode.clientWidth + this.__lastChild.clientWidth) / 2 :
-          null;
+        const maxOffset = Number(this.horizontalOffset.replace(/(\d*).*/, (str, value) => {
+          return value * (this.__children.length - 1);
+        }));
 
         if (this.__swipeOffset + swipeDiff < 0) {
           this.__swipeOffset = 0;
-        } else if (maxOffset && this.__swipeOffset + swipeDiff >= maxOffset) {
+        } else if (maxOffset && (this.__swipeOffset + swipeDiff > maxOffset)) {
           this.__swipeOffset = maxOffset;
         } else {
           this.__swipeOffset += swipeDiff;
@@ -188,6 +196,7 @@
           this.__clientStart = (event.clientX || event.touches[0].clientX);
         } else if (this.__moved > this._clickThreshold) {
           event.preventDefault();
+          event.returnValue = false;
         }
         this.__moved = 0;
       }
