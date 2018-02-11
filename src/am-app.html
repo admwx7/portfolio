@@ -244,6 +244,13 @@
         document.removeEventListener('touchmove', this.__touchMove);
         document.removeEventListener('touchstart', this.__touchStart);
       }
+      // eslint-disable-next-line require-jsdoc
+      ready() {
+        super.ready();
+
+        this.$.nav.showPage = this.$.content._showPage;
+        this.$['side-nav'].showPage = this.$.content._showPage;
+      }
       /* Public Methods */
       /**
        * Closes the drawer
