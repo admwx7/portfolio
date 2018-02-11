@@ -126,6 +126,15 @@
       }
       /* Public Methods */
       /**
+       * Needs to be provided externally
+       *
+       * @param {String} domains
+       * @return {Boolean}
+       */
+      showPage() {
+        return true;
+      }
+      /**
        * Signs the user in
        */
       signIn() {
@@ -150,6 +159,7 @@
           return [
             page.label || page.getAttribute('label'),
             signedIn || (!page.authenticated && page.getAttribute('authenticated') === null),
+            this.showPage(page.getAttribute('domains')),
           ].every(Boolean);
         };
       }

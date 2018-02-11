@@ -41,11 +41,13 @@
       selected-attribute="active">
       <am-page-main name="home"
         class="page"
+        domains="home"
         label="Home"
         root-path="[[rootPath]]"
       ></am-page-main>
       <am-page-blog name="blog"
         class="page"
+        domains="home blog"
         label="Blog"
         root-path="[[rootPath]]"
         route="{{__subRoute}}"
@@ -85,6 +87,12 @@
             type: Array,
             notify: true,
           },
+          /* Used for hosting partials of this app on a subDomain */
+          subDomain: {
+            type: String,
+            notify: true,
+            readOnly: true,
+          },
 
           __route: Object,
           __routeData: Object,
@@ -99,6 +107,32 @@
         return [
           '__routePageChanged(__routeData.page)',
         ];
+      }
+      /* Lifecycle Methods */
+      // eslint-disable-next-line require-jsdoc
+      constructor() {
+        super();
+
+        const isLocal = Boolean(window.location.host.includes('127.0.0.1'));
+        const hostParts = window.location.host.split('.');
+        // "home" is considered the default subDomain
+        this._setSubDomain((isLocal || hostParts.length <= 2) ? 'home' : hostParts[0]);
+
+        this._showPage = this._showPage.bind(this);
+      }
+      /* Protected Methods */
+      /**
+       * Checks to see if the subDomain is in the list of domains this page should be
+       *  displayed for.
+       * @protected
+       *
+       * @param {String} domains
+       * @param {String} [subDomain = this.subDomain]
+       * @return {Boolean}
+       */
+      _showPage(domains, subDomain = this.subDomain) {
+        domains = (domains || '').replace(' ', ',').split(',');
+        return domains.includes(subDomain);
       }
       /* Private Methods */
       /**
@@ -120,12 +154,15 @@
        * @param {String} page
        */
       __routePageChanged(page) {
-        // default to the home if there isn't a route
-        page = page || 'home';
+        // fallback to the subDomain if a page isn't provided
+        page = page || this.subDomain;
 
         // ensure the page exists in the DOM
         const el = this.shadowRoot.querySelector(`[name="${page}"]`);
-        if (!el) {
+        const show = el &&
+          (!el.getAttribute('domains')) ||
+          this._showPage(el.getAttribute('domains'));
+        if (!show) {
           this.__show404Page();
           return;
         }

@@ -17,7 +17,7 @@
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-chai-expect": "^1.1.1",
     "eslint-plugin-html": "^4.0.1",
-    "polymer-cli": "^1.5.7",
+    "polymer-cli": "^1.6.0",
     "postcss-cli": "^4.1.1",
     "postcss-html": "^0.12.0"
   },
