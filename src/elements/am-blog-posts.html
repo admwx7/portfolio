@@ -234,19 +234,18 @@
        * @private
        */
       __delete() {
-        // TODO: add permission checks
         const key = this.selectedPost.key;
-        if (key && !this.loading) {
-          this.loading = true;
-          this.$.query.ref.child(key).remove().
-            then(() => {
-              this.reset();
-            }).
-            catch(() => {
-              // TODO: add error handling
-              this.loading = false;
-            });
-        }
+        if (!key || this.loading || !this.author) return;
+        this.loading = true;
+
+        this.$.query.ref.child(key).remove().
+          then(() => {
+            this.reset();
+          }).
+          catch(() => {
+            // TODO: add error handling
+            this.loading = false;
+          });
       }
       /**
        * Performs a dirty check on the data for creating a new post
@@ -317,8 +316,7 @@
        * @private
        */
       __submit() {
-        // TODO: permission checks
-        if (!this.create || this.loading) return;
+        if (!this.create || this.loading || !this.author) return;
         this.loading = true;
 
         this.$.query.ref.push(Object.assign({
