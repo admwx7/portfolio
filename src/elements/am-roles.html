@@ -1,0 +1,145 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+
+<dom-module id="am-roles">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+
+    <firebase-auth
+      signed-in="{{signedIn}}"
+      user="{{user}}"
+    ></firebase-auth>
+    <firebase-document
+      path="/metadata/[[user.uid]]/refreshTime"
+      on-data-changed="__refreshTimeUpdated"
+    ></firebase-document>
+  </template>
+  <script>
+    window.AM = Object.assign(window.AM || {}, {
+      /**
+      * Parses a JWToken so it can be read and used
+      *
+      * @param {String} token
+      * @return {Object}
+      */
+      parseJwt(token) {
+        return JSON.parse(
+          window.atob(
+            token.split('.')[1].
+              replace('-', '+').
+              replace('_', '/')
+          ));
+      },
+    });
+
+    /**
+     * `am-roles` provides an interface for dealing with user roles
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
+    class AmRoles extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
+      static get is() {
+        return 'am-roles';
+      }
+      // eslint-disable-next-line require-jsdoc
+      static get properties() {
+        return {
+          /* Whether or not the provided role is in this user's list of roles */
+          active: {
+            type: Boolean,
+            computed: 'hasRole(role, roles)',
+            notify: true,
+            readOnly: true,
+          },
+          /* The role to check against this user's element */
+          role: String,
+          /* All roles this user has assigned to them */
+          roles: {
+            type: Object,
+            notify: true,
+            readOnly: true,
+          },
+          /* Pass-through from firebase-auth, flags the user as signed in */
+          signedIn: {
+            type: Boolean,
+            notify: true,
+            observer: '__updateForceRefresh',
+          },
+          /* Pass-through from firebase-auth, the user object */
+          user: {
+            type: Object,
+            notify: true,
+          },
+        };
+      }
+      /* Public Methods */
+      /**
+       * Checks to see if the provided role is in the list of roles this user has assigned to them.
+       *
+       * @param {String} [role = this.role]
+       * @return {Boolean}
+       */
+      hasRole(role = this.role) {
+        return Boolean(this.get(`roles.${role}`));
+      }
+      /* Private Methods */
+      /**
+       * Fetches the idToken for the user and parses roles stored in it.
+       * @private
+       *
+       * @param {Object} [user = this.user]
+       * @param {Object} [config = {forceRefresh: false}]
+       */
+      __parseRoles(user = this.user, config = {forceRefresh: false}) {
+        if (!user || !user.getIdToken) return;
+
+        this.__debounceRolesParser = Polymer.Debouncer.debounce(
+          this.__debounceRolesParser,
+          Polymer.Async.microTask,
+          () => {
+            user.getIdToken(config.forceRefresh).then((idToken) => {
+              const payload = window.AM.parseJwt(idToken);
+              this._setRoles(payload.roles);
+            });
+          });
+      }
+      /**
+       * Used to call __parseRoles() at the appropriate time, based on the current state of the user metadata
+       * @private
+       *
+       * @param {CustomEvent} event
+       */
+      __refreshTimeUpdated(event) {
+        if (typeof event.detail.value === 'number') {
+          // Force refresh the roles every time a new refreshTime is sent back to the UI
+          this.__parseRoles(this.user, {forceRefresh: this.__forceRefresh});
+          this.__forceRefresh = true;
+        } else {
+          this._setRoles({});
+        }
+      }
+      /**
+       * Sets the __forceRefresh property to force refresh when parsing roles.  When a user logs in they will always get
+       *  a new token so there's no need to refresh, but if metadata changes after the user logs in the token will have
+       *  to be updated using forceRefresh.
+       * @private
+       *
+       * @param {Boolean} signedIn
+       */
+      __updateForceRefresh(signedIn) {
+        this.__forceRefresh = !signedIn;
+      }
+    }
+
+    window.customElements.define(AmRoles.is, AmRoles);
+  </script>
+</dom-module>

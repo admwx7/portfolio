@@ -7,6 +7,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
 
+<link rel="import" href="am-roles.html">
 <link rel="import" href="../theme/shared-styles.html">
 
 <dom-module id="am-blog-posts">
@@ -22,8 +23,13 @@
       data="{{posts}}"
       order-by-child="lastUpdated"
     ></firebase-query>
+    <am-roles
+      active="{{author}}"
+      role="author"
+      user="{{user}}"
+    ></am-roles>
 
-    <dom-if if="[[create]]">
+    <dom-if if="[[__every(create, author)]]">
       <template>
         <div class="card">
           <paper-input id="title"
@@ -53,19 +59,23 @@
     </dom-if>
     <dom-if if="[[!create]]">
       <template>
-        <!-- TODO: make this look better, FAB for admins -->
-        <paper-button on-click="createPost"
-          hidden$="[[__boolean(selected)]]"
-          raised
-        >Create</paper-button>
         <paper-button on-click="reset"
           hidden$="[[!__boolean(selected)]]"
           raised
         >Back</paper-button>
-        <paper-button on-click="__delete"
-          hidden$="[[!__boolean(selected)]]"
-          raised
-        >Delete</paper-button>
+        <!-- TODO: make this look better, FAB? -->
+        <dom-if if="[[author]]">
+          <template>
+            <paper-button on-click="createPost"
+              hidden$="[[__boolean(selected)]]"
+              raised
+            >Create</paper-button>
+            <paper-button on-click="__delete"
+              hidden$="[[!__boolean(selected)]]"
+              raised
+            >Delete</paper-button>
+          </template>
+        </dom-if>
 
         <iron-selector id="selector"
           attr-for-selected="name"
@@ -107,6 +117,11 @@
       // eslint-disable-next-line require-jsdoc
       static get properties() {
         return {
+          /* If this user has author permission or not */
+          author: {
+            type: Boolean,
+            notify: true,
+          },
           /* Triggers creation of a new blog post */
           create: {
             type: Boolean,
@@ -137,6 +152,8 @@
           },
           /* The data associated with the currently selected post */
           selectedPost: Object,
+          /* The current user object */
+          user: Object,
 
           __clean: {
             type: Boolean,
@@ -256,6 +273,16 @@
         return a == b;
       }
       /**
+       * Requires all params to be truthy
+       * @private
+       *
+       * @param {Object[]} params
+       * @return {Boolean}
+       */
+      __every(...params) {
+        return params.every(Boolean);
+      }
+      /**
        * Used to reverse the sort order from firebase based on lastUpdated
        * @private
        *
@@ -295,8 +322,9 @@
         this.loading = true;
 
         this.$.query.ref.push(Object.assign({
-          name: this.post.title.toLowerCase().replace(/ /g, '-'),
+          author: this.user.uid,
           lastUpdated: window.firebase.database.ServerValue.TIMESTAMP,
+          name: this.post.title.toLowerCase().replace(/ /g, '-'),
         }, this.post)).
           then(() => {
             this.reset();
