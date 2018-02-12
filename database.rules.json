@@ -1,12 +1,22 @@
 {
   "rules": {
+    "metadata": {
+      "$user_id": {
+        ".read": "$user_id === auth.uid",
+        ".write": false
+      }
+    },
     "posts": {
       ".read": true,
       ".indexOn": ["createdAt"],
       "$post": {
-        ".write": "auth != null",
-        ".validate": "root.child('users').child(auth.uid).child('roles').child('admin').val() == true && newData.hasChildren(['title', 'content']) && newData.child('title').isString() && newData.child('content').isString()"
+        ".write": "auth.token.roles.author === true",
+        ".validate": "newData.hasChildren(['title', 'content']) && newData.child('title').isString() && newData.child('content').isString()"
       }
+    },
+    "users": {
+      ".read": false,
+      ".write": false
     }
   }
 }
