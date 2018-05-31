@@ -2,9 +2,9 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 
 // Update a user's roles based on changes the their roles entry in the database
-exports.setUserRoles = functions.database.ref('/users/{userId}/roles').onWrite((event) => {
-  const roles = event.data.val();
-  const userId = event.params.userId;
+exports.setUserRoles = functions.database.ref('/users/{userId}/roles').onWrite((change, context) => {
+  const roles = change.after.val();
+  const userId = context.params.userId;
 
   // Roles can come as 'role-name' or 'role-name:role-value'.  The second option gets combined into an array of values
   const customClaims = {
