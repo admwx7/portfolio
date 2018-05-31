@@ -1,8 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/lazy-imports/lazy-imports-mixin.html">
+
+<link rel="import" href="am-roles.html">
 
 <dom-module id="am-pages">
   <link rel="lazy-import" group="blog" href="../pages/am-page-blog.html">
@@ -32,6 +35,10 @@
       route="{{__route}}"
       tail="{{__subRoute}}"
     ></app-route>
+    <am-roles
+      active="{{__isAdmin}}"
+      role="admin"
+    ></am-roles>
 
     <iron-pages
       attr-for-selected="name"
@@ -45,13 +52,17 @@
         label="Home"
         root-path="[[rootPath]]"
       ></am-page-main>
-      <am-page-blog name="blog"
-        class="page"
-        domains="home blog"
-        label="Blog"
-        root-path="[[rootPath]]"
-        route="{{__subRoute}}"
-      ></am-page-blog>
+      <dom-if if="[[__isAdmin]]">
+        <template>
+          <am-page-blog name="blog"
+            class="page"
+            domains="home blog"
+            label="Blog"
+            root-path="[[rootPath]]"
+            route="{{__subRoute}}"
+          ></am-page-blog>
+        </template>
+      </dom-if>
       <am-page-404 name="404"
         class="page"
         title="404"
@@ -94,6 +105,10 @@
             readOnly: true,
           },
 
+          __isAdmin: {
+            type: Boolean,
+            value: false,
+          },
           __route: Object,
           __routeData: Object,
           __subRoute: String,
@@ -159,9 +174,10 @@
 
         // ensure the page exists in the DOM
         const el = this.shadowRoot.querySelector(`[name="${page}"]`);
+        const domains = el.getAttribute('domains');
         const show = el &&
-          (!el.getAttribute('domains')) ||
-          this._showPage(el.getAttribute('domains'));
+          (!domains || this._showPage(domains));
+
         if (!show) {
           this.__show404Page();
           return;

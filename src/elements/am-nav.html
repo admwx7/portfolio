@@ -70,7 +70,8 @@
       <dom-repeat id="pages"
         items="[[pages]]"
         filter="[[__filterPages(signedIn)]]"
-        as="page">
+        as="page"
+        mutable-data>
         <template>
           <div name$="[[__get(page, 'name')]]"
             class="page-link">
