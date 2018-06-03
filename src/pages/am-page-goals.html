@@ -1,0 +1,34 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../elements/am-under-construction.html">
+
+<dom-module id="am-page-goals">
+  <template>
+    <am-under-construction></am-under-construction>
+  </template>
+
+  <script>
+    /**
+     * `am-page-goals` allows creation and management of goals
+     *
+     * @customElement
+     * @polymer
+     * @extends Polymer.Element
+     */
+    class AmPageGoals extends Polymer.Element {
+      // eslint-disable-next-line require-jsdoc
+      static get is() {
+        return 'am-page-goals';
+      }
+      // eslint-disable-next-line require-jsdoc
+      static get properties() {
+        return {
+          /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
+          rootPath: String,
+        };
+      }
+    }
+
+    window.customElements.define(AmPageGoals.is, AmPageGoals);
+  </script>
+</dom-module>

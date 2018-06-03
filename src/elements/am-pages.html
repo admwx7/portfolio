@@ -9,6 +9,7 @@
 
 <dom-module id="am-pages">
   <link rel="lazy-import" group="blog" href="../pages/am-page-blog.html">
+  <link rel="lazy-import" group="goals" href="../pages/am-page-goals.html">
   <link rel="lazy-import" group="home" href="../pages/am-page-main.html">
   <link rel="lazy-import" group="404" href="../pages/am-page-404.html">
 
@@ -54,6 +55,13 @@
       ></am-page-main>
       <dom-if if="[[__isAdmin]]">
         <template>
+          <am-page-goals name="goals"
+            class="page"
+            domains="home goals"
+            label="GoalTracker"
+            root-path="[[rootPath]]"
+            route="{{__subRoute}}"
+          ></am-page-goals>
           <am-page-blog name="blog"
             class="page"
             domains="home blog"
