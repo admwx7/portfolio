@@ -10,13 +10,14 @@
     "iron-icon": "PolymerElements/iron-icon#^2.0.0",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.0.0",
     "iron-pages": "PolymerElements/iron-pages#^2.0.0",
-    "iron-selector": "PolymerElements/iron-selector#^2.0.0",
+    "iron-selector": "PolymerElements/iron-selector#^2.1.0",
     "polymer": "Polymer/polymer#^2.0.0",
     "polymerfire": "firebase/polymerfire#^v2.2.1",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "lazy-imports": "Polymer/lazy-imports#^2.1.0",
     "paper-input": "PolymerElements/paper-input#^2.0.5",
-    "paper-button": "PolymerElements/paper-button#^2.0.0"
+    "paper-button": "PolymerElements/paper-button#^2.0.0",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",
