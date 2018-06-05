@@ -1,10 +1,114 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 
 <link rel="import" href="../elements/am-under-construction.html">
+<link rel="import" href="../theme/am-icons.html">
 
 <dom-module id="am-page-goals">
   <template>
-    <am-under-construction></am-under-construction>
+    <style>
+      #goal-list,
+      #tasks {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      #goal-list > div {
+        padding: 18px;
+      }
+      #goal-list {
+        flex: 1 1 auto;
+        overflow-x: auto;
+      }
+      #goal-list > div {
+        flex: 1 0 auto;
+        text-align: center;
+        padding: 12px 4px;
+        min-width: calc(20% - 8px);
+        max-width: calc(100% - 8px);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      #goal-list > div:not(:last-of-type) {
+        border-right: 1px solid var(--text-color);
+      }
+      #tasks {
+        flex-direction: column;
+      }
+      #tasks > li {
+        flex: 1 0 auto;
+        border-bottom: 1px solid var(--text-color);
+        padding: 0;
+      }
+      #title {
+        display: flex;
+        border-bottom: 1px solid var(--text-color);
+      }
+      #settings {
+        display: flex;
+        flex: 0 0 44px;
+        flex-direction: column;
+      }
+      #settings > * {
+        flex: 0 1 100%;
+        width: calc(100% - 16px);
+        padding: 8px;
+        border-left: 1px solid var(--text-color);
+      }
+      .iron-selected {
+        position: relative;
+        color: var(--accent-color);
+        font-weight: bold;
+      }
+      .iron-selected::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        border-bottom: 4px solid var(--accent-color);
+        z-index: 1;
+      }
+      paper-fab {
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+      }
+      li > * {
+        padding: 18px;
+        width: calc(100% - 36px);
+      }
+    </style>
+
+    <div id="title" on-touchstart="__stopPropagation">
+      <iron-selector id="goal-list" selected="0">
+        <div>List</div>
+        <div>List</div>
+        <div>List</div>
+        <div>Super Long List Name</div>
+        <div>List</div>
+        <div>List</div>
+        <div>List</div>
+      </iron-selector>
+      <div id="settings">
+        <iron-icon
+          icon="am-icons:filter-list"
+        ></iron-icon>
+      </div>
+    </div>
+    <ol id="tasks">
+      <li><paper-checkbox>Task</paper-checkbox></li>
+      <li><paper-checkbox>Task</paper-checkbox></li>
+      <li><paper-checkbox>Task</paper-checkbox></li>
+      <li><paper-checkbox>Task</paper-checkbox></li>
+      <li><paper-checkbox>Task</paper-checkbox></li>
+    </ol>
+    <paper-fab icon="am-icons:add"></paper-fab>
   </template>
 
   <script>
@@ -26,6 +130,13 @@
           /* FIXME: This shouldn't be neccessary, but the Analyzer isn't picking up Polymer.Element#rootPath */
           rootPath: String,
         };
+      }
+      /**
+       * Stops event propagation, used to prevent swipe events from triggering the menu
+       * @param {Event} event
+       */
+      __stopPropagation(event) {
+        event.stopPropagation();
       }
     }
 

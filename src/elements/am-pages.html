@@ -182,7 +182,7 @@
 
         // ensure the page exists in the DOM
         const el = this.shadowRoot.querySelector(`[name="${page}"]`);
-        const domains = el.getAttribute('domains');
+        const domains = el ? el.getAttribute('domains') : '';
         const show = el &&
           (!domains || this._showPage(domains));
 
