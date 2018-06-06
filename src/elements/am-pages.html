@@ -40,6 +40,10 @@
       active="{{__isAdmin}}"
       role="admin"
     ></am-roles>
+    <am-roles
+      active="{{__isAlpha}}"
+      role="alpha"
+    ></am-roles>
 
     <iron-pages
       attr-for-selected="name"
@@ -53,7 +57,7 @@
         label="Home"
         root-path="[[rootPath]]"
       ></am-page-main>
-      <dom-if if="[[__isAdmin]]">
+      <dom-if if="[[__isAlpha]]">
         <template>
           <am-page-goals name="goals"
             class="page"
@@ -62,6 +66,10 @@
             root-path="[[rootPath]]"
             route="{{__subRoute}}"
           ></am-page-goals>
+        </template>
+      </dom-if>
+      <dom-if if="[[__isAdmin]]">
+        <template>
           <am-page-blog name="blog"
             class="page"
             domains="home blog"
@@ -114,6 +122,10 @@
           },
 
           __isAdmin: {
+            type: Boolean,
+            value: false,
+          },
+          __isAlpha: {
             type: Boolean,
             value: false,
           },
