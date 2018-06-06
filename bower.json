@@ -19,7 +19,6 @@
     "paper-button": "PolymerElements/paper-button#^2.0.0",
     "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4",
     "paper-fab": "PolymerElements/paper-fab#^2.1.0",
-    "iron-dropdown": "PolymerElements/iron-dropdown#^2.2.0",
     "paper-dialog": "PolymerElements/paper-dialog#^2.1.1"
   },
   "devDependencies": {
