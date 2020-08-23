@@ -2,15 +2,15 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
-    "serve": "firebase serve --only functions",
-    "shell": "firebase experimental:functions:shell",
+    "serve": "npx firebase serve --only functions",
+    "shell": "npx firebase experimental:functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "deploy": "npx firebase deploy --only functions",
+    "logs": "npx firebase functions:log"
   },
   "dependencies": {
-    "firebase-admin": "^5.12.1",
-    "firebase-functions": "^1.0.3"
+    "firebase-admin": "~9.1",
+    "firebase-functions": "~3.11"
   },
   "private": true
 }

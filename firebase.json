@@ -2,6 +2,9 @@
   "database": {
     "rules": "database.rules.json"
   },
+  "functions": {
+    "runtime": "nodejs12"
+  },
   "hosting": {
     "public": "build/es5-bundled",
     "ignore": [
