@@ -14,7 +14,7 @@ module.exports = {
   staticFileGlobs: [
     'index.html',
     'manifest.json',
-    'bower_components/webcomponentsjs/*',
+    'node_modules/webcomponentsjs/*',
   ],
   navigateFallback: 'index.html',
   // runtimeCaching: [

@@ -2,25 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="generator" content="Polymer Starter Kit">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
     <title>Austin Murdock</title>
     <meta name="description" content="Austin Murdock Portfolio">
 
-    <!--
-      The `<base>` tag below is present to support two advanced deployment options:
-      1) Differential serving. 2) Serving from a non-root path.
-
-      Instead of manually editing the `<base>` tag yourself, you should generally either:
-      a) Add a `basePath` property to the build configuration in your `polymer.json`.
-      b) Use the `--base-path` command-line option for `polymer build`.
-
-      Note: If you intend to serve from a non-root path, see [polymer-root-path] below.
-    -->
     <base href="/">
 
     <link rel="icon" href="images/favicon.ico">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- See https://goo.gl/OOhYW5 -->
     <link rel="manifest" href="manifest.json">
@@ -50,35 +40,32 @@
     <meta name="msapplication-tap-highlight" content="no">
 
     <script>
-      /* eslint-disable */
-      // Browser warning
-      var $buoop = {notify:{i:13,f:-3,o:48,s:9,c:-3},insecure:true,unsupported:true,api:5};
+      // From browser-update.org
+      var $buoop = {required:{e:-2,f:-2,o:-2,s:0,c:-2},insecure:true,unsupported:true,api:2020.08 };
       function $buo_f(){
-       var e = document.createElement("script");
-       e.src = "//browser-update.org/update.min.js";
-       document.body.appendChild(e);
+      var e = document.createElement("script");
+      e.src = "//browser-update.org/update.min.js";
+      document.body.appendChild(e);
       };
-      try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+      try {document.addEventListener("DOMContentLoaded", $buo_f, false)}
       catch(e){window.attachEvent("onload", $buo_f)}
-      /* eslint-enable */
-
-      window.Polymer = {rootPath: '/'};
+      // End
 
       // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('service-worker.js', {
-            scope: Polymer.rootPath,
+            scope: '/',
           });
         });
       }
     </script>
 
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
-    <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
     <!-- Load your application shell -->
-    <link rel="import" href="src/am-app.html">
+    <script type="module" src="src/am-app.ts"></script>
 
     <!-- Add any global styles for body, document, etc. -->
     <style>
@@ -98,6 +85,5 @@
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
-    <!-- Built with love using Polymer Starter Kit -->
   </body>
 </html>

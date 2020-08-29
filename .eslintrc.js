@@ -6,7 +6,6 @@ module.exports = {
     es6: true,
   },
   'globals': {
-    Polymer: true,
     AM: true,
   },
   'plugins': [
