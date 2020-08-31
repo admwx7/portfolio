@@ -13,6 +13,7 @@
 * Add prettier support
 * Rebuild test infrastructure against wct
 * Add git hooks to prevent pushing code failing lint checks
+* Add linting and testing to functions section
 
 ### AmAboutPage
 * net new page
