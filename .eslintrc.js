@@ -1,35 +1,72 @@
-
+// eslint-disable-next-line no-undef
 module.exports = {
-  'extends': ['eslint:recommended', 'google'],
-  'env': {
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'google',
+  ],
+  env: {
     browser: true,
     es6: true,
   },
-  'globals': {
-    AM: true,
-  },
-  'plugins': [
+  parser: '@typescript-eslint/parser',
+  plugins: [
+    '@typescript-eslint',
     'html',
+    'jsdoc',
   ],
-  'rules': {
-    // 2 == error, 1 == warning, 0 == off
-    'arrow-parens': [2, 'always'],
-    'indent': [2, 2, {
+  rules: {
+    'arrow-parens': ['error', 'always'],
+    'indent': ['error', 2, {
       SwitchCase: 1,
       VariableDeclarator: 2,
     }],
-    'prefer-const': 2,
-    'max-len': [2, {
+    'prefer-const': 'error',
+    'max-len': ['error', {
       'code': 120,
     }],
-    'new-cap': 0,
-    'no-unused-expressions': [2, {
+    'new-cap': 'off',
+    'no-unused-expressions': ['error', {
       allowShortCircuit: true,
       allowTernary: false,
     }],
-    'no-unused-vars': [2, {
-      vars: 'all',
-      args: 'after-used',
+
+    'no-unused-vars': 'off',
+    'require-jsdoc': 'off',
+    'valid-jsdoc': 'off',
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/explicit-module-boundary-types': ['error', {
+      allowedNames: ['connectedCallback', 'disconnectedCallback', 'render'],
     }],
+    '@typescript-eslint/no-unused-vars': 'error',
+    // 'jsdoc/require-jsdoc': ['error', {
+    //   requireParamDescription: false,
+    //   requireParamType: false,
+    //   requireReturnDescription: false,
+    //   requireReturn: false,
+    //   requireReturnType: false,
+    //   prefer: {return: 'returns'},
+    // }],
+    'jsdoc/check-alignment': 1,
+    'jsdoc/check-examples': 1,
+    'jsdoc/check-indentation': 1,
+    'jsdoc/check-param-names': 1,
+    'jsdoc/check-syntax': 1,
+    'jsdoc/check-tag-names': 1,
+    'jsdoc/check-types': 1,
+    'jsdoc/implements-on-classes': 1,
+    'jsdoc/match-description': 1,
+    'jsdoc/newline-after-description': 1,
+    'jsdoc/no-types': 1,
+    'jsdoc/no-undefined-types': 1,
+    'jsdoc/require-description': 1,
+    'jsdoc/require-description-complete-sentence': 1,
+    'jsdoc/require-hyphen-before-param-description': 1,
+    'jsdoc/require-jsdoc': 2,
+    'jsdoc/require-param': 1,
+    'jsdoc/require-param-name': 1,
+    'jsdoc/require-returns': 1,
+    'jsdoc/require-returns-check': 1,
+    'jsdoc/valid-types': 1,
   },
 };

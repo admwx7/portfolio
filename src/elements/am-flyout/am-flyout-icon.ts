@@ -1,11 +1,10 @@
-import { LitElement, customElement, css, TemplateResult, html, property } from "lit-element";
+import {LitElement, customElement, css, TemplateResult, html, property} from 'lit-element';
 import '@material/mwc-icon';
 
-import { reset } from '../../theme/shared-styles';
+import {reset} from '../../theme/shared-styles';
 
 /**
  * `am-flyout-icon` a card for displaying a way to contact me: twitter, linkedin, github, ...
- * @customElement
  */
 @customElement('am-flyout-icon')
 export class AmFlyoutIcon extends LitElement {
@@ -73,8 +72,8 @@ export class AmFlyoutIcon extends LitElement {
   @property() href: string;
 
   render(): TemplateResult {
-    const { href } = this;
-    
+    const {href} = this;
+
     return html`
       <a target=_blank href=${href}>
         <mwc-icon id="icon">

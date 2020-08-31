@@ -1,5 +1,5 @@
-import { LitElement, customElement, html, css } from "lit-element";
-import { card, reset } from '../../theme/shared-styles';
+import {LitElement, customElement, html} from 'lit-element';
+import {card, reset} from '../../theme/shared-styles';
 
 @customElement('am-page-404')
 export class AmPage404 extends LitElement {
@@ -7,7 +7,7 @@ export class AmPage404 extends LitElement {
     reset,
     card,
   ];
-  
+
   render() {
     return html`
       <div class="card">

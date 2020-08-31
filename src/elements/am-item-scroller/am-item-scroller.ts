@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
 
 @customElement('am-item-scroller')
 export class AmItemScroller extends LitElement {
@@ -26,9 +26,9 @@ export class AmItemScroller extends LitElement {
   private swipeThreshold = 25;
 
   /* The total number of items being displayed */
-  @property({ type: Number }) count: number;
+  @property({type: Number}) count: number;
   /* The item index for the currently centered item, ranges 0 to (count - 1) */
-  @property({ type: Number, noAccessor: true })
+  @property({type: Number, noAccessor: true})
   get center(): number {
     return this._center;
   }
@@ -68,7 +68,7 @@ export class AmItemScroller extends LitElement {
     this.removeEventListener('mouseleave', this.swipeEnd);
   }
   render(): TemplateResult {
-    const { count = 1, center = 0 } = this;
+    const {count = 1, center = 0} = this;
     const offsets = this.calculateOffsets(count, center);
 
     return html`
@@ -79,9 +79,11 @@ export class AmItemScroller extends LitElement {
 
   /* Private Methods */
   /**
-   * Sets the CSS variables per item to properly position them
-   * @param count - total number of items to display
-   * @param center - the item currently centered in the scroller
+   * Sets the CSS variables per item to properly position them.
+   *
+   * @param count - Total number of items to display.
+   * @param center - The item currently centered in the scroller.
+   * @returns - CSS snippets as TemplateResult[].
    */
   private calculateOffsets(count: number, center: number): TemplateResult[] {
     const offsets: TemplateResult[] = [];
@@ -99,19 +101,20 @@ export class AmItemScroller extends LitElement {
     return offsets;
   }
   /**
-   * Clears out the swipe start location to calculate distance moved
+   * Clears out the swipe start location to calculate distance moved.
    */
   private swipeClear() {
     this.clientX = null;
   }
   /**
-   * Ends the user swipe action, updating the offset to accomodate the distance moved
+   * Ends the user swipe action, updating the offset to accomodate the distance moved.
+   *
    * @param event
    */
   private swipeEnd(event: TouchEvent | MouseEvent) {
     event.stopPropagation();
     event.preventDefault();
-    
+
     let clientX;
     if (event instanceof TouchEvent) clientX = event.changedTouches[0].clientX;
     else clientX = event.clientX;
@@ -119,13 +122,14 @@ export class AmItemScroller extends LitElement {
 
     const diff = clientX - this.clientX;
     if (Math.abs(diff) < this.swipeThreshold) return;
-    
+
     if (diff < 0) this.next();
     else this.previous();
     this.swipeClear();
   }
   /**
-   * Starts recording the swipe action from the user
+   * Starts recording the swipe action from the user.
+   *
    * @param event
    */
   private swipeStart(event: TouchEvent | MouseEvent) {
@@ -138,13 +142,13 @@ export class AmItemScroller extends LitElement {
 
   /* Public Methods */
   /**
-   * Centers on the next item in the scroller
+   * Centers on the next item in the scroller.
    */
   next(): void {
     this.center += 1;
   }
   /**
-   * Centers on the previous item in the scroller
+   * Centers on the previous item in the scroller.
    */
   previous(): void {
     this.center -= 1;

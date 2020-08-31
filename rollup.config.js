@@ -1,11 +1,12 @@
-import { createSpaConfig } from '@open-wc/building-rollup';
+import {createSpaConfig} from '@open-wc/building-rollup';
 import typescript from '@rollup/plugin-typescript';
 
 const baseConfig = createSpaConfig({
   output: {
     format: 'esm',
-    dir: 'dist'
+    dir: 'dist',
   },
+  // eslint-disable-next-line no-undef
   developmentMode: process.env.ROLLUP_WATCH === 'true',
   injectServiceWorker: true,
   nodeResolve: {

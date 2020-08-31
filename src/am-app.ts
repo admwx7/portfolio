@@ -1,9 +1,9 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
 import '@material/mwc-icon';
 
-import BreakpointService, { Breakpoint } from './services/Breakpoint';
-import { colorStyles } from './theme/colors';
-import { reset } from './theme/shared-styles';
+import BreakpointService, {Breakpoint} from './services/Breakpoint';
+import {colorStyles} from './theme/colors';
+import {reset} from './theme/shared-styles';
 import './elements/am-logo';
 import './elements/am-nav';
 import './elements/am-pages';
@@ -11,8 +11,7 @@ import './elements/am-pages';
 const slimBreakpoints = [Breakpoint.XSmall, Breakpoint.Small];
 
 /**
- * `am-app` contains the app-wide structure and common functionality
- * @customElement
+ * `am-app` contains the app-wide structure and common functionality.
  */
 @customElement('am-app')
 export class AmApp extends LitElement {
@@ -27,7 +26,14 @@ export class AmApp extends LitElement {
         color: var(--text-color);
         height: 100vh;
         min-height: 100vh;
-        background: linear-gradient(150deg, var(--secondary-background-color) 1vh, var(--primary-background-color) 21vh, var(--primary-background-color) 79.75vh, var(--secondary-background-color) 80vh, var(--primary-background-color) 100vh);
+        background: linear-gradient(
+          150deg,
+          var(--secondary-background-color) 1vh,
+          var(--primary-background-color) 21vh,
+          var(--primary-background-color) 79.75vh,
+          var(--secondary-background-color) 80vh,
+          var(--primary-background-color) 100vh
+        );
 
         --am-logo-sizing: calc(0.75 * var(--gutter));
       }
@@ -117,8 +123,8 @@ export class AmApp extends LitElement {
   private swipeDiff = 120;
   private xDown: number = null;
 
-  @property({ type: Boolean }) slim = false;
-  @property({ type: Boolean }) open = false;
+  @property({type: Boolean}) slim = false;
+  @property({type: Boolean}) open = false;
 
   /* Lifecycle Methods */
   constructor() {
@@ -148,8 +154,8 @@ export class AmApp extends LitElement {
     document.removeEventListener('touchstart', this.touchStart);
   }
   render(): TemplateResult {
-    const { open, slim, toggleDrawer } = this;
-    
+    const {open, slim, toggleDrawer} = this;
+
     return html`
       <div id="drawer" ?open=${open}>
         <am-nav id="side-nav" vertical></am-nav>
@@ -172,7 +178,8 @@ export class AmApp extends LitElement {
 
   /* Private Methods */
   /**
-   * Monitors movements associated with touch actions for triggering between open and closing the drawer
+   * Monitors movements associated with touch actions for triggering between open and closing the drawer.
+   *
    * @param event
    */
   private touchMove(event: TouchEvent) {
@@ -188,7 +195,8 @@ export class AmApp extends LitElement {
     }
   }
   /**
-   * Tracks touch start for opening / closing the left drawer
+   * Tracks touch start for opening / closing the left drawer.
+   *
    * @param event
    */
   private touchStart(event: TouchEvent) {
@@ -197,24 +205,25 @@ export class AmApp extends LitElement {
 
   /* Public Methods */
   /**
-   * Closes the drawer
+   * Closes the drawer.
    */
-  closeDrawer() {
+  closeDrawer(): void {
     this.open = false;
     this.xDown = null;
   }
   /**
-   * Opens the drawer
+   * Opens the drawer.
    */
-  openDrawer() {
+  openDrawer(): void {
     this.open = true;
     this.xDown = null;
   }
   /**
-   * Toggles the drawer and prevents event propagation
+   * Toggles the drawer and prevents event propagation.
+   *
    * @param event
    */
-  toggleDrawer(event?: TouchEvent) {
+  toggleDrawer(event?: TouchEvent): void {
     if (event) event.stopPropagation();
     this.open = !this.open;
     this.xDown = null;

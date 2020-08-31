@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import {LitElement, TemplateResult, customElement, css, html} from 'lit-element';
 
 @customElement('am-logo')
 export class AmLogo extends LitElement {

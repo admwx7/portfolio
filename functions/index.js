@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();

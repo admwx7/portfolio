@@ -1,6 +1,6 @@
-import { ObserverType, fireObservers, observe } from '../../utils/observer';
-import { debounce } from '../../utils/timing';
-import { CSSResult, css } from 'lit-element';
+import {ObserverType, fireObservers, observe} from '../../utils/observer';
+import {debounce} from '../../utils/timing';
+import {CSSResult, css} from 'lit-element';
 
 export enum Breakpoint {
   XSmall = 'xsmall',
@@ -56,9 +56,9 @@ const BreakpointMapping: Record<Breakpoint, Mapping> = {
 
 /**
  * Exposes hooks for responsive UI breakpoints, derived from the Material design spec
- * https://material.io/design/layout/responsive-layout-grid.html#breakpoints
- * 
- * WARNING: this is simplified to focus on columns / gutters at the cost of other spec related details
+ * https://material.io/design/layout/responsive-layout-grid.html#breakpoints.
+ *
+ * WARNING: this is simplified to focus on columns / gutters at the cost of other spec related details.
  */
 export class BreakpointService {
   private _breakpoint: Breakpoint;
@@ -72,26 +72,26 @@ export class BreakpointService {
 
   constructor() {
     this.handleResize = debounce(this.handleResize.bind(this), 100);
-    
+
     window.onresize = this.handleResize;
     this.handleResize();
   }
   /**
-   * Adjusts the Breakpoint based on an updated window size
+   * Adjusts the Breakpoint based on an updated window size.
    */
   private handleResize() {
-    const { clientWidth } = document.documentElement;
-    const { name } = Object.values(BreakpointMapping).
-      sort(({ range }, { range: range2 }) => range2 - range).
-      find(({ range }) => range < clientWidth);
+    const {clientWidth} = document.documentElement;
+    const {name} = Object.values(BreakpointMapping).
+      sort(({range}, {range: range2}) => range2 - range).
+      find(({range}) => range < clientWidth);
 
     this.breakpoint = name;
   }
-  
+
   generateCSSVariables(): CSSResult[] {
     return Object.values(BreakpointMapping).
-      sort(({ range }, { range: range2 }) => range - range2).
-      map(({ columns, gutters, padding, range }) => css`
+      sort(({range}, {range: range2}) => range - range2).
+      map(({columns, gutters, padding, range}) => css`
         @media (min-width: ${range}px) {
           :host {
             --columns: ${columns};
@@ -102,9 +102,10 @@ export class BreakpointService {
       `);
   }
   /**
-   * Uses the observer util to notify of changes to the current browser breakpoints
-   * @param callback - the logic to run when the breakpoints update
-   * @returns - deregistration function for cleanup
+   * Uses the observer util to notify of changes to the current browser breakpoints.
+   *
+   * @param callback - The logic to run when the breakpoints update.
+   * @returns - Deregistration function for cleanup.
    */
   onBreakpointChanged(callback: (breakpoint: Breakpoint) => void): () => void {
     if (this.breakpoint) callback(this.breakpoint);

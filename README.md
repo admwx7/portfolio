@@ -10,17 +10,20 @@
 * Introduce a app level notifications, then link up service errors to use the banner
 * Link browser check and everything else browser based to .browserslistrc file
 * Vertical scrolling on mobile stops when swiping on the am-item-scroller
+* Add prettier support
+* Rebuild test infrastructure against wct
+* Add git hooks to prevent pushing code failing lint checks
 
-### Build
-* Introduce TS rules to eslint / update eslint rules
-* Fix testing infra
+### AmAboutPage
+* net new page
+* inline resume from drive?
+
+### AmVTTPage
+* new page
+* WIP concept
 
 ### Lit Rewrite
-* AmAboutPage
-  * net new page
-  * inline resume from drive?
-* AmVTTPage
-  * new page
-  * WIP concept
 * AmBlogPage
 * AmGoalsPage
+* am-blog-posts
+* am-under-construction

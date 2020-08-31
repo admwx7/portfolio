@@ -1,22 +1,22 @@
-import { TemplateResult, html } from 'lit-element';
-import AuthService, { Role } from '../Auth';
-import { ObserverType, observe, fireObservers } from '../../utils/observer';
+import {TemplateResult, html} from 'lit-element';
+import AuthService, {Role} from '../Auth';
+import {ObserverType, observe, fireObservers} from '../../utils/observer';
 
 /**
  * Defines a Route object in the UI and the requirements to navigate to and render the associated page element.
  */
 export class Route {
   label?: string;
-  importModule?: () => Promise<any>;
+  importModule?: () => Promise<unknown>;
   name: RouteName;
   path: () => string;
   pattern: RegExp;
   render: () => TemplateResult;
   roles?: Role[];
   title?: string;
-};
+}
 /**
- * All RouteNames in the app
+ * All RouteNames in the app.
  */
 export enum RouteName {
   Home = 'home',
@@ -26,14 +26,18 @@ export enum RouteName {
   NotFound = '404',
 }
 /**
- * All Route definitions in the UI a user can possibly navigate to
+ * All Route definitions in the UI a user can possibly navigate to.
  */
 const Routes: Record<RouteName, Route> = {
   [RouteName.Home]: {
     label: 'Home',
-    importModule() { return import('../../pages/main'); },
+    importModule() {
+      return import('../../pages/main');
+    },
     name: RouteName.Home,
-    path() { return '/'; },
+    path() {
+      return '/';
+    },
     pattern: /^\/(home)?$/, // Adding /home for backwards compatibility, moving towards just /
     render: () => html`<am-page-main class="page"></am-page-main>`,
   },
@@ -58,13 +62,18 @@ const Routes: Record<RouteName, Route> = {
   // },
   [RouteName.NotFound]: {
     name: RouteName.NotFound,
-    path() { return '/404'; },
+    path() {
+      return '/404';
+    },
     pattern: /^\/404/,
     render: () => html`<am-page-404 class="page"></am-page-404>`,
     title: '404',
   },
 };
 
+/**
+ * Defines a service for managing navigation based interactions.
+ */
 export class RouterService {
   private _activeRoute: RouteName;
   private get activeRoute(): RouteName {
@@ -95,7 +104,7 @@ export class RouterService {
     window.onpopstate = this.handleHistoryChange;
     AuthService.onUserRolesChanged((userRoles) => {
       this.routes = (Object.values(Routes) as Route[]).
-        filter(({ roles }) => {
+        filter(({roles}) => {
           return !roles || !roles.length || roles.some((role) => userRoles.includes(role));
         });
       this.handleHistoryChange();
@@ -103,28 +112,30 @@ export class RouterService {
   }
 
   /**
-   * Handles updates to the History API and maps them into routing changes
-   * @param event
+   * Handles updates to the History API and maps them into routing changes.
    */
   private handleHistoryChange() {
-    const { pathname } = window.location;
-    const { name }: Route =
-      this.routes.find(({ pattern }: Route) => pattern.exec(pathname)) ||
+    const {pathname} = window.location;
+    const {name}: Route =
+      this.routes.find(({pattern}: Route) => pattern.exec(pathname)) ||
       Routes[RouteName.NotFound];
     this.navigate(name, false);
   }
 
   /**
-   * Looks up a route in the set of possible routes the user has access to
+   * Looks up a route in the set of possible routes the user has access to.
+   *
    * @param routeName
+   * @returns - A valid Route object from the available routes.
    */
   getRoute(routeName: RouteName): Route {
-    return this.routes.find(({ name }) => name === routeName);
+    return this.routes.find(({name}) => name === routeName);
   }
   /**
-   * Uses the observer util to notify of changes to the currently available routes
-   * @param callback - the logic to run when the routes are updated
-   * @returns - deregistration function for cleanup
+   * Uses the observer util to notify of changes to the currently available routes.
+   *
+   * @param callback - The logic to run when the routes are updated.
+   * @returns - Deregistration function for cleanup.
    */
   onAvailableRoutesChanged(callback: (routes: Route[]) => void): () => void {
     if (this.routes) callback(this.routes);
@@ -132,27 +143,29 @@ export class RouterService {
     return observe(ObserverType.AvailableRoutes, callback);
   }
   /**
-   * Triggers a route change for the user, ensuring the route is dynamically imported as part of the change
+   * Triggers a route change for the user, ensuring the route is dynamically imported as part of the change.
+   *
    * @param route
-   * @param updateHistory - flag to disable browser history updates, defaults to updating the browser history
+   * @param updateHistory - Flag to disable browser history updates, defaults to updating the browser history.
    */
-  async navigate(route: RouteName, updateHistory = true) {
+  async navigate(route: RouteName, updateHistory = true): Promise<void> {
     this.activeRoute = route;
     try {
-      const { importModule } = this.getRoute(this.activeRoute);
+      const {importModule} = this.getRoute(this.activeRoute);
       if (importModule) await importModule();
-    } catch(e) {
+    } catch (e) {
       // Failed to fetch the page, load 404 instead
       this.activeRoute = RouteName.NotFound;
       console.error('Failed import', e);
     }
-    const { label, path, title } = this.getRoute(this.activeRoute);
+    const {label, path, title} = this.getRoute(this.activeRoute);
     if (updateHistory) window.history.pushState({}, `Austin Murdock | ${title || label}`, `${path()}`);
   }
   /**
-   * Uses the observer util to notify of changes to the activeRoute
-   * @param callback - the logic to run when the activeRoute is updated
-   * @returns - deregistration function for cleanup
+   * Uses the observer util to notify of changes to the activeRoute.
+   *
+   * @param callback - The logic to run when the activeRoute is updated.
+   * @returns - Deregistration function for cleanup.
    */
   onRouteChange(callback: (route: Route) => void): () => void {
     if (this.activeRoute) callback(this.getRoute(this.activeRoute));
