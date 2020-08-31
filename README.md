@@ -14,6 +14,7 @@
 * Rebuild test infrastructure against wct
 * Add git hooks to prevent pushing code failing lint checks
 * Add linting and testing to functions section
+* Sign in/out gets a warning about cross-site resource flags in cookies
 
 ### AmAboutPage
 * net new page
