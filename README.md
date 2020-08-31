@@ -8,11 +8,12 @@
 * Moves some of these services and utils into their own packages so they can be shared
 * Move ALL firebase tokens to build stage, even tokens that can't be stolen
 * Introduce a app level notifications, then link up service errors to use the banner
+* Link browser check and everything else browser based to .browserslistrc file
+* Vertical scrolling on mobile stops when swiping on the am-item-scroller
 
 ### Build
-* Move away from Polymer based build
-* Update SW generator now that polymer-cli is gone
 * Introduce TS rules to eslint / update eslint rules
+* Fix testing infra
 
 ### Lit Rewrite
 * AmAboutPage

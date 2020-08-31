@@ -88,6 +88,7 @@ export class AmApp extends LitElement {
         transition-property: transform;
         cursor: pointer;
         color: var(--light-primary-color);
+        user-select: none;
       }
       .icon:hover {
         filter: var(--drop-shadow);

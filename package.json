@@ -9,24 +9,25 @@
   },
   "dependencies": {
     "@material/mwc-icon": "~0.18",
-    "@webcomponents/webcomponentsjs": "webcomponents/webcomponentsjs#~2.2",
-    "browser-update": "~3.3",
-    "firebase": "^7.19.1",
+    "firebase": "~7.19",
     "lit-element": "~2.3"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/plugin-proposal-decorators": "^7.10.5",
-    "@babel/preset-typescript": "^7.10.4",
-
-    "autoprefixer": "^7",
-    "es-dev-server": "^1.57.3",
-    "eslint": "^4",
-    "eslint-config-google": "^0.9",
-    "eslint-plugin-chai-expect": "^1",
-    "eslint-plugin-html": "^4",
-    "postcss-cli": "^4",
-    "postcss-html": "^0.20",
+    "@babel/plugin-proposal-class-properties": "~7.10",
+    "@babel/plugin-proposal-decorators": "~7.10",
+    "@babel/preset-typescript": "~7.10",
+    "@open-wc/building-rollup": "~1.8",
+    "@rollup/plugin-typescript": "~5.0",
+    "babel": "~6.23",
+    "copyfiles": "~2.3",
+    "es-dev-server": "~1.57",
+    "eslint": "~7.7",
+    "eslint-config-google": "~0.14",
+    "eslint-plugin-chai-expect": "~2.2",
+    "eslint-plugin-html": "~6.0",
+    "rimraf": "~3.0",
+    "rollup": "~2.26",
+    "typescript": "~4.0",
     "web-component-tester": "~6.9"
   },
   "engines": {
@@ -34,13 +35,14 @@
     "npm": "^6"
   },
   "scripts": {
-    "autoprefixer": "postcss \"build/**/*.html\" -r -u autoprefixer -s postcss-html --no-map",
-    "build": "polymer install && polymer build && npm run autoprefixer",
-    "lint": "npm run lint:javascript",
-    "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
-    "test": "polymer test",
+    "build": "rimraf dist && npm run build:bundle && npm run build:copy",
+    "build:bundle": "rollup -c rollup.config.js",
+    "build:copy": "copyfiles manifest.json images/** dist",
+    "start": "es-dev-server --file-extensions .ts --node-resolve --babel --open",
+    "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --compatibility none --open",
+    "lint": "eslint . --ext ts,html --ignore-path .gitignore",
+
     "deploy": "npm run build && firebase deploy",
-    "deploy:hosting": "npm run build && firebase deploy --only hosting",
-    "start": "es-dev-server --file-extensions .ts --node-resolve --babel --open"
+    "deploy:hosting": "npm run build && firebase deploy --only hosting"
   }
 }

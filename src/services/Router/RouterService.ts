@@ -7,7 +7,7 @@ import { ObserverType, observe, fireObservers } from '../../utils/observer';
  */
 export class Route {
   label?: string;
-  modulePath?: string;
+  importModule?: () => Promise<any>;
   name: RouteName;
   path: () => string;
   pattern: RegExp;
@@ -31,7 +31,7 @@ export enum RouteName {
 const Routes: Record<RouteName, Route> = {
   [RouteName.Home]: {
     label: 'Home',
-    modulePath: '../../pages/main/index.ts',
+    importModule() { return import('../../pages/main'); },
     name: RouteName.Home,
     path() { return '/'; },
     pattern: /^\/(home)?$/, // Adding /home for backwards compatibility, moving towards just /
@@ -40,7 +40,7 @@ const Routes: Record<RouteName, Route> = {
   /* Disabled during rewrite */
   // [RouteName.Goals]: {
   //   label: 'GoalTracker',
-  //   modulePath: '../../pages/main/index.ts',
+  //   importModule() { return import('../../pages/goals'); },
   //   name: RouteName.Goals,
   //   path() { return '/goals'; },
   //   pattern: /^\/goals/,
@@ -49,7 +49,7 @@ const Routes: Record<RouteName, Route> = {
   // },
   // [RouteName.Blog]: {
   //   label: 'Blog',
-  //   modulePath: '../../pages/main/index.ts',
+  //   importModule() { return import('../../pages/blog/index'); },
   //   name: RouteName.Blog,
   //   path() { return '/blog'; },
   //   pattern: /^\/blog/,
@@ -139,11 +139,12 @@ export class RouterService {
   async navigate(route: RouteName, updateHistory = true) {
     this.activeRoute = route;
     try {
-      const { modulePath } = this.getRoute(this.activeRoute);
-      if (modulePath) await import(modulePath);
+      const { importModule } = this.getRoute(this.activeRoute);
+      if (importModule) await importModule();
     } catch(e) {
       // Failed to fetch the page, load 404 instead
       this.activeRoute = RouteName.NotFound;
+      console.error('Failed import', e);
     }
     const { label, path, title } = this.getRoute(this.activeRoute);
     if (updateHistory) window.history.pushState({}, `Austin Murdock | ${title || label}`, `${path()}`);
