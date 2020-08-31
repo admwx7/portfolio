@@ -10,7 +10,7 @@
   "dependencies": {
     "@material/mwc-icon": "~0.18",
     "firebase": "~7.19",
-    "lit-element": "~2.3"
+    "lit-element": "~2.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "~7.10",
