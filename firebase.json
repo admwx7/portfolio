@@ -6,7 +6,7 @@
     "runtime": "nodejs12"
   },
   "hosting": {
-    "public": "build/es5-bundled",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
