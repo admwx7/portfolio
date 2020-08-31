@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult, html, css, property, customElement } from "lit-element";
+import {LitElement, TemplateResult, html, css, property, customElement} from 'lit-element';
 
 @customElement('am-card')
 export class AmCard extends LitElement {
@@ -35,8 +35,8 @@ export class AmCard extends LitElement {
     }
   `;
 
-  @property({ type: Boolean, reflect: true }) selectable = false;
-  @property({ type: Boolean, reflect: true }) selected = false;
+  @property({type: Boolean, reflect: true}) selectable = false;
+  @property({type: Boolean, reflect: true}) selected = false;
 
   render(): TemplateResult {
     return html`

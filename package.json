@@ -18,17 +18,18 @@
     "@babel/preset-typescript": "~7.10",
     "@open-wc/building-rollup": "~1.8",
     "@rollup/plugin-typescript": "~5.0",
+    "@typescript-eslint/eslint-plugin": "~3.10",
+    "@typescript-eslint/parser": "~3.10",
     "babel": "~6.23",
     "copyfiles": "~2.3",
     "es-dev-server": "~1.57",
     "eslint": "~7.7",
     "eslint-config-google": "~0.14",
-    "eslint-plugin-chai-expect": "~2.2",
     "eslint-plugin-html": "~6.0",
+    "eslint-plugin-jsdoc": "~30.3",
     "rimraf": "~3.0",
     "rollup": "~2.26",
-    "typescript": "~4.0",
-    "web-component-tester": "~6.9"
+    "typescript": "~4.0"
   },
   "engines": {
     "node": "^12",
@@ -40,8 +41,10 @@
     "build:copy": "copyfiles manifest.json images/** dist",
     "start": "es-dev-server --file-extensions .ts --node-resolve --babel --open",
     "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --compatibility none --open",
-    "lint": "eslint . --ext ts,html --ignore-path .gitignore",
-
+    "lint": "npm run lint:code && npm run lint:types",
+    "lint:code": "eslint . --ext .js,.ts,.html",
+    "lint:fix": "eslint . --ext .js,.ts,.html --fix",
+    "lint:types": "tsc --project tsconfig.json --noEmit",
     "deploy": "npm run build && firebase deploy",
     "deploy:hosting": "npm run build && firebase deploy --only hosting"
   }

@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
 import {
   contactMe,
   continuous,
@@ -10,10 +10,10 @@ import {
   testing,
   training,
   twitter,
-  youtube
+  youtube,
 } from '../../theme/icons';
-import BreakpointService, { Breakpoint } from '../../services/Breakpoint';
-import { card, reset, tiles } from '../../theme/shared-styles';
+import BreakpointService, {Breakpoint} from '../../services/Breakpoint';
+import {card, reset, tiles} from '../../theme/shared-styles';
 import '../../elements/am-card';
 import '../../elements/am-flyout';
 import '../../elements/am-flyout/am-flyout-icon';
@@ -32,8 +32,7 @@ export class Card {
 }
 
 /**
- * `am-page-main` the home page containing information about me, services I provide, my projects, and contact info
- * @customElement
+ * `am-page-main` the home page containing information about me, services I provide, my projects, and contact info.
  */
 @customElement('am-page-main')
 export class AmPageMain extends LitElement {
@@ -102,7 +101,7 @@ export class AmPageMain extends LitElement {
 
   private breakpointObserver: () => void;
 
-  @property({ type: Array }) private flyouts = [
+  @property({type: Array}) private flyouts = [
     {
       href: 'mailto:austin.d.murdock@gmail.com',
       icon: 'email',
@@ -134,7 +133,7 @@ export class AmPageMain extends LitElement {
       text: 'admwx7',
     },
   ];
-  @property({ type: Array }) private projects: Card[] = [
+  @property({type: Array}) private projects: Card[] = [
     {
       classes: 'project-card',
       title: 'Portfolio',
@@ -212,7 +211,7 @@ export class AmPageMain extends LitElement {
       `,
     },
   ];
-  @property({ type: Array }) private services: Card[] = [
+  @property({type: Array}) private services: Card[] = [
     {
       icon: ruler(),
       title: 'Architecture',
@@ -259,7 +258,7 @@ export class AmPageMain extends LitElement {
       `,
     },
   ];
-  @property({ type: Boolean }) private slim = false;
+  @property({type: Boolean}) private slim = false;
 
   connectedCallback() {
     super.connectedCallback();
@@ -273,18 +272,18 @@ export class AmPageMain extends LitElement {
     this.breakpointObserver();
   }
   render(): TemplateResult {
-    const { flyouts, projects, renderCard, services, slim } = this;
-    
+    const {flyouts, projects, renderCard, services, slim} = this;
+
     return html`
       <am-flyout ?inline=${slim} .items=${flyouts}>${contactMe()}</am-flyout>
       <div id="intro" class="card">
         <p class="primary-content card__content">
-          I am a <span class="inline-emphasis">Front-End</span> focused <span class="inline-emphasis">Full-Stack Engineer</span>
-          with an emphasis on <span class="inline-emphasis">Architecture</span> and developing intuitive
-          <span class="inline-emphasis">User Experiences</span>. I firmly believe in the benefit of <span class="inline-emphasis">
-          Unit Testing</span> and rely heavily on <span class="inline-emphasis">Continuous Integration</span> and
-          <span class="inline-emphasis">Deployment</span> to support my efforts building highly <span class="inline-emphasis">
-          Reusable Elements</span>.
+          I am a <span class="inline-emphasis">Front-End</span> focused <span class="inline-emphasis">Full-Stack
+          Engineer</span> with an emphasis on <span class="inline-emphasis">Architecture</span> and developing intuitive
+          <span class="inline-emphasis">User Experiences</span>. I firmly believe in the benefit of
+          <span class="inline-emphasis"> Unit Testing</span> and rely heavily on <span class="inline-emphasis">
+          Continuous Integration</span> and <span class="inline-emphasis">Deployment</span> to support my efforts
+          building highly <span class="inline-emphasis"> Reusable Elements</span>.
         </p>
       </div>
       <div id="projects" class="card">
@@ -295,7 +294,7 @@ export class AmPageMain extends LitElement {
       <div class="card tiles">${services.map(renderCard)}</div>
     `;
   }
-  renderCard({ classes, description, icon, links, title }: Card): TemplateResult {
+  renderCard({classes, description, icon, links, title}: Card): TemplateResult {
     return html`
       <am-card class="${classes}">
         ${ icon ? html`<mwc-icon slot="icon">${icon}</mwc-icon>` : null}

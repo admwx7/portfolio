@@ -1,4 +1,4 @@
-import { FirebaseService } from './FirebaseService';
+import {FirebaseService} from './FirebaseService';
 
 export default FirebaseService;
 export * from './FirebaseService';

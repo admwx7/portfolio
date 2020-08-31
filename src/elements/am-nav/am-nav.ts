@@ -1,10 +1,10 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
+import {User} from '@firebase/auth-types';
 import AuthService from '../../services/Auth';
-import RouterService, { Route, RouteName } from '../../services/Router';
+import RouterService, {Route, RouteName} from '../../services/Router';
 
 /**
- * Renders routes as links for the user in horizontal or vertical views
- * @customElement
+ * Renders routes as links for the user in horizontal or vertical views.
  */
 @customElement('am-nav')
 export class AmNav extends LitElement {
@@ -63,11 +63,11 @@ export class AmNav extends LitElement {
   private routeObserver: () => void;
 
   /* The currently selected page */
-  @property({ type: Object }) private page: RouteName;
+  @property({type: Object}) private page: RouteName;
   /* Whether or not the user is signed in */
-  @property({ type: Boolean }) private signedIn: Boolean;
+  @property({type: Boolean}) private signedIn: boolean;
   /* Routes available to the user */
-  @property({ type: Array }) private routes: Route[];
+  @property({type: Array}) private routes: Route[];
 
   /* Lifecycle Methods */
   constructor() {
@@ -79,9 +79,9 @@ export class AmNav extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    this.authObserver = AuthService.onAuthStateChanged((user: any) => this.signedIn = Boolean(user));
+    this.authObserver = AuthService.onAuthStateChanged((user: User) => this.signedIn = Boolean(user));
     this.availableRoutesObserver = RouterService.onAvailableRoutesChanged((routes: Route[]) => this.routes = routes);
-    this.routeObserver = RouterService.onRouteChange(({ name }: Route) => this.page = name);
+    this.routeObserver = RouterService.onRouteChange(({name}: Route) => this.page = name);
   }
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -91,18 +91,18 @@ export class AmNav extends LitElement {
     this.routeObserver();
   }
   render(): TemplateResult {
-    const { signedIn } = this;
-    
+    const {signedIn} = this;
+
     return html`
-      ${this.routes.filter(({ label }) => Boolean(label)).map(this.renderLink)}
+      ${this.routes.filter(({label}) => Boolean(label)).map(this.renderLink)}
       <div class="page-link" @click=${this.handleAuthChange}>
         <span>Sign ${signedIn ? 'Out' : 'In'}</span>
       </div>
     `;
   }
-  renderLink({ label, name }: Route): TemplateResult {
-    const { page } = this;
-    
+  renderLink({label, name}: Route): TemplateResult {
+    const {page} = this;
+
     return html`
       <div name=${name} class="page-link" ?selected=${name === page} @click=${this.handlePageChange}>
         <span>${label}</span>
@@ -112,21 +112,23 @@ export class AmNav extends LitElement {
 
   /* Private Methods */
   /**
-   * Handles user interactions to sign in/out by calling the AuthService
+   * Handles user interactions to sign in/out by calling the AuthService.
    */
   private async handleAuthChange() {
-    const { signedIn } = this;
-    
+    const {signedIn} = this;
+
     if (signedIn) {
       await AuthService.signOut();
       await RouterService.navigate(RouteName.Home);
     } else AuthService.signIn();
   }
   /**
-   * Determines which link the user clicked and fires the appropriate page-change details as an event
+   * Determines which link the user clicked and fires the appropriate page-change details as an event.
+   *
    * @param event
+   * @param event.currentTarget
    */
-  private async handlePageChange({ currentTarget }: MouseEvent) {
+  private async handlePageChange({currentTarget}: MouseEvent) {
     const pageName = (currentTarget as Element).getAttribute('name');
     if (pageName) await RouterService.navigate(pageName as RouteName);
   }

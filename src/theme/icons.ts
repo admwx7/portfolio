@@ -1,4 +1,7 @@
-import { TemplateResult, html } from 'lit-element';
+/* eslint-disable max-len, jsdoc/require-jsdoc */
+import {TemplateResult, html} from 'lit-element';
+
+/* Contains a series of encoded SVG images to use for icons */
 
 export function contactMe(): TemplateResult {
   return html`

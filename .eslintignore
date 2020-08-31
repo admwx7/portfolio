@@ -1,0 +1,5 @@
+src/**/*.html
+dist*
+node_modules*
+build*
+*.log
