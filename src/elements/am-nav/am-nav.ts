@@ -1,5 +1,4 @@
 import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
-import {User} from '@firebase/auth-types';
 import AuthService from '../../services/Auth';
 import RouterService, {Route, RouteName} from '../../services/Router';
 
@@ -79,7 +78,7 @@ export class AmNav extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    this.authObserver = AuthService.onAuthStateChanged((user: User) => this.signedIn = Boolean(user));
+    this.authObserver = AuthService.onAuthStateChanged((user: unknown) => this.signedIn = Boolean(user));
     this.availableRoutesObserver = RouterService.onAvailableRoutesChanged((routes: Route[]) => this.routes = routes);
     this.routeObserver = RouterService.onRouteChange(({name}: Route) => this.page = name);
   }

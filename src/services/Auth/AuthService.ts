@@ -1,5 +1,4 @@
 import '@firebase/auth';
-import {User} from '@firebase/auth-types';
 import '@firebase/database';
 import {Reference} from '@firebase/database';
 import FirebaseService from '../Firebase';
@@ -31,7 +30,7 @@ export class AuthService {
     fireObservers(ObserverType.UserRoles, value);
   }
 
-  get currentUser(): User {
+  get currentUser(): { getIdToken: (forceRefresh: boolean) => Promise<string> } {
     return this.auth.currentUser;
   }
 
