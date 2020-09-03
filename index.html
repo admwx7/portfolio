@@ -54,6 +54,13 @@
         window.attachEvent('onload', $buo_f);
       }
       /* eslint-disable */
+      /* SW Cleansing Protocol */
+      async function cleanseServiceWorkers() {
+        for (let sw of await navigator.serviceWorker.getRegistrations()) {
+          sw.unregister();
+        }
+      }
+      cleanseServiceWorkers();
     </script>
 
     <!-- Load your application shell -->
