@@ -1,5 +1,12 @@
 import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
 
+/**
+ * Renders a horizontal scroller for displaying items.
+ * ### Slots
+ * | Name              | Description
+ * | ----------------- | -------------
+ * | `default`         | The items to be rendered inside of the scroller, designed for <am-card>
+ */
 @customElement('am-item-scroller')
 export class AmItemScroller extends LitElement {
   static styles = css`

@@ -23,6 +23,9 @@ import '@material/mwc-icon';
 
 const slimBreakpoints = [Breakpoint.XSmall, Breakpoint.Small];
 
+/**
+ * Data structure mapped to a renderable UI Card object for displaying information.
+ */
 export class Card {
   classes?: string;
   description: TemplateResult;

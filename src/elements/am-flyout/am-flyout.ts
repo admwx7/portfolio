@@ -1,12 +1,17 @@
 import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
 import './am-flyout-icon';
 
+/**
+ * Data structure to provide to <am-flyout> when rendering flyouts.
+ */
 export class Flyout {
   href: string;
   icon: TemplateResult;
   text: string;
 }
-
+/**
+ * Renders a group of flyouts as icons that expand out to show additional content.
+ */
 @customElement('am-flyout')
 export class AmFlyout extends LitElement {
   static styles = css`

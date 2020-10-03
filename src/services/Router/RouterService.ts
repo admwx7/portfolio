@@ -19,16 +19,30 @@ export class Route {
  * All RouteNames in the app.
  */
 export enum RouteName {
+  DND = 'dnd',
   Home = 'home',
+  NotFound = '404',
   /* Disabled during rewrite */
   // Goals = 'goals',
   // Blog = 'blog',
-  NotFound = '404',
 }
 /**
  * All Route definitions in the UI a user can possibly navigate to.
  */
 const Routes: Record<RouteName, Route> = {
+  [RouteName.DND]: {
+    label: 'DND',
+    importModule() {
+      return import('../../pages/dnd');
+    },
+    name: RouteName.DND,
+    path() {
+      return '/dnd';
+    },
+    pattern: /^\/dnd$/,
+    render() { return html`<am-page-dnd class="page"></am-page-dnd>`; },
+    roles: [Role.Admin, Role.Alpha],
+  },
   [RouteName.Home]: {
     label: 'Home',
     importModule() {
@@ -39,7 +53,16 @@ const Routes: Record<RouteName, Route> = {
       return '/';
     },
     pattern: /^\/(home)?$/, // Adding /home for backwards compatibility, moving towards just /
-    render: () => html`<am-page-main class="page"></am-page-main>`,
+    render() { return html`<am-page-main class="page"></am-page-main>`; },
+  },
+  [RouteName.NotFound]: {
+    name: RouteName.NotFound,
+    path() {
+      return '/404';
+    },
+    pattern: /^\/404$/,
+    render() { return html`<am-page-404 class="page"></am-page-404>`; },
+    title: '404',
   },
   /* Disabled during rewrite */
   // [RouteName.Goals]: {
@@ -60,15 +83,6 @@ const Routes: Record<RouteName, Route> = {
   //   roles: [Role.Admin],
   //   render: () => html`<am-page-blog class="page" route="{{__subRoute}}"></am-page-blog>`,
   // },
-  [RouteName.NotFound]: {
-    name: RouteName.NotFound,
-    path() {
-      return '/404';
-    },
-    pattern: /^\/404/,
-    render: () => html`<am-page-404 class="page"></am-page-404>`,
-    title: '404',
-  },
 };
 
 /**

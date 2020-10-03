@@ -88,6 +88,12 @@ export class BreakpointService {
     this.breakpoint = name;
   }
 
+  /**
+   * Generates CSS variables for injection based on the breakpoint configuration object.
+   *
+   * @todo some experimentation has shown this should probably be managed in the CSS and this service should instead
+   * read the value that's currently injected based on the @media query instead.
+   */
   generateCSSVariables(): CSSResult[] {
     return Object.values(BreakpointMapping).
       sort(({ range }, { range: range2 }) => range - range2).

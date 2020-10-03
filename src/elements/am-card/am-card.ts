@@ -1,5 +1,16 @@
 import { LitElement, TemplateResult, html, css, property, customElement } from 'lit-element';
 
+/**
+ * Renders a UI Card based on the provided.
+ *
+ * ### Slots
+ * | Name              | Description
+ * | ----------------- | -------------
+ * | `icon`            | The icon to render with the card
+ * | `title`           | The title to provide to the card
+ * | `description`     | The card description
+ * | `links`           | Links to render at the bottom of the card
+ */
 @customElement('am-card')
 export class AmCard extends LitElement {
   static styles = css`
