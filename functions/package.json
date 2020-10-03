@@ -2,15 +2,34 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
-    "serve": "npx firebase serve --only functions",
-    "shell": "npx firebase experimental:functions:shell",
+    "lint": "eslint 'src/**/*'",
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "npx firebase deploy --only functions",
-    "logs": "npx firebase functions:log"
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
   },
+  "engines": {
+    "node": "12"
+  },
+  "main": "lib/index.js",
   "dependencies": {
-    "firebase-admin": "~9.1",
-    "firebase-functions": "~3.11"
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "firebase-admin": "~9.2",
+    "firebase-functions": "~3.11",
+    "node-fetch": "~2.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.7",
+    "@types/node-fetch": "^2.5.7",
+    "@typescript-eslint/eslint-plugin": "~4.3",
+    "@typescript-eslint/parser": "~4.3",
+    "eslint": "~7.10",
+    "eslint-plugin-import": "~2.22",
+    "firebase-functions-test": "0.2.2",
+    "typescript": "~4.0"
   },
   "private": true
 }
