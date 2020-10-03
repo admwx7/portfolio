@@ -6,6 +6,9 @@ import fetch from 'node-fetch';
 const app = express();
 app.use(cors({ origin: true }));
 
+/**
+ * Creates a pass-through interface for fetching character information from DNDBeyond
+ */
 app.get('/:id', async (req, res) => {
   try {
     const id = req.params.id;

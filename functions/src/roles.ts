@@ -1,7 +1,9 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-// Update a user's roles based on changes the their roles entry in the database
+/**
+ * Update a user's roles based on changes the their roles entry in the database
+ */
 export const setUserRoles = functions.database.ref('/users/{userId}/roles')
   .onWrite(async (change, context) => {
     const roles = change.after.val();
