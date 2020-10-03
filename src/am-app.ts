@@ -1,9 +1,9 @@
-import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
+import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
 import '@material/mwc-icon';
 
-import BreakpointService, {Breakpoint} from './services/Breakpoint';
-import {colorStyles} from './theme/colors';
-import {reset} from './theme/shared-styles';
+import BreakpointService, { Breakpoint } from './services/Breakpoint';
+import { colorStyles } from './theme/colors';
+import { reset } from './theme/shared-styles';
 import './elements/am-logo';
 import './elements/am-nav';
 import './elements/am-pages';
@@ -123,8 +123,8 @@ export class AmApp extends LitElement {
   private swipeDiff = 120;
   private xDown: number = null;
 
-  @property({type: Boolean}) slim = false;
-  @property({type: Boolean}) open = false;
+  @property({ type: Boolean }) slim = false;
+  @property({ type: Boolean }) open = false;
 
   /* Lifecycle Methods */
   constructor() {
@@ -154,7 +154,7 @@ export class AmApp extends LitElement {
     document.removeEventListener('touchstart', this.touchStart);
   }
   render(): TemplateResult {
-    const {open, slim, toggleDrawer} = this;
+    const { open, slim, toggleDrawer } = this;
 
     return html`
       <div id="drawer" ?open=${open}>

@@ -1,4 +1,4 @@
-import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
+import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
 
 @customElement('am-item-scroller')
 export class AmItemScroller extends LitElement {
@@ -26,9 +26,9 @@ export class AmItemScroller extends LitElement {
   private swipeThreshold = 25;
 
   /* The total number of items being displayed */
-  @property({type: Number}) count: number;
+  @property({ type: Number }) count: number;
   /* The item index for the currently centered item, ranges 0 to (count - 1) */
-  @property({type: Number, noAccessor: true})
+  @property({ type: Number, noAccessor: true })
   get center(): number {
     return this._center;
   }
@@ -68,7 +68,7 @@ export class AmItemScroller extends LitElement {
     this.removeEventListener('mouseleave', this.swipeEnd);
   }
   render(): TemplateResult {
-    const {count = 1, center = 0} = this;
+    const { count = 1, center = 0 } = this;
     const offsets = this.calculateOffsets(count, center);
 
     return html`

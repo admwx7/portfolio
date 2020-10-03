@@ -1,6 +1,6 @@
-import {ObserverType, fireObservers, observe} from '../../utils/observer';
-import {debounce} from '../../utils/timing';
-import {CSSResult, css} from 'lit-element';
+import { ObserverType, fireObservers, observe } from '../../utils/observer';
+import { debounce } from '../../utils/timing';
+import { CSSResult, css } from 'lit-element';
 
 export enum Breakpoint {
   XSmall = 'xsmall',
@@ -80,18 +80,18 @@ export class BreakpointService {
    * Adjusts the Breakpoint based on an updated window size.
    */
   private handleResize() {
-    const {clientWidth} = document.documentElement;
-    const {name} = Object.values(BreakpointMapping).
-      sort(({range}, {range: range2}) => range2 - range).
-      find(({range}) => range < clientWidth);
+    const { clientWidth } = document.documentElement;
+    const { name } = Object.values(BreakpointMapping).
+      sort(({ range }, { range: range2 }) => range2 - range).
+      find(({ range }) => range < clientWidth);
 
     this.breakpoint = name;
   }
 
   generateCSSVariables(): CSSResult[] {
     return Object.values(BreakpointMapping).
-      sort(({range}, {range: range2}) => range - range2).
-      map(({columns, gutters, padding, range}) => css`
+      sort(({ range }, { range: range2 }) => range - range2).
+      map(({ columns, gutters, padding, range }) => css`
         @media (min-width: ${range}px) {
           :host {
             --columns: ${columns};

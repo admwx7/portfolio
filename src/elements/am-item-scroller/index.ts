@@ -1,4 +1,4 @@
-import {AmItemScroller} from './am-item-scroller';
+import { AmItemScroller } from './am-item-scroller';
 
 export default AmItemScroller;
 export * from './am-item-scroller';

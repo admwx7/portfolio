@@ -1,9 +1,9 @@
 import '@firebase/auth';
 import '@firebase/database';
-import {Reference} from '@firebase/database';
+import { Reference } from '@firebase/database';
 import FirebaseService from '../Firebase';
-import {ObserverType, fireObservers, observe} from '../../utils/observer';
-import {parseJwt} from '../../utils/parser';
+import { ObserverType, fireObservers, observe } from '../../utils/observer';
+import { parseJwt } from '../../utils/parser';
 
 /**
  * Possible roles a user can have.
@@ -47,7 +47,7 @@ export class AuthService {
       if (!user) this.fetchUserRoles(); // Update roles for no user
       else { // Establish a new DB connection, will update roles for the current user
         this.dbRef = this.database.ref(`metadata/${user.uid}/refreshTime`) as Reference;
-        this.dbRef.on('value', () => this.fetchUserRoles({forceRefresh: true}));
+        this.dbRef.on('value', () => this.fetchUserRoles({ forceRefresh: true }));
       }
     });
   }
@@ -58,14 +58,14 @@ export class AuthService {
    * @param root0
    * @param root0.forceRefresh
    */
-  private async fetchUserRoles({forceRefresh} = {forceRefresh: false}): Promise<void> {
+  private async fetchUserRoles({ forceRefresh } = { forceRefresh: false }): Promise<void> {
     let userRoles: Role[] = [];
     try {
-      const {roles} =
+      const { roles } =
         parseJwt(await this.currentUser.getIdToken(forceRefresh)) as unknown as { roles: Record<Role, boolean> };
       userRoles = (Object.keys(roles) as Role[]).
         filter((role: Role) => Boolean(roles[role]));
-    } catch (e) {/* */}
+    } catch (e) { /* */ }
     this.roles = userRoles;
   }
 
@@ -91,7 +91,7 @@ export class AuthService {
   async signIn(): Promise<void> {
     try {
       await this.auth.signInWithPopup(this.provider);
-    } catch ({code, credential, email, message}) {
+    } catch ({ code, credential, email, message }) {
       console.error('Auth Error', code, credential, email, message);
     }
   }
@@ -101,7 +101,7 @@ export class AuthService {
   async signOut(): Promise<void> {
     try {
       await this.auth.signOut();
-    } catch ({code, credential, email, message}) {
+    } catch ({ code, credential, email, message }) {
       console.error('Auth Error', code, credential, email, message);
     }
   }

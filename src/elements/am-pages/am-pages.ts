@@ -1,5 +1,5 @@
-import {LitElement, TemplateResult, customElement, css, property} from 'lit-element';
-import RouterService, {Route} from '../../services/Router';
+import { LitElement, TemplateResult, customElement, css, property } from 'lit-element';
+import RouterService, { Route } from '../../services/Router';
 import '../../pages/404';
 
 /**
@@ -22,13 +22,13 @@ export class AmPages extends LitElement {
   private routeObserver: () => void;
 
   /* The currently selected page to display */
-  @property({type: Object}) private page: TemplateResult;
+  @property({ type: Object }) private page: TemplateResult;
 
   /* Lifecycle Methods */
   connectedCallback() {
     super.connectedCallback();
 
-    this.routeObserver = RouterService.onRouteChange(({render}: Route) => this.page = render());
+    this.routeObserver = RouterService.onRouteChange(({ render }: Route) => this.page = render());
   }
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -36,7 +36,7 @@ export class AmPages extends LitElement {
     this.routeObserver();
   }
   render(): TemplateResult {
-    const {page} = this;
+    const { page } = this;
     return page;
   }
 }

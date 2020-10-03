@@ -1,4 +1,4 @@
-import {createSpaConfig} from '@open-wc/building-rollup';
+import { createSpaConfig } from '@open-wc/building-rollup';
 import typescript from '@rollup/plugin-typescript';
 
 // eslint-disable-next-line no-undef

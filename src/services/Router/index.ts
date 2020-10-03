@@ -1,4 +1,4 @@
-import {RouterService} from './RouterService';
+import { RouterService } from './RouterService';
 
 export default new RouterService();
 export * from './RouterService';

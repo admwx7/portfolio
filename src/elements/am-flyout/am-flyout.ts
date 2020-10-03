@@ -1,4 +1,4 @@
-import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
+import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
 import './am-flyout-icon';
 
 export class Flyout {
@@ -44,17 +44,17 @@ export class AmFlyout extends LitElement {
     }
   `;
 
-  @property({type: Array}) items: Flyout[] = [];
+  @property({ type: Array }) items: Flyout[] = [];
 
   render(): TemplateResult {
-    const {items} = this;
+    const { items } = this;
 
     return html`
       <mwc-icon id="contact-me"><slot></slot></mwc-icon>
       <div id="icons">${items.map(this.renderItem)}</div>
     `;
   }
-  renderItem({href, icon, text}: Flyout): TemplateResult {
+  renderItem({ href, icon, text }: Flyout): TemplateResult {
     return html`
       <am-flyout-icon href=${href}>
         ${icon}
