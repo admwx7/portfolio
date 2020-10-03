@@ -16,6 +16,9 @@ export enum Role {
   User = 'user',
 }
 
+/**
+ * UI Service used for authenticating users and interfacing with the User object for roles.
+ */
 export class AuthService {
   private auth = FirebaseService.auth();
   private database = FirebaseService.database();

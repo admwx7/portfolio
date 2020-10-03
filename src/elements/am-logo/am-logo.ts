@@ -1,5 +1,10 @@
 import { LitElement, TemplateResult, customElement, css, html } from 'lit-element';
 
+/**
+ * Renders the app logo, designed fully with HTML + CSS
+ *
+ * @todo really need to convert this to an SVG
+ */
 @customElement('am-logo')
 export class AmLogo extends LitElement {
   static styles = css`

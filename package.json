@@ -8,8 +8,9 @@
     "url": "git@github.com:admwx7/portfolio"
   },
   "dependencies": {
-    "@material/mwc-icon": "~0.18",
-    "firebase": "~7.21",
+    "@material/mwc-icon": "0.18.0",
+    "@material/mwc-textfield": "^0.18.0",
+    "firebase": "~7.22",
     "lit-element": "~2.4"
   },
   "devDependencies": {
@@ -39,7 +40,7 @@
     "build": "rimraf dist && npm run build:bundle && npm run build:copy",
     "build:bundle": "rollup -c rollup.config.js",
     "build:copy": "copyfiles manifest.json images/** dist",
-    "start": "es-dev-server --file-extensions .ts --node-resolve --babel --open",
+    "start": "es-dev-server --file-extensions .ts --node-resolve --babel",
     "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --compatibility none --open",
     "lint": "npm run lint:code && npm run lint:types",
     "lint:code": "eslint . --ext .js,.ts,.html",
