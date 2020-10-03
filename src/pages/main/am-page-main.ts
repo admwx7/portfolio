@@ -1,4 +1,4 @@
-import {LitElement, TemplateResult, customElement, css, html, property} from 'lit-element';
+import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
 import {
   contactMe,
   continuous,
@@ -12,8 +12,8 @@ import {
   twitter,
   youtube,
 } from '../../theme/icons';
-import BreakpointService, {Breakpoint} from '../../services/Breakpoint';
-import {card, reset, tiles} from '../../theme/shared-styles';
+import BreakpointService, { Breakpoint } from '../../services/Breakpoint';
+import { card, reset, tiles } from '../../theme/shared-styles';
 import '../../elements/am-card';
 import '../../elements/am-flyout';
 import '../../elements/am-flyout/am-flyout-icon';
@@ -101,7 +101,7 @@ export class AmPageMain extends LitElement {
 
   private breakpointObserver: () => void;
 
-  @property({type: Array}) private flyouts = [
+  @property({ type: Array }) private flyouts = [
     {
       href: 'mailto:austin.d.murdock@gmail.com',
       icon: 'email',
@@ -133,7 +133,7 @@ export class AmPageMain extends LitElement {
       text: 'admwx7',
     },
   ];
-  @property({type: Array}) private projects: Card[] = [
+  @property({ type: Array }) private projects: Card[] = [
     {
       classes: 'project-card',
       title: 'Portfolio',
@@ -211,7 +211,7 @@ export class AmPageMain extends LitElement {
       `,
     },
   ];
-  @property({type: Array}) private services: Card[] = [
+  @property({ type: Array }) private services: Card[] = [
     {
       icon: ruler(),
       title: 'Architecture',
@@ -258,7 +258,7 @@ export class AmPageMain extends LitElement {
       `,
     },
   ];
-  @property({type: Boolean}) private slim = false;
+  @property({ type: Boolean }) private slim = false;
 
   connectedCallback() {
     super.connectedCallback();
@@ -272,7 +272,7 @@ export class AmPageMain extends LitElement {
     this.breakpointObserver();
   }
   render(): TemplateResult {
-    const {flyouts, projects, renderCard, services, slim} = this;
+    const { flyouts, projects, renderCard, services, slim } = this;
 
     return html`
       <am-flyout ?inline=${slim} .items=${flyouts}>${contactMe()}</am-flyout>
@@ -294,7 +294,7 @@ export class AmPageMain extends LitElement {
       <div class="card tiles">${services.map(renderCard)}</div>
     `;
   }
-  renderCard({classes, description, icon, links, title}: Card): TemplateResult {
+  renderCard({ classes, description, icon, links, title }: Card): TemplateResult {
     return html`
       <am-card class="${classes}">
         ${ icon ? html`<mwc-icon slot="icon">${icon}</mwc-icon>` : null}

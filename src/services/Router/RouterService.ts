@@ -1,6 +1,6 @@
-import {TemplateResult, html} from 'lit-element';
-import AuthService, {Role} from '../Auth';
-import {ObserverType, observe, fireObservers} from '../../utils/observer';
+import { TemplateResult, html } from 'lit-element';
+import AuthService, { Role } from '../Auth';
+import { ObserverType, observe, fireObservers } from '../../utils/observer';
 
 /**
  * Defines a Route object in the UI and the requirements to navigate to and render the associated page element.
@@ -104,7 +104,7 @@ export class RouterService {
     window.onpopstate = this.handleHistoryChange;
     AuthService.onUserRolesChanged((userRoles) => {
       this.routes = (Object.values(Routes) as Route[]).
-        filter(({roles}) => {
+        filter(({ roles }) => {
           return !roles || !roles.length || roles.some((role) => userRoles.includes(role));
         });
       this.handleHistoryChange();
@@ -115,9 +115,9 @@ export class RouterService {
    * Handles updates to the History API and maps them into routing changes.
    */
   private handleHistoryChange() {
-    const {pathname} = window.location;
-    const {name}: Route =
-      this.routes.find(({pattern}: Route) => pattern.exec(pathname)) ||
+    const { pathname } = window.location;
+    const { name }: Route =
+      this.routes.find(({ pattern }: Route) => pattern.exec(pathname)) ||
       Routes[RouteName.NotFound];
     this.navigate(name, false);
   }
@@ -129,7 +129,7 @@ export class RouterService {
    * @returns - A valid Route object from the available routes.
    */
   getRoute(routeName: RouteName): Route {
-    return this.routes.find(({name}) => name === routeName);
+    return this.routes.find(({ name }) => name === routeName);
   }
   /**
    * Uses the observer util to notify of changes to the currently available routes.
@@ -151,14 +151,14 @@ export class RouterService {
   async navigate(route: RouteName, updateHistory = true): Promise<void> {
     this.activeRoute = route;
     try {
-      const {importModule} = this.getRoute(this.activeRoute);
+      const { importModule } = this.getRoute(this.activeRoute);
       if (importModule) await importModule();
     } catch (e) {
       // Failed to fetch the page, load 404 instead
       this.activeRoute = RouteName.NotFound;
       console.error('Failed import', e);
     }
-    const {label, path, title} = this.getRoute(this.activeRoute);
+    const { label, path, title } = this.getRoute(this.activeRoute);
     if (updateHistory) window.history.pushState({}, `Austin Murdock | ${title || label}`, `${path()}`);
   }
   /**

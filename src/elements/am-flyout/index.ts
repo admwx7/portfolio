@@ -1,4 +1,4 @@
-import {AmFlyout} from './am-flyout';
+import { AmFlyout } from './am-flyout';
 
 export default AmFlyout;
 export * from './am-flyout';

@@ -30,6 +30,9 @@ module.exports = {
       allowShortCircuit: true,
       allowTernary: false,
     }],
+    'object-curly-spacing': ['error', 'always'],
+    'block-spacing': ['error', 'always'],
+    'brace-style': ['error', '1tbs', { 'allowSingleLine': true }],
 
     'no-unused-vars': 'off',
     'require-jsdoc': 'off',
