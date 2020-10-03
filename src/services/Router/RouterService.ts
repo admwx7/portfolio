@@ -19,7 +19,6 @@ export class Route {
  * All RouteNames in the app.
  */
 export enum RouteName {
-  DND = 'dnd',
   Home = 'home',
   NotFound = '404',
   /* Disabled during rewrite */
@@ -30,19 +29,6 @@ export enum RouteName {
  * All Route definitions in the UI a user can possibly navigate to.
  */
 const Routes: Record<RouteName, Route> = {
-  [RouteName.DND]: {
-    label: 'DND',
-    importModule() {
-      return import('../../pages/dnd');
-    },
-    name: RouteName.DND,
-    path() {
-      return '/dnd';
-    },
-    pattern: /^\/dnd$/,
-    render() { return html`<am-page-dnd class="page"></am-page-dnd>`; },
-    roles: [Role.Admin, Role.Alpha],
-  },
   [RouteName.Home]: {
     label: 'Home',
     importModule() {
