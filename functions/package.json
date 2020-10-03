@@ -22,8 +22,8 @@
     "node-fetch": "~2.6"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.7",
-    "@types/node-fetch": "^2.5.7",
+    "@types/cors": "~2.8",
+    "@types/node-fetch": "~2.5",
     "@typescript-eslint/eslint-plugin": "~4.3",
     "@typescript-eslint/parser": "~4.3",
     "eslint": "~7.10",
