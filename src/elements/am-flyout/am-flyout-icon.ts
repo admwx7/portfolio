@@ -69,13 +69,14 @@ export class AmFlyoutIcon extends LitElement {
     `,
   ];
 
+  @property() alt: string;
   @property() href: string;
 
   render(): TemplateResult {
-    const { href } = this;
+    const { alt, href } = this;
 
     return html`
-      <a target=_blank href=${href}>
+      <a target=_blank href=${href} atl=${alt}>
         <mwc-icon id="icon">
           <slot></slot>
         </mwc-icon>
