@@ -119,9 +119,6 @@ export class AmItemScroller extends LitElement {
    * @param event
    */
   private swipeEnd(event: TouchEvent | MouseEvent) {
-    event.stopPropagation();
-    event.preventDefault();
-
     let clientX;
     if (event instanceof TouchEvent) clientX = event.changedTouches[0].clientX;
     else clientX = event.clientX;
@@ -130,6 +127,8 @@ export class AmItemScroller extends LitElement {
     const diff = clientX - this.clientX;
     if (Math.abs(diff) < this.swipeThreshold) return;
 
+    event.stopPropagation();
+    event.preventDefault();
     if (diff < 0) this.next();
     else this.previous();
     this.swipeClear();

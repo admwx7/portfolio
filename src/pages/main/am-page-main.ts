@@ -111,11 +111,6 @@ export class AmPageMain extends LitElement {
       text: 'austin.d.murdock@gmail.com',
     },
     {
-      href: 'tel:+16365773448',
-      icon: 'phone',
-      text: '(636) 577-3448',
-    },
-    {
       href: 'https://twitter.com/admwx7',
       icon: twitter(),
       text: '@admwx7',
@@ -147,9 +142,11 @@ export class AmPageMain extends LitElement {
         tackle common <a href="https://www.polymer-project.org/">Polymer</a> related issues.
       `,
       links: html`
-        <a href="https://github.com/admwx7/portfolio" alt="Source Code" class="project-link">
-          <am-flyout-icon>${github()}</am-flyout-icon>
-        </a>
+        <am-flyout-icon
+          href="https://github.com/admwx7/portfolio"
+          alt="Source Code"
+          class="project-link"
+        >${github()}</am-flyout-icon>
       `,
     },
     {
@@ -162,12 +159,16 @@ export class AmPageMain extends LitElement {
         (pre-boarding).
       `,
       links: html`
-        <a href="https://youtu.be/zKeyVhC8qbU?t=2h37m14s" alt="Final Pitch" class="project-link">
-          <am-flyout-icon>${youtube()}</am-flyout-icon>
-        </a>
-        <a href="http://bit.ly/2AV2M0O" alt="Entrepreneurially Thinking Podcast" class="project-link">
-          <am-flyout-icon>${podcast()}</am-flyout-icon>
-        </a>
+        <am-flyout-icon
+          href="https://youtu.be/zKeyVhC8qbU?t=2h37m14s"
+          alt="Final Pitch"
+          class="project-link"
+        >${youtube()}</am-flyout-icon>
+        <am-flyout-icon
+          href="http://bit.ly/2AV2M0O"
+          alt="Entrepreneurially Thinking Podcast"
+          class="project-link"
+        >${podcast()}</am-flyout-icon>
       `,
     },
     {
@@ -180,9 +181,11 @@ export class AmPageMain extends LitElement {
         help tracking, intake, and locating facilities.
       `,
       links: html`
-        <a href="https://github.com/Hackception/global-hack-6" alt="Source Code" class="project-link">
-          <am-flyout-icon>${github()}</am-flyout-icon>
-        </a>
+        <am-flyout-icon
+          href="https://github.com/Hackception/global-hack-6"
+          alt="Source Code"
+          class="project-link"
+        >${github()}</am-flyout-icon>
       `,
     },
     {
@@ -194,9 +197,11 @@ export class AmPageMain extends LitElement {
         searches. Meanjs was used for scaffolding with a free Bootstrap 3 theme.
       `,
       links: html`
-        <a href="https://github.com/Hackception/civiception" alt="Source Code" class="project-link">
-          <am-flyout-icon>${github()}</am-flyout-icon>
-        </a>
+        <am-flyout-icon
+          href="https://github.com/Hackception/civiception"
+          alt="Source Code"
+          class="project-link"
+        >${github()}</am-flyout-icon>
       `,
     },
     {
@@ -208,9 +213,11 @@ export class AmPageMain extends LitElement {
         form was created using AngularJS, the chart was created using the C3 charting library.
       `,
       links: html`
-        <a href="https://github.com/Hackception/Widgetception" alt="Source Code" class="project-link">
-          <am-flyout-icon>${github()}</am-flyout-icon>
-        </a>
+        <am-flyout-icon
+          href="https://github.com/Hackception/Widgetception"
+          alt="Source Code"
+          class="project-link"
+        >${github()}</am-flyout-icon>
       `,
     },
   ];
