@@ -24,7 +24,8 @@ jobs:
           node-version: 18
           cache: 'yarn'
       - run: yarn install --immutable
-      - run: yarn run lint build
+      - run: yarn run lint
+      - run: yarn run build
       - name: Tar files
         run: tar -cvzf apps.tar.gz ./apps/*/dist .firebaserc database.rules.json firebase.json remoteconfig.template.json storage.rules
       - uses: actions/upload-artifact@v3
