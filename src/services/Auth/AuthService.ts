@@ -1,9 +1,20 @@
-import '@firebase/auth';
-import '@firebase/database';
-import { Reference } from '@firebase/database';
-import FirebaseService from '../Firebase';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getDatabase, ref, onValue, off, DatabaseReference } from 'firebase/database';
 import { ObserverType, fireObservers, observe } from '../../utils/observer';
 import { parseJwt } from '../../utils/parser';
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+// App initialization
+const app = initializeApp({
+  apiKey: 'AIzaSyCjMz2srT0HjuJRPH2ThhLD7XqLcrYqSQQ',
+  authDomain: 'portfolio-138c8.firebaseapp.com',
+  databaseURL: 'https://portfolio-138c8.firebaseio.com',
+  projectId: 'portfolio-138c8',
+  storageBucket: 'portfolio-138c8.appspot.com',
+  messagingSenderId: '807153287758',
+  appId: '1:807153287758:web:a4b9fca89e60a6d2b7b91f',
+});
+getAnalytics(app);
 
 /**
  * Possible roles a user can have.
@@ -20,12 +31,12 @@ export enum Role {
  * UI Service used for authenticating users and interfacing with the User object for roles.
  */
 export class AuthService {
-  private auth = FirebaseService.auth();
-  private database = FirebaseService.database();
-  private dbRef: Reference = null;
-  private provider = new FirebaseService.auth.GoogleAuthProvider();
-  private _roles: Role[];
-  private get roles(): Role[] {
+  private auth = getAuth();
+  private database = getDatabase();
+  private dbQuery?: DatabaseReference;
+  private provider = new GoogleAuthProvider();
+  private _roles?: Role[];
+  private get roles(): Role[] | undefined {
     return this._roles;
   }
   private set roles(value: Role[]) {
@@ -33,8 +44,8 @@ export class AuthService {
     fireObservers(ObserverType.UserRoles, value);
   }
 
-  get currentUser(): { getIdToken: (forceRefresh: boolean) => Promise<string> } {
-    return this.auth.currentUser;
+  get currentUser(): { getIdToken: (forceRefresh: boolean) => Promise<string> } | null {
+    return this.auth.currentUser || null;
   }
 
   constructor() {
@@ -42,15 +53,14 @@ export class AuthService {
 
     this.onAuthStateChanged((user: { uid: string } | null) => {
       // Close previous DB connection
-      if (this.dbRef) {
-        this.dbRef.off();
-        this.dbRef = null;
+      if (this.dbQuery) {
+        off(this.dbQuery, 'value', () => { delete this.dbQuery; });
       }
 
       if (!user) this.fetchUserRoles(); // Update roles for no user
       else { // Establish a new DB connection, will update roles for the current user
-        this.dbRef = this.database.ref(`metadata/${user.uid}/refreshTime`) as Reference;
-        this.dbRef.on('value', () => this.fetchUserRoles({ forceRefresh: true }));
+        this.dbQuery = ref(this.database, `metadata/${user.uid}/refreshTime`);
+        onValue(this.dbQuery, () => this.fetchUserRoles({ forceRefresh: true }));
       }
     });
   }
@@ -64,6 +74,7 @@ export class AuthService {
   private async fetchUserRoles({ forceRefresh } = { forceRefresh: false }): Promise<void> {
     let userRoles: Role[] = [];
     try {
+      if (!this.currentUser) return;
       const { roles } =
         parseJwt(await this.currentUser.getIdToken(forceRefresh)) as unknown as { roles: Record<Role, boolean> };
       userRoles = (Object.keys(roles) as Role[]).
@@ -75,7 +86,6 @@ export class AuthService {
   /**
    * Provides a hook for watching auth state changes.
    */
-  // eslint-disable-next-line no-invalid-this
   onAuthStateChanged = this.auth.onAuthStateChanged.bind(this.auth);
   /**
    * Uses the observer util to notify of changes to the roles associated with the current user.
@@ -93,8 +103,9 @@ export class AuthService {
    */
   async signIn(): Promise<void> {
     try {
-      await this.auth.signInWithPopup(this.provider);
-    } catch ({ code, credential, email, message }) {
+      await signInWithPopup(this.auth, this.provider);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch ({ code, credential, email, message }: any) {
       console.error('Auth Error', code, credential, email, message);
     }
   }
@@ -104,7 +115,8 @@ export class AuthService {
   async signOut(): Promise<void> {
     try {
       await this.auth.signOut();
-    } catch ({ code, credential, email, message }) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch ({ code, credential, email, message }: any) {
       console.error('Auth Error', code, credential, email, message);
     }
   }

@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*.*.**
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  test_and_build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn run lint build
+      - name: Tar files
+        run: tar -cvzf apps.tar.gz ./apps/*/dist .firebaserc database.rules.json firebase.json remoteconfig.template.json storage.rules
+      - uses: actions/upload-artifact@v3
+        with:
+          name: apps-builds
+          path: apps.tar.gz
+          retention-days: 1
+  release:
+    if: github.ref_type == 'tag'
+    needs: test_and_build
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: apps-builds
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: ./**
+  deploy:
+    needs: test_and_build
+    concurrency:
+      group: prod-apps
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: ${{ github.ref_type == 'tag' && 'Production' || 'Development' }}
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: apps-builds
+      - run: tar -xvzf apps.tar.gz
+      - run: rm apps.tar.gz
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: '${{ secrets.FIREBASE_CHANNEL }}'
+          projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
+          target: '${{ secrets.FIREBASE_TARGET }}'
+      # TODO: add functions deployment
+      # TODO: add db deployment

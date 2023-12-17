@@ -1,4 +1,4 @@
-import { css } from 'lit-element';
+import { css } from 'lit';
 
 export const reset = css`
   [hidden] {
@@ -36,7 +36,7 @@ export const reset = css`
   a:hover {
     color: var(--accent-color);
   }
-  a:hover > mwc-icon {
+  a:hover > md-icon {
     color: var(--text-color);
     filter: var(--drop-shadow);
   }

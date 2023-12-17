@@ -1,5 +1,6 @@
-/* eslint-disable max-len, jsdoc/require-jsdoc */
-import { TemplateResult, html } from 'lit-element';
+/* eslint-disable max-len */
+
+import { TemplateResult, html } from 'lit';
 
 /* Contains a series of encoded SVG images to use for icons */
 

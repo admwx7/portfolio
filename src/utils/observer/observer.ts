@@ -26,7 +26,7 @@ const callbacks: CallbackMap =
  */
 export function fireObservers(type: ObserverType, ...params: unknown[]): void {
   for (const id in callbacks[type]) {
-    if (Object.prototype.hasOwnProperty.call(callbacks[type], id)) callbacks[type][id](...params);
+    if (Object.prototype.hasOwnProperty.call(callbacks[type], id)) callbacks[type][id]?.(...params);
   }
 }
 /**
@@ -36,7 +36,8 @@ export function fireObservers(type: ObserverType, ...params: unknown[]): void {
  * @param callback
  * @returns - Function to deregister the registered observer.
  */
-export function observe(type: ObserverType, callback: (...params: unknown[]) => void): () => void {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function observe(type: ObserverType, callback: (...params: any[]) => void): () => void {
   let id: string;
   do { // Fetch a unique ID for this callback
     id = String(Math.random());

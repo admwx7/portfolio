@@ -1,4 +1,5 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import { LitElement, TemplateResult, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 /**
  * Renders a horizontal scroller for displaying items.
@@ -9,7 +10,7 @@ import { LitElement, TemplateResult, customElement, css, html, property } from '
  */
 @customElement('am-item-scroller')
 export class AmItemScroller extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: block;
       position: relative;
@@ -28,12 +29,12 @@ export class AmItemScroller extends LitElement {
   `;
 
   private _center = 0;
-  private clientX: number = null;
+  private clientX: number | null = null;
   /* The minimum swip distance required to jump to the next / previous item */
   private swipeThreshold = 25;
 
   /* The total number of items being displayed */
-  @property({ type: Number }) count: number;
+  @property({ type: Number }) count: number = 0;
   /* The item index for the currently centered item, ranges 0 to (count - 1) */
   @property({ type: Number, noAccessor: true })
   get center(): number {
@@ -55,8 +56,8 @@ export class AmItemScroller extends LitElement {
     this.swipeStart = this.swipeStart.bind(this);
   }
   /* Lifecycle Methods */
-  async connectedCallback() {
-    if (super.connectedCallback) super.connectedCallback();
+  override async connectedCallback() {
+    super.connectedCallback?.();
 
     // event listeners
     this.addEventListener('mousedown', this.swipeStart);
@@ -66,15 +67,15 @@ export class AmItemScroller extends LitElement {
     this.addEventListener('touchstart', this.swipeStart);
     this.addEventListener('touchend', this.swipeEnd);
   }
-  async disconnectedCallback() {
-    if (super.disconnectedCallback) super.disconnectedCallback();
+  override async disconnectedCallback() {
+    super.disconnectedCallback?.();
 
     // event listeners
     this.removeEventListener('mousedown', this.swipeStart);
     this.removeEventListener('click', this.swipeEnd);
     this.removeEventListener('mouseleave', this.swipeEnd);
   }
-  render(): TemplateResult {
+  override render(): TemplateResult {
     const { count = 1, center = 0 } = this;
     const offsets = this.calculateOffsets(count, center);
 
@@ -120,11 +121,11 @@ export class AmItemScroller extends LitElement {
    */
   private swipeEnd(event: TouchEvent | MouseEvent) {
     let clientX;
-    if (event instanceof TouchEvent) clientX = event.changedTouches[0].clientX;
+    if (event instanceof TouchEvent) clientX = event.changedTouches[0]?.clientX;
     else clientX = event.clientX;
     if (!this.clientX) return;
 
-    const diff = clientX - this.clientX;
+    const diff = (clientX || 0) - this.clientX;
     if (Math.abs(diff) < this.swipeThreshold) return;
 
     event.stopPropagation();
@@ -142,7 +143,7 @@ export class AmItemScroller extends LitElement {
     event.stopPropagation();
     event.preventDefault();
 
-    if (event instanceof TouchEvent) this.clientX = event.touches[0].clientX;
+    if (event instanceof TouchEvent) this.clientX = event.touches[0]?.clientX || null;
     else this.clientX = event.clientX;
   }
 
