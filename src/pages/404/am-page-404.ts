@@ -1,4 +1,5 @@
-import { LitElement, customElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { card, reset } from '../../theme/shared-styles';
 
 /**
@@ -6,12 +7,12 @@ import { card, reset } from '../../theme/shared-styles';
  */
 @customElement('am-page-404')
 export class AmPage404 extends LitElement {
-  static styles = [
+  static override styles = [
     reset,
     card,
   ];
 
-  render() {
+  override render() {
     return html`
       <div class="card">
         <p>Oops you hit a 404. <a href="/">Head back to home.</a></p>

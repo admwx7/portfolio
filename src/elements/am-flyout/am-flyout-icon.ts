@@ -1,5 +1,7 @@
-import { LitElement, customElement, css, TemplateResult, html, property } from 'lit-element';
-import '@material/mwc-icon';
+import { LitElement, css, TemplateResult, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import '@material/web/icon/icon.js';
+import '@material/web/iconbutton/icon-button.js';
 
 import { reset } from '../../theme/shared-styles';
 
@@ -8,7 +10,7 @@ import { reset } from '../../theme/shared-styles';
  */
 @customElement('am-flyout-icon')
 export class AmFlyoutIcon extends LitElement {
-  static styles = [
+  static override styles = [
     reset,
     css`
       :host {
@@ -59,6 +61,9 @@ export class AmFlyoutIcon extends LitElement {
         padding: var(--padding);
         color: var(--text-color);
       }
+      md-icon {
+        color: var(--text-color);
+      }
       #flyout ::slotted(*) {
         display: inline-block;
         margin: 0;
@@ -69,17 +74,17 @@ export class AmFlyoutIcon extends LitElement {
     `,
   ];
 
-  @property() alt: string;
-  @property() href: string;
+  @property() alt?: string;
+  @property() href?: string;
 
-  render(): TemplateResult {
+  override render(): TemplateResult {
     const { alt, href } = this;
 
     return html`
       <a target=_blank href=${href} atl=${alt}>
-        <mwc-icon id="icon">
-          <slot></slot>
-        </mwc-icon>
+        <md-icon-button id=icon>
+          <md-icon><slot></slot></md-icon>
+        </md-icon-button>
         <div id="flyout">
           <slot name="flyout"></slot>
         </div>

@@ -1,4 +1,5 @@
-import { LitElement, TemplateResult, customElement, css, property } from 'lit-element';
+import { LitElement, TemplateResult, css } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import RouterService, { Route } from '../../services/Router';
 import '../../pages/404';
 
@@ -7,7 +8,7 @@ import '../../pages/404';
  */
 @customElement('am-pages')
 export class AmPages extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: block;
       position: relative;
@@ -19,24 +20,24 @@ export class AmPages extends LitElement {
     }
   `;
 
-  private routeObserver: () => void;
+  private routeObserver?: () => void;
 
   /* The currently selected page to display */
-  @property({ type: Object }) private page: TemplateResult;
+  @property({ type: Object }) private page?: TemplateResult;
 
   /* Lifecycle Methods */
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
 
-    this.routeObserver = RouterService.onRouteChange(({ render }: Route) => this.page = render());
+    this.routeObserver = RouterService.onRouteChange((route: Route) => this.page = route?.render());
   }
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
 
-    this.routeObserver();
+    this.routeObserver?.();
   }
-  render(): TemplateResult {
+  override render(): TemplateResult | null {
     const { page } = this;
-    return page;
+    return page || null;
   }
 }

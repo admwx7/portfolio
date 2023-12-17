@@ -23,11 +23,11 @@ export class Character {
   private overrideHitPoints?: number;
   private removedHitPoints?: number;
 
-  avatarUrl: URL;
-  classes: CharacterClass[];
-  id: number;
-  name: string;
-  readonlyUrl: URL;
+  avatarUrl?: URL;
+  classes?: CharacterClass[];
+  id?: number;
+  name?: string;
+  readonlyUrl?: URL;
   temporaryHitPoints?: number;
 
   get currentHitPoints(): number {
@@ -42,8 +42,8 @@ export class Character {
   }
 
   constructor(props: Partial<Character> | Record<keyof Character, CharacterInput>) {
-    Object.entries(props).
-      forEach(([key, value]: [keyof Character, CharacterInput]) => {
+    (Object.entries(props) as [keyof Character, CharacterInput][]).
+      forEach(([key, value]) => {
         switch (key) {
           case 'currentHitPoints':
           case 'maxHitPoints':

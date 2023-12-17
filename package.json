@@ -8,40 +8,36 @@
     "url": "git@github.com:admwx7/portfolio"
   },
   "dependencies": {
-    "@material/mwc-icon": "0.18.0",
-    "@material/mwc-textfield": "^0.18.0",
-    "firebase": "~7.22",
-    "lit-element": "~2.4"
+    "@material/web": "~1.1",
+    "firebase": "~10.7",
+    "lit": "~3.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "~7.10",
-    "@babel/plugin-proposal-decorators": "~7.10",
-    "@babel/preset-typescript": "~7.10",
-    "@open-wc/building-rollup": "~1.9",
-    "@rollup/plugin-typescript": "~6.0",
-    "@typescript-eslint/eslint-plugin": "~4.2",
-    "@typescript-eslint/parser": "~4.2",
+    "@chialab/esbuild-plugin-html": "^0.17",
+    "@craftamap/esbuild-plugin-html": "^0.6",
+    "@typescript-eslint/eslint-plugin": "~6.14",
+    "@typescript-eslint/parser": "~6.14",
     "babel": "~6.23",
-    "copyfiles": "~2.3",
-    "es-dev-server": "~1.57",
-    "eslint": "~7.10",
-    "eslint-config-google": "0.14.0",
-    "eslint-plugin-html": "~6.1",
-    "eslint-plugin-jsdoc": "~30.6",
-    "rimraf": "~3.0",
-    "rollup": "~2.28",
-    "typescript": "~4.0"
+    "copyfiles": "~2.4",
+    "es-dev-server": "~2.1",
+    "esbuild": "^0.19",
+    "esbuild-plugin-inline-image": "^0.0.9",
+    "esbuild-plugin-inline-worker": "^0.1",
+    "esbuild-plugin-wat": "^0.2",
+    "eslint": "~8.56",
+    "eslint-config-google": "^0.14",
+    "eslint-plugin-html": "~7.1",
+    "rimraf": "~5.0",
+    "typescript": "~5.3"
   },
   "engines": {
-    "node": ">=12",
-    "npm": ">=6"
+    "node": ">=18",
+    "npm": ">=9"
   },
   "scripts": {
-    "build": "rimraf dist && npm run build:bundle && npm run build:copy",
-    "build:bundle": "rollup -c rollup.config.js",
-    "build:copy": "copyfiles manifest.json images/** dist",
-    "start": "es-dev-server --file-extensions .ts --node-resolve --babel",
-    "start:build": "npm run build && es-dev-server --root-dir dist --app-index index.html --compatibility none --open",
+    "build": "rimraf dist && node ./prod.esbuild.config.mjs && npm run build:copy",
+    "build:copy": "copyfiles manifest.json dist",
+    "start": "node ./dev.esbuild.config.mjs",
     "lint": "npm run lint:code && npm run lint:types",
     "lint:code": "eslint . --ext .js,.ts,.html",
     "lint:fix": "eslint . --ext .js,.ts,.html --fix",

@@ -1,4 +1,5 @@
-import { LitElement, TemplateResult, html, css, property, customElement } from 'lit-element';
+import { css, html, LitElement, TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 /**
  * Renders a UI Card based on the provided.
@@ -13,7 +14,7 @@ import { LitElement, TemplateResult, html, css, property, customElement } from '
  */
 @customElement('am-card')
 export class AmCard extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: flex;
       flex: 0 0 calc(100% / var(--size) - var(--gutter) * var(--size));
@@ -49,7 +50,7 @@ export class AmCard extends LitElement {
   @property({ type: Boolean, reflect: true }) selectable = false;
   @property({ type: Boolean, reflect: true }) selected = false;
 
-  render(): TemplateResult {
+  override render(): TemplateResult {
     return html`
       <slot name="icon"></slot>
       <slot name="title"></slot>

@@ -1,4 +1,5 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import { LitElement, TemplateResult, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import AuthService from '../../services/Auth';
 import RouterService, { Route, RouteName } from '../../services/Router';
 
@@ -7,7 +8,7 @@ import RouterService, { Route, RouteName } from '../../services/Router';
  */
 @customElement('am-nav')
 export class AmNav extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: flex;
       flex-direction: row;
@@ -57,16 +58,16 @@ export class AmNav extends LitElement {
     }
   `;
 
-  private authObserver: () => void;
-  private availableRoutesObserver: () => void;
-  private routeObserver: () => void;
+  private authObserver?: () => void;
+  private availableRoutesObserver?: () => void;
+  private routeObserver?: () => void;
 
   /* The currently selected page */
-  @property({ type: Object }) private page: RouteName;
+  @property({ type: Object }) private page?: RouteName;
   /* Whether or not the user is signed in */
-  @property({ type: Boolean }) private signedIn: boolean;
+  @property({ type: Boolean }) private signedIn?: boolean;
   /* Routes available to the user */
-  @property({ type: Array }) private routes: Route[];
+  @property({ type: Array }) private routes?: Route[];
 
   /* Lifecycle Methods */
   constructor() {
@@ -75,25 +76,25 @@ export class AmNav extends LitElement {
     this.handleAuthChange = this.handleAuthChange.bind(this);
     this.renderLink = this.renderLink.bind(this);
   }
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
 
-    this.authObserver = AuthService.onAuthStateChanged((user: unknown) => this.signedIn = Boolean(user));
+    this.authObserver = AuthService.onAuthStateChanged?.((user: unknown) => this.signedIn = Boolean(user));
     this.availableRoutesObserver = RouterService.onAvailableRoutesChanged((routes: Route[]) => this.routes = routes);
-    this.routeObserver = RouterService.onRouteChange(({ name }: Route) => this.page = name);
+    this.routeObserver = RouterService.onRouteChange((route: Route | null) => this.page = route?.name || undefined);
   }
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
 
-    this.authObserver();
-    this.availableRoutesObserver();
-    this.routeObserver();
+    this.authObserver?.();
+    this.availableRoutesObserver?.();
+    this.routeObserver?.();
   }
-  render(): TemplateResult {
+  override render(): TemplateResult {
     const { signedIn } = this;
 
     return html`
-      ${this.routes.filter(({ label }) => Boolean(label)).map(this.renderLink)}
+      ${this.routes?.filter(({ label }) => Boolean(label)).map(this.renderLink)}
       <div class="page-link" @click=${this.handleAuthChange}>
         <span>Sign ${signedIn ? 'Out' : 'In'}</span>
       </div>

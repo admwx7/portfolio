@@ -8,22 +8,22 @@
  * @returns - Function for debouncing.
  */
 export function debounce(
+  this: unknown,
   func: (..._args: unknown[]) => void,
   timeout: number,
   rising = false
 ): (..._args: unknown[]) => void {
-  let timer: number = null;
+  let timer: number | null = null;
 
-  return function(..._args: unknown[]) {
-    // eslint-disable-next-line no-invalid-this, @typescript-eslint/no-this-alias
-    const _this = this;
+  return (..._args: unknown[]) => {
+    // eslint-disable-next-line no-invalid-this, @typescript-eslint/no-explicit-any
+    if (rising && !timer) func.apply(this as any, _args);
 
-    if (rising && !timer) func.apply(_this, _args);
-
-    window.clearTimeout(timer);
+    if (timer) window.clearTimeout(timer);
     timer = window.setTimeout(() => {
       timer = null;
-      if (!rising) func.apply(_this, _args);
+      // eslint-disable-next-line no-invalid-this, @typescript-eslint/no-explicit-any
+      if (!rising) func.apply(this as any, _args);
     }, timeout);
   };
 }

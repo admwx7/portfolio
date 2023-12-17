@@ -1,4 +1,5 @@
-import { LitElement, TemplateResult, customElement, css, html } from 'lit-element';
+import { LitElement, TemplateResult, css, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
 /**
  * Renders the app logo, designed fully with HTML + CSS
@@ -7,7 +8,7 @@ import { LitElement, TemplateResult, customElement, css, html } from 'lit-elemen
  */
 @customElement('am-logo')
 export class AmLogo extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       display: block;
       position: relative;
@@ -196,7 +197,9 @@ export class AmLogo extends LitElement {
     }
   `;
 
-  render(): TemplateResult {
+  // static override shadowRootOptions: ShadowRootInit = { mode: 'open', delegatesFocus: true };
+
+  override render(): TemplateResult {
     return html`
       <!-- Corner block -->
       <div class="fill rotate light top-0 left-0 height-3 width-2"></div>
@@ -229,3 +232,11 @@ export class AmLogo extends LitElement {
     `;
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'am-logo': AmLogo;
+  }
+}
+
+export default AmLogo;

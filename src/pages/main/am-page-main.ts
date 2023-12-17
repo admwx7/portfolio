@@ -1,4 +1,5 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import { LitElement, TemplateResult, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import {
   contactMe,
   continuous,
@@ -19,7 +20,7 @@ import '../../elements/am-flyout';
 import '../../elements/am-flyout/am-flyout-icon';
 import '../../elements/am-item-scroller';
 
-import '@material/mwc-icon';
+import '@material/web/icon/icon';
 
 const slimBreakpoints = [Breakpoint.XSmall, Breakpoint.Small];
 
@@ -28,10 +29,10 @@ const slimBreakpoints = [Breakpoint.XSmall, Breakpoint.Small];
  */
 export class Card {
   classes?: string;
-  description: TemplateResult;
+  description: TemplateResult = html``;
   icon?: TemplateResult;
   links?: TemplateResult;
-  title: string;
+  title: string = '';
 }
 
 /**
@@ -39,7 +40,7 @@ export class Card {
  */
 @customElement('am-page-main')
 export class AmPageMain extends LitElement {
-  static styles = [
+  static override styles = [
     reset,
     card,
     tiles,
@@ -85,7 +86,7 @@ export class AmPageMain extends LitElement {
         display: inline-block;
         padding: 0 5px;
       }
-      .project-link > mwc-icon {
+      .project-link > md-icon {
         height: 40px;
         width: 40px;
       }
@@ -102,7 +103,7 @@ export class AmPageMain extends LitElement {
     `,
   ];
 
-  private breakpointObserver: () => void;
+  private breakpointObserver?: () => void;
 
   @property({ type: Array }) private flyouts = [
     {
@@ -270,18 +271,18 @@ export class AmPageMain extends LitElement {
   ];
   @property({ type: Boolean }) private slim = false;
 
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
 
     this.breakpointObserver =
       BreakpointService.onBreakpointChanged((breakpoint) => this.slim = slimBreakpoints.includes(breakpoint));
   }
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
 
-    this.breakpointObserver();
+    this.breakpointObserver?.();
   }
-  render(): TemplateResult {
+  override render(): TemplateResult {
     const { flyouts, projects, renderCard, services, slim } = this;
 
     return html`
@@ -307,10 +308,10 @@ export class AmPageMain extends LitElement {
   renderCard({ classes, description, icon, links, title }: Card): TemplateResult {
     return html`
       <am-card class="${classes}">
-        ${ icon ? html`<mwc-icon slot="icon">${icon}</mwc-icon>` : null}
-        ${ title ? html`<h3 slot="title">${title}</h3>` : null}
-        ${ description ? html`<p slot="description">${description}</p>` : null}
-        ${ links ? html`<div slot="links">${links}</div>` : null}
+        ${icon ? html`<md-icon slot="icon">${icon}</md-icon>` : null}
+        ${title ? html`<h3 slot="title">${title}</h3>` : null}
+        ${description ? html`<p slot="description">${description}</p>` : null}
+        ${links ? html`<div slot="links">${links}</div>` : null}
       </am-card>
     `;
   }

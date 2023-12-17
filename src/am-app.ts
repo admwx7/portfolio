@@ -1,5 +1,7 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
-import '@material/mwc-icon';
+import { LitElement, TemplateResult, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import '@material/web/icon/icon.js';
+import '@material/web/iconbutton/icon-button.js';
 
 import BreakpointService, { Breakpoint } from './services/Breakpoint';
 import { colorStyles } from './theme/colors';
@@ -15,7 +17,7 @@ const slimBreakpoints = [Breakpoint.XSmall, Breakpoint.Small];
  */
 @customElement('am-app')
 export class AmApp extends LitElement {
-  static styles = [
+  static override styles = [
     reset,
     colorStyles,
     BreakpointService.generateCSSVariables(),
@@ -93,8 +95,10 @@ export class AmApp extends LitElement {
         transition-duration: 0.75s;
         transition-property: transform;
         cursor: pointer;
-        color: var(--light-primary-color);
         user-select: none;
+      }
+      .icon > md-icon {
+        color: var(--light-primary-color);
       }
       .icon:hover {
         filter: var(--drop-shadow);
@@ -119,9 +123,9 @@ export class AmApp extends LitElement {
     `,
   ];
 
-  private breakpointObserver: () => void;
+  private breakpointObserver?: () => void;
   private swipeDiff = 120;
-  private xDown: number = null;
+  private xDown: number | null = null;
 
   @property({ type: Boolean }) slim = false;
   @property({ type: Boolean }) open = false;
@@ -136,7 +140,7 @@ export class AmApp extends LitElement {
     this.touchMove = this.touchMove.bind(this);
     this.touchStart = this.touchStart.bind(this);
   }
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
 
     this.breakpointObserver =
@@ -145,28 +149,28 @@ export class AmApp extends LitElement {
     document.addEventListener('touchend', this.touchMove, false);
     document.addEventListener('touchstart', this.touchStart, false);
   }
-  disconnectedCallback() {
+  override disconnectedCallback() {
     super.disconnectedCallback();
 
-    this.breakpointObserver();
+    this.breakpointObserver?.();
     document.removeEventListener('click', this.closeDrawer);
     document.removeEventListener('touchend', this.touchMove);
     document.removeEventListener('touchstart', this.touchStart);
   }
-  render(): TemplateResult {
+  override render(): TemplateResult {
     const { open, slim, toggleDrawer } = this;
 
     return html`
       <div id="drawer" ?open=${open}>
         <am-nav id="side-nav" vertical></am-nav>
-        <mwc-icon class="icon" @click=${toggleDrawer}>chevron_right</mwc-icon>
+        <md-icon-button class=icon @click=${toggleDrawer}>
+          <md-icon>chevron_right</md-icon>
+        </md-icon-button>
       </div>
       <div id="header">
-        <mwc-icon id="menuIcon"
-          class="icon"
-          ?hidden=${!slim}
-          @click=${toggleDrawer}
-        >menu</mwc-icon>
+        <md-icon-button id=menuIcon class=icon ?hidden=${!slim} @click=${toggleDrawer}>
+          <md-icon>menu</md-icon>
+        </md-icon-button>
         <a id="title" ?center=${slim} href="/">
           <am-logo></am-logo>
         </a>
@@ -185,7 +189,7 @@ export class AmApp extends LitElement {
   private touchMove(event: TouchEvent) {
     if (!this.xDown) return;
 
-    const xUp = event.changedTouches[0].clientX;
+    const xUp = event.changedTouches[0]?.clientX || 0;
     const xDiff = this.xDown - xUp;
 
     if (xDiff > this.swipeDiff) {
@@ -200,7 +204,7 @@ export class AmApp extends LitElement {
    * @param event
    */
   private touchStart(event: TouchEvent) {
-    this.xDown = event.touches[0].clientX;
+    this.xDown = event.touches[0]?.clientX || 0;
   }
 
   /* Public Methods */

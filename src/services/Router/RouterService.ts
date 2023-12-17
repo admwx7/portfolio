@@ -1,11 +1,11 @@
-import { TemplateResult, html } from 'lit-element';
+import { TemplateResult, html } from 'lit';
 import AuthService, { Role } from '../Auth';
 import { ObserverType, observe, fireObservers } from '../../utils/observer';
 
 /**
  * Defines a Route object in the UI and the requirements to navigate to and render the associated page element.
  */
-export class Route {
+export interface Route {
   label?: string;
   importModule?: () => Promise<unknown>;
   name: RouteName;
@@ -19,7 +19,6 @@ export class Route {
  * All RouteNames in the app.
  */
 export enum RouteName {
-  DND = 'dnd',
   Home = 'home',
   NotFound = '404',
   /* Disabled during rewrite */
@@ -30,19 +29,6 @@ export enum RouteName {
  * All Route definitions in the UI a user can possibly navigate to.
  */
 const Routes: Record<RouteName, Route> = {
-  [RouteName.DND]: {
-    label: 'DND',
-    importModule() {
-      return import('../../pages/dnd');
-    },
-    name: RouteName.DND,
-    path() {
-      return '/dnd';
-    },
-    pattern: /^\/dnd$/,
-    render() { return html`<am-page-dnd class="page"></am-page-dnd>`; },
-    roles: [Role.Admin, Role.Alpha],
-  },
   [RouteName.Home]: {
     label: 'Home',
     importModule() {
@@ -89,9 +75,9 @@ const Routes: Record<RouteName, Route> = {
  * Defines a service for managing navigation based interactions.
  */
 export class RouterService {
-  private _activeRoute: RouteName;
+  private _activeRoute?: RouteName;
   private get activeRoute(): RouteName {
-    return this._activeRoute;
+    return this._activeRoute!;
   }
   private set activeRoute(value: RouteName) {
     const route = this.getRoute(value);
@@ -123,6 +109,8 @@ export class RouterService {
         });
       this.handleHistoryChange();
     });
+
+    this.handleHistoryChange();
   }
 
   /**
@@ -142,8 +130,8 @@ export class RouterService {
    * @param routeName
    * @returns - A valid Route object from the available routes.
    */
-  getRoute(routeName: RouteName): Route {
-    return this.routes.find(({ name }) => name === routeName);
+  getRoute(routeName: RouteName): Route | null {
+    return this.routes.find(({ name }) => name === routeName) || null;
   }
   /**
    * Uses the observer util to notify of changes to the currently available routes.
@@ -162,18 +150,19 @@ export class RouterService {
    * @param route
    * @param updateHistory - Flag to disable browser history updates, defaults to updating the browser history.
    */
-  async navigate(route: RouteName, updateHistory = true): Promise<void> {
-    this.activeRoute = route;
+  async navigate(routeName: RouteName, updateHistory = true): Promise<void> {
+    this.activeRoute = routeName;
+    const route = this.getRoute(this.activeRoute);
     try {
-      const { importModule } = this.getRoute(this.activeRoute);
-      if (importModule) await importModule();
+      await route?.importModule?.();
     } catch (e) {
       // Failed to fetch the page, load 404 instead
       this.activeRoute = RouteName.NotFound;
       console.error('Failed import', e);
     }
-    const { label, path, title } = this.getRoute(this.activeRoute);
-    if (updateHistory) window.history.pushState({}, `Austin Murdock | ${title || label}`, `${path()}`);
+    if (route && updateHistory) {
+      window.history.pushState({}, `Austin Murdock | ${route.title || route.label}`, `${route.path()}`);
+    }
   }
   /**
    * Uses the observer util to notify of changes to the activeRoute.
@@ -182,7 +171,7 @@ export class RouterService {
    * @returns - Deregistration function for cleanup.
    */
   onRouteChange(callback: (route: Route) => void): () => void {
-    if (this.activeRoute) callback(this.getRoute(this.activeRoute));
+    if (this.activeRoute) callback(this.getRoute(this.activeRoute)!);
 
     return observe(ObserverType.ActiveRoute, callback);
   }

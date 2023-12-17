@@ -7,8 +7,8 @@
 export function parseJwt(token: string): Record<string, string> {
   return JSON.parse(
     window.atob(
-      token.split('.')[1].
+      token.split('.')[1]?.
         replace('-', '+').
-        replace('_', '/')
+        replace('_', '/') || ''
     ));
 }

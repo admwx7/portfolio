@@ -1,6 +1,6 @@
 import { ObserverType, fireObservers, observe } from '../../utils/observer';
 import { debounce } from '../../utils/timing';
-import { CSSResult, css } from 'lit-element';
+import { CSSResult, css } from 'lit';
 
 export enum Breakpoint {
   XSmall = 'xsmall',
@@ -61,9 +61,9 @@ const BreakpointMapping: Record<Breakpoint, Mapping> = {
  * WARNING: this is simplified to focus on columns / gutters at the cost of other spec related details.
  */
 export class BreakpointService {
-  private _breakpoint: Breakpoint;
+  private _breakpoint?: Breakpoint;
   private get breakpoint(): Breakpoint {
-    return this._breakpoint;
+    return this._breakpoint!;
   }
   private set breakpoint(value: Breakpoint) {
     this._breakpoint = value;
@@ -81,11 +81,11 @@ export class BreakpointService {
    */
   private handleResize() {
     const { clientWidth } = document.documentElement;
-    const { name } = Object.values(BreakpointMapping).
+    const breakpoint = Object.values(BreakpointMapping).
       sort(({ range }, { range: range2 }) => range2 - range).
       find(({ range }) => range < clientWidth);
 
-    this.breakpoint = name;
+    if (breakpoint) this.breakpoint = breakpoint.name;
   }
 
   /**

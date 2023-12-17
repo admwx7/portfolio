@@ -1,20 +1,23 @@
-import { LitElement, TemplateResult, customElement, css, html, property } from 'lit-element';
+import { LitElement, TemplateResult, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import './am-flyout-icon';
+
+import '@material/web/icon/icon';
 
 /**
  * Data structure to provide to <am-flyout> when rendering flyouts.
  */
 export class Flyout {
-  href: string;
-  icon: TemplateResult;
-  text: string;
+  href?: string;
+  icon?: TemplateResult;
+  text?: string;
 }
 /**
  * Renders a group of flyouts as icons that expand out to show additional content.
  */
 @customElement('am-flyout')
 export class AmFlyout extends LitElement {
-  static styles = css`
+  static override styles = css`
     :host {
       position: var(--am-contact-flyouts-position, fixed);
       top: calc(var(--padding) + var(--header-height));
@@ -36,26 +39,27 @@ export class AmFlyout extends LitElement {
       opacity: 1;
       pointer-events: auto;
     }
-    mwc-icon {
+    md-icon {
       fill: var(--text-color);
+      color: var(--text-color);
       height: 36px;
       width: 36px;
       padding-top: calc(var(--padding) / 2);
       padding-bottom: calc(var(--padding) / 2);
       cursor: pointer;
     }
-    mwc-icon:hover {
+    md-icon:hover {
       filter: var(--drop-shadow);
     }
   `;
 
   @property({ type: Array }) items: Flyout[] = [];
 
-  render(): TemplateResult {
+  override render(): TemplateResult {
     const { items } = this;
 
     return html`
-      <mwc-icon id="contact-me"><slot></slot></mwc-icon>
+      <md-icon id="contact-me"><slot></slot></md-icon>
       <div id="icons">${items.map(this.renderItem)}</div>
     `;
   }
