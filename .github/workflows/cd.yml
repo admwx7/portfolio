@@ -8,7 +8,21 @@ on:
       - v*.*.**
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn run lint
   build:
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -30,7 +44,7 @@ jobs:
           retention-days: 1
   release:
     if: github.ref_type == 'tag'
-    needs: test_and_build
+    needs: build
     permissions:
       contents: write
     runs-on: ubuntu-latest
