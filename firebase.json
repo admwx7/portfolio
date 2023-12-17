@@ -11,7 +11,7 @@
     ]
   },
   "hosting": {
-    "site": "portfolio",
+    "site": "portfolio-138c8",
     "public": "dist",
     "ignore": [
       "firebase.json",
