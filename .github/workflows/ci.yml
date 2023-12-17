@@ -27,7 +27,7 @@ jobs:
       - run: yarn run lint
       - run: yarn run build
       - name: Tar files
-        run: tar -cvzf apps.tar.gz ./apps/*/dist .firebaserc database.rules.json firebase.json remoteconfig.template.json storage.rules
+        run: tar -cvzf apps.tar.gz ./dist .firebaserc database.rules.json firebase.json storage.rules
       - uses: actions/upload-artifact@v3
         with:
           name: apps-builds
