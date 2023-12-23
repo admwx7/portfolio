@@ -26,25 +26,6 @@ jobs:
       - run: yarn install --immutable --prod=false
         working-directory: functions
       - run: yarn run lint
-  # test_functions:
-  #   concurrency:
-  #     group: test-functions
-  #     cancel-in-progress: true
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-  #   defaults:
-  #     run:
-  #       working-directory: functions
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 2
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: 18
-  #         cache: 'yarn'
-  #     - run: yarn install --immutable
-  #     - run: yarn run lint
   build:
     needs: test
     concurrency:
@@ -70,7 +51,7 @@ jobs:
           path: apps.tar.gz
           retention-days: 1
   # build_functions:
-  #   needs: test_functions
+  #   needs: test
   #   concurrency:
   #     group: build-functions
   #     cancel-in-progress: true
@@ -112,9 +93,9 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: apps-builds
-      - uses: actions/download-artifact@v3
-        with:
-          name: functions-builds
+      # - uses: actions/download-artifact@v3
+      #   with:
+      #     name: functions-builds
       - uses: softprops/action-gh-release@v1
         with:
           files: ./**

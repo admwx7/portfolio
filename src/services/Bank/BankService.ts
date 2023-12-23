@@ -7,13 +7,12 @@ import {
   DocumentSnapshot,
   Unsubscribe,
 } from 'firebase/firestore';
-import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import type { CommunityMember } from '../../../functions/src/community/types';
 
 import AuthService from '../Auth';
 const database = getFirestore(getApp());
 const functions = getFunctions(getApp());
-connectFunctionsEmulator(functions, '127.0.0.1', 5001);
 
 export { CommunityMember };
 /**
