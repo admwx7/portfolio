@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 18
           cache: 'yarn'
-      - run: yarn install --immutable
+      - run: yarn install --immutable --prod=false
       - run: yarn run lint
   # test_functions:
   #   concurrency:
