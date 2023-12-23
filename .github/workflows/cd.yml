@@ -98,7 +98,7 @@ jobs:
     if: github.ref_type == 'tag'
     needs:
       - build
-      - build_functions
+      # - build_functions
     concurrency:
       group: release
       cancel-in-progress: true
