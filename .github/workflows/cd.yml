@@ -24,7 +24,7 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable --prod=false
       - run: yarn install --immutable --prod=false
-        - working-directory: functions
+        working-directory: functions
       - run: yarn run lint
   # test_functions:
   #   concurrency:
