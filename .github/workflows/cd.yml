@@ -23,6 +23,8 @@ jobs:
           node-version: 18
           cache: 'yarn'
       - run: yarn install --immutable --prod=false
+      - run: yarn install --immutable --prod=false
+        - working-directory: functions
       - run: yarn run lint
   # test_functions:
   #   concurrency:
