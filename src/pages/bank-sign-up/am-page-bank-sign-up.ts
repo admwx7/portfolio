@@ -109,8 +109,9 @@ export class AmPageBankSignUp extends Page {
     const { invite } = this;
     try {
       if (!AuthService.currentUser) await AuthService.signIn();
-      await BankService.joinCommunity({ invite });
-      await RouterService.navigate(RouteName.Bank);
+      await BankService.optIn();
+      if (invite) await BankService.joinCommunity({ invite });
+      await RouterService.navigate(RouteName.Bank, { updateHistory: true, waitForRole: true });
     } catch (e) {
       const { message } = e as { message: string };
       alert(message);

@@ -37,6 +37,8 @@ export class BankService {
   createCommunity = httpsCallable<{ name: string, startingFunds?: number }, unknown>(functions, 'createCommunity');
   deleteCommunity = httpsCallable<{ name: string }, unknown>(functions, 'deleteCommunity');
   joinCommunity = httpsCallable<{ invite?: string }, unknown>(functions, 'joinCommunity');
+  optIn = (): Promise<unknown> =>
+    httpsCallable<{ feature: string }, unknown>(functions, 'optIn')({ feature: 'banking' });
   report = httpsCallable<{ text: string }, unknown>(functions, 'reportFeedback');
   search = httpsCallable<
     { community: string, search: string },
@@ -62,7 +64,7 @@ export class BankService {
           subscriptions.forEach((unsub) => unsub());
           const { communities } = user.data() as { communities: DocumentReference[] };
           const data: (DocumentSnapshot<CommunityMember> | null)[] = [];
-          subscriptions = communities.map((communityRef, index) => {
+          subscriptions = (communities || []).map((communityRef, index) => {
             data[index] = null;
             return onSnapshot<CommunityMember, CommunityMember>(
               doc(

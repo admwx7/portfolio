@@ -1,6 +1,7 @@
 import { TemplateResult, html } from 'lit';
 import AuthService, { Role } from '../Auth';
 import { ObserverType, observe, fireObservers } from '../../utils/observer';
+import { wait } from '../../utils/timing';
 
 /**
  * Defines a Route object in the UI and the requirements to navigate to and render the associated page element.
@@ -17,6 +18,7 @@ export interface Route {
 }
 export interface NavigateOptions {
   updateHistory: boolean;
+  waitForRole?: boolean;
 }
 /**
  * All RouteNames in the app.
@@ -70,21 +72,16 @@ const Routes: Record<RouteName, Route> = {
  * Defines a service for managing navigation based interactions.
  */
 export class RouterService {
-  private _activeRoute?: RouteName;
-  private get activeRoute(): RouteName {
+  private _activeRoute?: Route;
+  private get activeRoute(): Route {
     return this._activeRoute!;
   }
-  private set activeRoute(value: RouteName) {
-    const route = this.getRoute(value);
-    let newValue;
-    if (!value || !route) newValue = RouteName.NotFound;
-    else newValue = value;
-    if (this._activeRoute === newValue) return;
-
-    this._activeRoute = newValue;
-    fireObservers(ObserverType.ActiveRoute, route);
+  private set activeRoute(value: Route) {
+    if (!value || this._activeRoute?.name === value.name) return;
+    this._activeRoute = value;
+    fireObservers(ObserverType.ActiveRoute, value);
   }
-  private _routes: Route[] = [Routes[RouteName.Home]];
+  private _routes: Route[] = [Routes[RouteName.Home], Routes[RouteName.NotFound]];
   private get routes(): Route[] {
     return this._routes;
   }
@@ -146,15 +143,24 @@ export class RouterService {
    * @param updateHistory - Flag to disable browser history updates, defaults to updating the browser history.
    */
   async navigate(routeName: RouteName, options: NavigateOptions = { updateHistory: true }): Promise<void> {
-    this.activeRoute = routeName;
-    const route = this.getRoute(this.activeRoute);
+    const retryCount = options.waitForRole ? 15 : 0;
+    let retries = 0;
+    let route;
+    do {
+      route = this.getRoute(routeName);
+      if (route) break;
+      retries++;
+      await wait(100);
+    } while (retries < retryCount);
     try {
+      if (retries >= retryCount && retries > 0) throw new Error('Timed out waiting for role updates.');
       await route?.importModule?.();
     } catch (e) {
       // Failed to fetch the page, load 404 instead
-      this.activeRoute = RouteName.NotFound;
+      route = this.getRoute(RouteName.NotFound);
       console.error('Failed import', e);
     }
+    this.activeRoute = route!;
     if (route && options.updateHistory) {
       window.history.pushState({}, `Austin Murdock | ${route.title || route.label}`, `${route.path()}`);
     }
@@ -166,7 +172,7 @@ export class RouterService {
    * @returns - Deregistration function for cleanup.
    */
   onRouteChange(callback: (route: Route) => void): () => void {
-    if (this.activeRoute) callback(this.getRoute(this.activeRoute)!);
+    if (this.activeRoute) callback(this.activeRoute);
 
     return observe(ObserverType.ActiveRoute, callback);
   }

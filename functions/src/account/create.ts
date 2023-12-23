@@ -5,7 +5,8 @@ import { auth } from 'firebase-functions';
  * Triggered during the registration process to store / set defaults for the user
  */
 export const createAccount = auth.user().onCreate(({ displayName, email, uid }) => {
-  return getFirestore().collection('users').doc(uid).create({
+  return getFirestore().collection('users').doc(uid).set({
+    communities: [],
     // Store displayName and email for account management
     displayName,
     email, // displayName is optional, storing email as a fallback
@@ -13,5 +14,5 @@ export const createAccount = auth.user().onCreate(({ displayName, email, uid }) 
     roles: {
       user: true,
     },
-  });
+  }, { merge: true });
 });

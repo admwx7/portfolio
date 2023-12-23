@@ -256,14 +256,14 @@ export class AmPageBank extends Page {
         throw { message: 'Must look up a user before attempting  to send funds.' };
       }
       const { community, userId } = this._searchedUser;
-      const response = await BankService.sendFunds({
+      await BankService.sendFunds({
         amount: data['sendAmount'] as number,
         community,
         to: userId,
       });
       this._clearInputs();
       this._searchedUser = undefined;
-      console.log('response', response);
+      alert('Funds successfully sent!');
     } catch (e) {
       const { message } = e as { message: string };
       alert(message);
