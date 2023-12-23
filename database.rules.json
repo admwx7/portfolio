@@ -6,14 +6,6 @@
         ".write": false
       }
     },
-    "posts": {
-      ".read": true,
-      ".indexOn": ["createdAt"],
-      "$post": {
-        ".write": "auth.token.roles.author === true",
-        ".validate": "newData.hasChildren(['title', 'content']) && newData.child('title').isString() && newData.child('content').isString()"
-      }
-    },
     "users": {
       ".read": false,
       ".write": false

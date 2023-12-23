@@ -20,8 +20,8 @@ export class AmFlyout extends LitElement {
   static override styles = css`
     :host {
       position: var(--am-contact-flyouts-position, fixed);
-      top: calc(var(--padding) + var(--header-height));
-      left: var(--padding);
+      top: calc(var(--gutter) + var(--header-height));
+      left: var(--gutter);
       display: flex;
       flex-direction: column;
       user-select: none;

@@ -1,8 +1,7 @@
-import * as admin from 'firebase-admin';
+import { initializeApp } from 'firebase-admin/app';
 
-admin.initializeApp();
+initializeApp();
 
-export * from './accountDeletion';
-export * from './character';
-export * from './register';
-export * from './roles';
+export * from './account';
+export * from './community';
+export * from './feedback';

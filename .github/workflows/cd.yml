@@ -9,6 +9,9 @@ on:
 
 jobs:
   test:
+    concurrency:
+      group: test
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -21,8 +24,30 @@ jobs:
           cache: 'yarn'
       - run: yarn install --immutable
       - run: yarn run lint
+  # test_functions:
+  #   concurrency:
+  #     group: test-functions
+  #     cancel-in-progress: true
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   defaults:
+  #     run:
+  #       working-directory: functions
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 2
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
+  #         cache: 'yarn'
+  #     - run: yarn install --immutable
+  #     - run: yarn run lint
   build:
     needs: test
+    concurrency:
+      group: build
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -42,9 +67,41 @@ jobs:
           name: apps-builds
           path: apps.tar.gz
           retention-days: 1
+  # build_functions:
+  #   needs: test_functions
+  #   concurrency:
+  #     group: build-functions
+  #     cancel-in-progress: true
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   defaults:
+  #     run:
+  #       working-directory: functions
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 2
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
+  #         cache: 'yarn'
+  #     - run: yarn install --immutable
+  #     - run: yarn run build
+  #     - name: Tar files
+  #       run: tar -cvzf functions.tar.gz ./dist .firebaserc database.rules.json firebase.json storage.rules
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: functions-builds
+  #         path: functions.tar.gz
+  #         retention-days: 1
   release:
     if: github.ref_type == 'tag'
-    needs: build
+    needs:
+      - build
+      - build_functions
+    concurrency:
+      group: release
+      cancel-in-progress: true
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -53,13 +110,16 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: apps-builds
+      - uses: actions/download-artifact@v3
+        with:
+          name: functions-builds
       - uses: softprops/action-gh-release@v1
         with:
           files: ./**
   deploy:
     needs: build
     concurrency:
-      group: prod-apps
+      group: deploy
       cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -78,5 +138,25 @@ jobs:
           channelId: '${{ vars.FIREBASE_CHANNEL }}'
           projectId: '${{ vars.FIREBASE_PROJECT_ID }}'
           target: '${{ vars.FIREBASE_TARGET }}'
-      # TODO: add functions deployment
-      # TODO: add db deployment
+  # deploy_functions:
+  #   if: github.ref_type == 'tag'
+  #   needs: build_functions
+  #   concurrency:
+  #     group: deploy-functions
+  #     cancel-in-progress: true
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 5
+  #   environment:
+  #     name: 'Production'
+  #   defaults:
+  #     run:
+  #       working-directory: functions
+  #   steps:
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: functions-builds
+  #     - run: tar -xvzf functions.tar.gz
+  #     - run: rm functions.tar.gz
+  #     - run: yarn install firebase-tools
+  #     - run: firebase deploy --token "${{ secrets.FIREBASE_CI_TOKEN }}" --only functions
+  # TODO: add db deployment

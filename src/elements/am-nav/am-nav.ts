@@ -1,5 +1,5 @@
 import { LitElement, TemplateResult, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import AuthService from '../../services/Auth';
 import RouterService, { Route, RouteName } from '../../services/Router';
 
@@ -63,11 +63,11 @@ export class AmNav extends LitElement {
   private routeObserver?: () => void;
 
   /* The currently selected page */
-  @property({ type: Object }) private page?: RouteName;
+  @state() private page?: RouteName;
   /* Whether or not the user is signed in */
-  @property({ type: Boolean }) private signedIn?: boolean;
+  @state() private signedIn?: boolean;
   /* Routes available to the user */
-  @property({ type: Array }) private routes?: Route[];
+  @state() private routes?: Route[];
 
   /* Lifecycle Methods */
   constructor() {

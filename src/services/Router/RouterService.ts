@@ -15,60 +15,55 @@ export interface Route {
   roles?: Role[];
   title?: string;
 }
+export interface NavigateOptions {
+  updateHistory: boolean;
+}
 /**
  * All RouteNames in the app.
  */
 export enum RouteName {
+  Bank = 'bank',
+  BankSignUp = 'bank-sign-up',
   Home = 'home',
   NotFound = '404',
-  /* Disabled during rewrite */
-  // Goals = 'goals',
-  // Blog = 'blog',
 }
 /**
  * All Route definitions in the UI a user can possibly navigate to.
  */
 const Routes: Record<RouteName, Route> = {
+  [RouteName.Bank]: {
+    label: 'Bank',
+    importModule() { return import('../../pages/bank'); },
+    name: RouteName.Bank,
+    path() { return '/bank'; },
+    pattern: /^\/bank$/,
+    render() { return html`<am-page-bank class=page></am-page-bank>`; },
+    title: 'Bank',
+    roles: [Role.Banking],
+  },
+  [RouteName.BankSignUp]: {
+    importModule() { return import('../../pages/bank-sign-up'); },
+    name: RouteName.BankSignUp,
+    path() { return '/bank-sign-up'; },
+    pattern: /^\/bank-sign-up$/,
+    render() { return html`<am-page-bank-sign-up class=page></am-page-bank-sign-up>`; },
+    title: 'Bank Sign Up',
+  },
   [RouteName.Home]: {
     label: 'Home',
-    importModule() {
-      return import('../../pages/main');
-    },
+    importModule() { return import('../../pages/main'); },
     name: RouteName.Home,
-    path() {
-      return '/';
-    },
+    path() { return '/'; },
     pattern: /^\/(home)?$/, // Adding /home for backwards compatibility, moving towards just /
-    render() { return html`<am-page-main class="page"></am-page-main>`; },
+    render() { return html`<am-page-main class=page></am-page-main>`; },
   },
   [RouteName.NotFound]: {
     name: RouteName.NotFound,
-    path() {
-      return '/404';
-    },
+    path() { return '/404'; },
     pattern: /^\/404$/,
-    render() { return html`<am-page-404 class="page"></am-page-404>`; },
+    render() { return html`<am-page-404 class=page></am-page-404>`; },
     title: '404',
   },
-  /* Disabled during rewrite */
-  // [RouteName.Goals]: {
-  //   label: 'GoalTracker',
-  //   importModule() { return import('../../pages/goals'); },
-  //   name: RouteName.Goals,
-  //   path() { return '/goals'; },
-  //   pattern: /^\/goals/,
-  //   roles: [Role.Admin],
-  //   render: () => html`<am-page-goals class="page"></am-page-goals>`,
-  // },
-  // [RouteName.Blog]: {
-  //   label: 'Blog',
-  //   importModule() { return import('../../pages/blog/index'); },
-  //   name: RouteName.Blog,
-  //   path() { return '/blog'; },
-  //   pattern: /^\/blog/,
-  //   roles: [Role.Admin],
-  //   render: () => html`<am-page-blog class="page" route="{{__subRoute}}"></am-page-blog>`,
-  // },
 };
 
 /**
@@ -121,7 +116,7 @@ export class RouterService {
     const { name }: Route =
       this.routes.find(({ pattern }: Route) => pattern.exec(pathname)) ||
       Routes[RouteName.NotFound];
-    this.navigate(name, false);
+    this.navigate(name, { updateHistory: false });
   }
 
   /**
@@ -150,7 +145,7 @@ export class RouterService {
    * @param route
    * @param updateHistory - Flag to disable browser history updates, defaults to updating the browser history.
    */
-  async navigate(routeName: RouteName, updateHistory = true): Promise<void> {
+  async navigate(routeName: RouteName, options: NavigateOptions = { updateHistory: true }): Promise<void> {
     this.activeRoute = routeName;
     const route = this.getRoute(this.activeRoute);
     try {
@@ -160,7 +155,7 @@ export class RouterService {
       this.activeRoute = RouteName.NotFound;
       console.error('Failed import', e);
     }
-    if (route && updateHistory) {
+    if (route && options.updateHistory) {
       window.history.pushState({}, `Austin Murdock | ${route.title || route.label}`, `${route.path()}`);
     }
   }

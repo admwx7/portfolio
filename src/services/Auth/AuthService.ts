@@ -1,9 +1,8 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { getDatabase, ref, onValue, off, DatabaseReference } from 'firebase/database';
-import { ObserverType, fireObservers, observe } from '../../utils/observer';
-import { parseJwt } from '../../utils/parser';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
+import { getAuth, signInWithPopup, GoogleAuthProvider, User } from 'firebase/auth';
+import { getFirestore, doc, onSnapshot, Unsubscribe } from 'firebase/firestore';
+import { ObserverType, fireObservers, observe } from '../../utils/observer';
 // App initialization
 const app = initializeApp({
   apiKey: 'AIzaSyCjMz2srT0HjuJRPH2ThhLD7XqLcrYqSQQ',
@@ -22,9 +21,9 @@ getAnalytics(app);
 export enum Role {
   Admin = 'admin',
   Alpha = 'alpha',
-  Author = 'author',
   Beta = 'beta',
   User = 'user',
+  Banking = 'banking',
 }
 
 /**
@@ -32,8 +31,8 @@ export enum Role {
  */
 export class AuthService {
   private auth = getAuth();
-  private database = getDatabase();
-  private dbQuery?: DatabaseReference;
+  private database = getFirestore();
+  private subscription?: Unsubscribe;
   private provider = new GoogleAuthProvider();
   private _roles?: Role[];
   private get roles(): Role[] | undefined {
@@ -44,43 +43,31 @@ export class AuthService {
     fireObservers(ObserverType.UserRoles, value);
   }
 
-  get currentUser(): { getIdToken: (forceRefresh: boolean) => Promise<string> } | null {
+  get currentUser(): User | null {
     return this.auth.currentUser || null;
   }
 
   constructor() {
-    this.fetchUserRoles = this.fetchUserRoles.bind(this);
-
     this.onAuthStateChanged((user: { uid: string } | null) => {
       // Close previous DB connection
-      if (this.dbQuery) {
-        off(this.dbQuery, 'value', () => { delete this.dbQuery; });
-      }
+      this.subscription?.();
+      this.subscription = undefined;
 
-      if (!user) this.fetchUserRoles(); // Update roles for no user
-      else { // Establish a new DB connection, will update roles for the current user
-        this.dbQuery = ref(this.database, `metadata/${user.uid}/refreshTime`);
-        onValue(this.dbQuery, () => this.fetchUserRoles({ forceRefresh: true }));
+      if (!user) {
+        // Update roles for no user
+        this.roles = [];
+      } else { // Establish a new DB connection, will update roles for the current user
+        this.subscription = onSnapshot(
+          doc(this.database, 'users', user.uid),
+          (doc) => {
+            const data = doc.data() as { roles: Record<Role, boolean> };
+            if (!data) return;
+            const { roles } = data;
+            this.roles = (Object.keys(roles) as Role[]).filter((role: Role) => Boolean(roles[role]));
+          }
+        );
       }
     });
-  }
-
-  /**
-   * Fetches updated roles for a given user from the API so it can be easily consumed in the UI later.
-   *
-   * @param root0
-   * @param root0.forceRefresh
-   */
-  private async fetchUserRoles({ forceRefresh } = { forceRefresh: false }): Promise<void> {
-    let userRoles: Role[] = [];
-    try {
-      if (!this.currentUser) return;
-      const { roles } =
-        parseJwt(await this.currentUser.getIdToken(forceRefresh)) as unknown as { roles: Record<Role, boolean> };
-      userRoles = (Object.keys(roles) as Role[]).
-        filter((role: Role) => Boolean(roles[role]));
-    } catch (e) { /* */ }
-    this.roles = userRoles;
   }
 
   /**

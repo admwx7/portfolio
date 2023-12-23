@@ -43,6 +43,8 @@
     "lint:fix": "eslint . --ext .js,.ts,.html --fix",
     "lint:types": "tsc --project tsconfig.json --noEmit",
     "deploy": "npm run build && firebase deploy",
-    "deploy:hosting": "npm run build && firebase deploy --only hosting"
+    "deploy:hosting": "npm run build && firebase deploy --only hosting",
+    "deploy:data": "firebase deploy --only firestore",
+    "deploy:functions": "firebase deploy --only functions"
   }
 }

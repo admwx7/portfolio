@@ -1,5 +1,5 @@
-import { LitElement, TemplateResult, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { TemplateResult, css, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
 import {
   contactMe,
   continuous,
@@ -13,16 +13,14 @@ import {
   twitter,
   youtube,
 } from '../../theme/icons';
-import BreakpointService, { Breakpoint } from '../../services/Breakpoint';
-import { card, reset, tiles } from '../../theme/shared-styles';
+import { card, tiles } from '../../theme/shared-styles';
+import Page from '../../classes/page';
 import '../../elements/am-card';
 import '../../elements/am-flyout';
 import '../../elements/am-flyout/am-flyout-icon';
 import '../../elements/am-item-scroller';
 
 import '@material/web/icon/icon';
-
-const slimBreakpoints = [Breakpoint.XSmall, Breakpoint.Small];
 
 /**
  * Data structure mapped to a renderable UI Card object for displaying information.
@@ -39,19 +37,14 @@ export class Card {
  * `am-page-main` the home page containing information about me, services I provide, my projects, and contact info.
  */
 @customElement('am-page-main')
-export class AmPageMain extends LitElement {
+export class AmPageMain extends Page {
   static override styles = [
-    reset,
+    ...Page.styles,
     card,
     tiles,
     css`
-      :host {
-        padding-bottom: var(--gutter);
-        display: relative;
-        font-size: 16pt;
-      }
       am-flyout ~ .card {
-        padding-left: calc(var(--padding) * 2 + 36px);
+        padding-left: calc(var(--padding) + 36px);
       }
       .inline-emphasis {
         margin: 0;
@@ -103,9 +96,7 @@ export class AmPageMain extends LitElement {
     `,
   ];
 
-  private breakpointObserver?: () => void;
-
-  @property({ type: Array }) private flyouts = [
+  @state() private flyouts = [
     {
       href: 'mailto:austin.d.murdock@gmail.com',
       icon: 'email',
@@ -132,7 +123,7 @@ export class AmPageMain extends LitElement {
       text: 'admwx7',
     },
   ];
-  @property({ type: Array }) private projects: Card[] = [
+  @state() private projects: Card[] = [
     {
       classes: 'project-card',
       title: 'Portfolio',
@@ -222,7 +213,7 @@ export class AmPageMain extends LitElement {
       `,
     },
   ];
-  @property({ type: Array }) private services: Card[] = [
+  @state() private services: Card[] = [
     {
       icon: ruler(),
       title: 'Architecture',
@@ -269,19 +260,7 @@ export class AmPageMain extends LitElement {
       `,
     },
   ];
-  @property({ type: Boolean }) private slim = false;
 
-  override connectedCallback() {
-    super.connectedCallback();
-
-    this.breakpointObserver =
-      BreakpointService.onBreakpointChanged((breakpoint) => this.slim = slimBreakpoints.includes(breakpoint));
-  }
-  override disconnectedCallback() {
-    super.disconnectedCallback();
-
-    this.breakpointObserver?.();
-  }
   override render(): TemplateResult {
     const { flyouts, projects, renderCard, services, slim } = this;
 
